@@ -1,6 +1,7 @@
 ## Deployment
 
-- Config DB Credentials in .env file.
+- Create the database and Config DB Credentials in .env file.
+- Run `php artisan migrate:fresh --seed`.
 
 ## Initial Setup
 
