@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateShopsTable extends Migration
+class CreateShopUserTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,10 @@ class CreateShopsTable extends Migration
      */
     public function up()
     {
-        Schema::create('shops', function (Blueprint $table) {
+        Schema::create('shop_user', function (Blueprint $table) {
             $table->id();
-            $table->string('title',32);
-            $table->string('address',255);
-            $table->boolean('is_active')->default(1);
+            $table->foreignId('shop_id')->constrained('shops')->onDelete('restrict')->onUpdate("cascade");
+            $table->foreignId('user_id')->constrained('users')->onDelete('restrict')->onUpdate("cascade");
             $table->timestamps();
         });
     }
@@ -29,6 +28,6 @@ class CreateShopsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('shops');
+        Schema::dropIfExists('shop_user');
     }
 }

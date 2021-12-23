@@ -22,7 +22,12 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/user', function (Request $request) {
 //        return $request->user()->getPermissionNames();
+//        return $request->user()->with("shops")->get();
         return $request->user();
+    });
+
+    Route::get('/shop/{id}', function (Request $request, $id) {
+        return \App\Models\Shop::with('users')->findOrFail($id);
     });
 
 });

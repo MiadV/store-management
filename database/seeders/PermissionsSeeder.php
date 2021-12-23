@@ -26,7 +26,7 @@ class PermissionsSeeder extends Seeder
         Permission::create(['name' => 'report-history']);
 
         // create roles and assign existing permissions
-        $roleSuperAdmin = Role::create(['name' => 'Super-Admin']);
+//        $roleSuperAdmin = Role::create(['name' => 'Super-Admin']);
         // gets all permissions via Gate::before rule; see AuthServiceProvider
 
         // create demo users
@@ -38,9 +38,15 @@ class PermissionsSeeder extends Seeder
 
 
         $user = User::factory()->create([
-            'name' => 'Example Super-Admin User',
-            'email' => 'superadmin@example.com',
+            'name' => 'Test User 2',
+            'email' => 'test2@test.com',
         ]);
-        $user->assignRole($roleSuperAdmin);
+        $user->givePermissionTo('sales-report', 'expense-report', 'report-history');
+
+//        $user = User::factory()->create([
+//            'name' => 'Example Super-Admin User',
+//            'email' => 'superadmin@example.com',
+//        ]);
+//        $user->assignRole($roleSuperAdmin);
     }
 }
