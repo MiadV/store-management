@@ -18,6 +18,11 @@ use \App\Http\Controllers\Api\V1\AuthController;
 Route::post('/login', [AuthController::class, 'login']);
 
 
+Route::get('/expense/{id}', function (Request $request, $id) {
+    return \App\Models\Expense::with(["expenseRule.expenseType","expenseRule.shop"])->get();
+});
+
+
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/user', function (Request $request) {
@@ -27,7 +32,7 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     Route::get('/shop/{id}', function (Request $request, $id) {
-        return \App\Models\Shop::with('users')->findOrFail($id);
+        return \App\Models\Shop::with("expenseTypes")->find($id);
     });
 
 });

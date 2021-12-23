@@ -24,5 +24,18 @@ class Shop extends Model
     {
         return $this->belongsToMany(User::class);
     }
+
+    public function expenseTypes()
+    {
+        return $this->belongsToMany(ExpenseType::class)
+            ->withPivot('limit_amount')
+            ->withTimestamps()
+            ->as("expense_types");
+    }
+
+    public function sales()
+    {
+        return $this->hasMany(Sale::class);
+    }
 }
 

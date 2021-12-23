@@ -16,7 +16,6 @@ class CreateExpenseTypesTable extends Migration
         Schema::create('expense_types', function (Blueprint $table) {
             $table->id();
             $table->string('title',64);
-            $table->string('description',255);
             $table->boolean('accountant_only')->default(0);
             $table->timestamps();
         });
