@@ -18,7 +18,8 @@ class DatabaseSeeder extends Seeder
             ShopSeeder::class,
             ExpenseTypeSeeder::class,
             ShopUserSeeder::class,
-            ExpenseTypeShopSeeder::class
+            ExpenseTypeShopSeeder::class,
+            SaleSeeder::class
         ]);
     }
 }

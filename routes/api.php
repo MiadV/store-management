@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\Api\V1\AuthController;
+use \App\Http\Controllers\Api\V1\SaleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,22 +18,32 @@ use \App\Http\Controllers\Api\V1\AuthController;
 
 Route::post('/login', [AuthController::class, 'login']);
 
-
-Route::get('/expense/{id}', function (Request $request, $id) {
-    return \App\Models\Expense::with(["expenseRule.expenseType","expenseRule.shop"])->get();
-});
-
-
 Route::middleware('auth:sanctum')->group(function () {
+
     Route::post('/logout', [AuthController::class, 'logout']);
-    Route::get('/user', function (Request $request) {
-//        return $request->user()->getPermissionNames();
-//        return $request->user()->with("shops")->get();
-        return $request->user();
+    Route::get('/me', [AuthController::class, 'currentUser']);
+
+
+    Route::prefix('sale')->group(function () {
+        Route::get('/latest/{shop_id}', [SaleController::class, 'latestSaleReport'])
+            ->where('shop_id', '[0-9]+');
+
     });
 
-    Route::get('/shop/{id}', function (Request $request, $id) {
-        return \App\Models\Shop::with("expenseTypes")->find($id);
+    Route::prefix('expense')->group(function () {
+
+        //
     });
 
 });
+
+
+
+//
+//Route::get('/expense/{id}', function (Request $request, $id) {
+//    return \App\Models\Expense::with(["expenseRule.expenseType","expenseRule.shop"])->get();
+//});
+
+//    Route::get('/shop/{id}', function (Request $request, $id) {
+//        return \App\Models\Shop::with("expenseTypes")->find($id);
+//    }

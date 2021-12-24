@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -10,29 +11,29 @@ use Illuminate\Support\Facades\Hash;
 class AuthController extends Controller
 {
 
-    public function register(Request $request)
-    {
-        $fields = $request->validate([
-            'name' => 'required|string',
-            'email' => 'required|string|unique:users,email',
-            'password' => 'required|string|confirmed'
-        ]);
-
-        $user = User::create([
-            'name' => $fields['name'],
-            'email' => $fields['email'],
-            'password' => bcrypt($fields['password'])
-        ]);
-
-        $token = $user->createToken('auth_token')->plainTextToken;
-
-        $response = [
-            'user' => $user,
-            'token' => $token
-        ];
-
-        return response($response, 201);
-    }
+//    public function register(Request $request)
+//    {
+//        $fields = $request->validate([
+//            'name' => 'required|string',
+//            'email' => 'required|string|unique:users,email',
+//            'password' => 'required|string|confirmed'
+//        ]);
+//
+//        $user = User::create([
+//            'name' => $fields['name'],
+//            'email' => $fields['email'],
+//            'password' => bcrypt($fields['password'])
+//        ]);
+//
+//        $token = $user->createToken('auth_token')->plainTextToken;
+//
+//        $response = [
+//            'user' => $user,
+//            'token' => $token
+//        ];
+//
+//        return response($response, 201);
+//    }
 
     public function login(Request $request)
     {
@@ -46,28 +47,32 @@ class AuthController extends Controller
 
         // Check password
         if (!$user || !Hash::check($fields['password'], $user->password)) {
-            return response([
-                'message' => 'Wrong credentials.'
-            ], 401);
+            return response()->json(["errors" => (object)["message" => ["Wrong credentials."]]], 401);
         }
 
+        // Check if user is disabled.
+        if (!$user["is_active"]) {
+            return response()->json(["errors" => (object)["email" => ["Disabled Account."]]], 401);
+        }
+
+        // TODO => Replace token-name with device name.
         $token = $user->createToken('auth_token')->plainTextToken;
 
-        $response = [
-            'user' => $user,
-            'token' => $token
-        ];
-
-        return response($response, 201);
+        return response()->json(["token" => $token], 200);
     }
 
     public function logout(Request $request)
     {
         auth()->user()->tokens()->delete();
 
-        return [
-            'message' => 'Logged out.'
-        ];
+        return response()->json(["message" => 'Logged out.'], 200);
     }
 
+
+    public function currentUser(Request $request)
+    {
+        $authUser = User::with(['shops', 'permissions'])->find(auth()->user()->getAuthIdentifier());
+
+        return new UserResource($authUser);
+    }
 }

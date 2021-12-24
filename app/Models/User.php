@@ -49,7 +49,7 @@ class User extends Authenticatable
 
     public function shops()
     {
-        return $this->belongsToMany(Shop::class);
+        return $this->belongsToMany(Shop::class)->where('is_active', true);
     }
 
 }

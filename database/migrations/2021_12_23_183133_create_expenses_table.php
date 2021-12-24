@@ -18,7 +18,7 @@ class CreateExpensesTable extends Migration
             $table->foreignId('expense_type_shop_id')->constrained('expense_type_shop')->onDelete('restrict')->onUpdate("cascade");
             $table->foreignId('user_id')->constrained('users')->onDelete('restrict')->onUpdate("cascade");
             $table->string('description',255)->nullable();
-            $table->date('report_date')->useCurrent();
+            $table->date('report_date');
             $table->decimal('amount', 10, 2);
             $table->timestamps();
         });
