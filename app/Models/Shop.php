@@ -24,9 +24,10 @@ class Shop extends Model
     public function expenseTypes()
     {
         return $this->belongsToMany(ExpenseType::class)
-            ->withPivot('limit_amount')
-            ->withTimestamps()
-            ->as("expense_types");
+            ->using(ExpenseTypeShop::class)
+            ->withPivot(['id', 'limit_amount', 'strict_limit', 'is_active'])
+            ->wherePivot('is_active', true)
+            ->withTimestamps();
     }
 
     public function sales()
@@ -36,7 +37,8 @@ class Shop extends Model
 
     public function users()
     {
-        return $this->belongsToMany(User::class)->where('is_active', true);;
+        return $this->belongsToMany(User::class)
+            ->where('is_active', true);;
     }
 }
 

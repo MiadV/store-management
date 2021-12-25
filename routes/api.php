@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\Api\V1\AuthController;
 use \App\Http\Controllers\Api\V1\SaleController;
+use \App\Http\Controllers\Api\V1\ExpenseTypeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,14 +40,15 @@ Route::middleware('auth:sanctum')
 
                 Route::get('/{sale_id}', [SaleController::class, 'show'])
                     ->where('sale_id', '[0-9]+');
-
-
             });
 
-        Route::prefix('expense')->group(function () {
+        Route::prefix('expense')
+            ->middleware('permission:EXPENSE_REPORT')
+            ->group(function () {
 
-            //
-        });
+                Route::get('/types/{shop_id}', [ExpenseTypeController::class, 'shopExpenseTypes'])
+                    ->where('shop_id', '[0-9]+');
+            });
 
     });
 

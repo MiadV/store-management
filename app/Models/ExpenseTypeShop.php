@@ -16,6 +16,18 @@ class ExpenseTypeShop extends Pivot
      */
     public $incrementing = true;
 
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'limit_amount' => 'decimal:2',
+        'strict_limit' => 'boolean',
+        'is_active' => 'boolean',
+    ];
+
+
     public function expenseType()
     {
         return $this->belongsTo(ExpenseType::class);
