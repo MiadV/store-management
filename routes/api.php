@@ -18,24 +18,37 @@ use \App\Http\Controllers\Api\V1\SaleController;
 
 Route::post('/login', [AuthController::class, 'login']);
 
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware('auth:sanctum')
+    ->group(function () {
 
-    Route::post('/logout', [AuthController::class, 'logout']);
-    Route::get('/me', [AuthController::class, 'currentUser']);
+        Route::post('/logout', [AuthController::class, 'logout']);
+        Route::get('/me', [AuthController::class, 'currentUser']);
 
 
-    Route::prefix('sale')->group(function () {
-        Route::get('/latest/{shop_id}', [SaleController::class, 'latestSaleReport'])
-            ->where('shop_id', '[0-9]+');
+        Route::prefix('sale')
+            ->middleware('permission:SALES_REPORT')
+            ->group(function () {
+
+                Route::post('/', [SaleController::class, 'store']);
+
+                Route::put('/{report}', [SaleController::class, 'update'])
+                    ->where('report', '[0-9]+');
+
+                Route::get('/latest/{shop_id}', [SaleController::class, 'latestSaleReport'])
+                    ->where('shop_id', '[0-9]+');
+
+                Route::get('/{sale_id}', [SaleController::class, 'show'])
+                    ->where('sale_id', '[0-9]+');
+
+
+            });
+
+        Route::prefix('expense')->group(function () {
+
+            //
+        });
 
     });
-
-    Route::prefix('expense')->group(function () {
-
-        //
-    });
-
-});
 
 
 

@@ -20,28 +20,34 @@ class PermissionsSeeder extends Seeder
         // Reset cached roles and permissions
         app()[PermissionRegistrar::class]->forgetCachedPermissions();
 
+
+        // define permissions
+        $sales_report = "SALES_REPORT";
+        $expense_report = "EXPENSE_REPORT";
+        $report_history = "REPORT_HISTORY";
+
         // create permissions
-        Permission::create(['name' => 'sales-report']);
-        Permission::create(['name' => 'expense-report']);
-        Permission::create(['name' => 'report-history']);
+        Permission::create(['name' => $sales_report]);
+        Permission::create(['name' => $expense_report]);
+        Permission::create(['name' => $report_history]);
 
         // create roles and assign existing permissions
 //        $roleSuperAdmin = Role::create(['name' => 'Super-Admin']);
         // gets all permissions via Gate::before rule; see AuthServiceProvider
 
-        // create demo users
+        // create some users
         $user = User::factory()->create([
             'name' => 'Test User',
             'email' => 'test@test.com',
         ]);
-        $user->givePermissionTo('sales-report', 'expense-report');
+        $user->givePermissionTo($sales_report, $expense_report);
 
 
         $user = User::factory()->create([
             'name' => 'Test User 2',
             'email' => 'test2@test.com',
         ]);
-        $user->givePermissionTo('sales-report', 'expense-report', 'report-history');
+        $user->givePermissionTo($sales_report, $expense_report, $report_history);
 
 //        $user = User::factory()->create([
 //            'name' => 'Example Super-Admin User',

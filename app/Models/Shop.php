@@ -20,10 +20,6 @@ class Shop extends Model
         'is_active' => 'boolean',
     ];
 
-    public function users()
-    {
-        return $this->belongsToMany(User::class)->where('is_active', true);;
-    }
 
     public function expenseTypes()
     {
@@ -36,6 +32,11 @@ class Shop extends Model
     public function sales()
     {
         return $this->hasMany(Sale::class);
+    }
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class)->where('is_active', true);;
     }
 }
 

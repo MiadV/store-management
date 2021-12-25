@@ -71,7 +71,7 @@ class AuthController extends Controller
 
     public function currentUser(Request $request)
     {
-        $authUser = User::with(['shops', 'permissions'])->find(auth()->user()->getAuthIdentifier());
+        $authUser = User::with(['shops', 'permissions'])->find(auth()->id());
 
         return new UserResource($authUser);
     }

@@ -26,8 +26,17 @@ class SaleResource extends JsonResource
             'cashAmount' => $this->cash_amount,
             'cardAmount' => $this->card_amount,
             'onlineTransferAmount' => $this->online_transfer_amount,
+
             'shop' => new  ShopResource($shop),
-            'user' => new  ShopResource($user),
+            $this->mergeWhen($user, [
+                'user' => [
+                    'userId' => $this->user->id,
+                    'name' => ucwords($this->user->name),
+                    'email' => $this->user->email,
+                ]]),
+
+            'createdAt' => $this->created_at,
+            'updatedAt' => $this->updated_at,
         ];
     }
 }

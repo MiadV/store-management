@@ -30,7 +30,6 @@ class Sale extends Model
      * @var array<string, string>
      */
     protected $casts = [
-        'report_date' => 'datetime:Y-m-d',
         'cash_amount' => 'decimal:2',
         'card_amount' => 'decimal:2',
         'online_transfer_amount' => 'decimal:2',

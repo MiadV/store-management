@@ -16,7 +16,7 @@ class ShopResource extends JsonResource
     {
         return [
             'shopId' => $this->id,
-            'title' => $this->title,
+            'title' => ucwords($this->title),
             'address' => $this->address,
             'isActive' => $this->is_active,
             'users' => UserResource::collection($this->whenLoaded('users')),
