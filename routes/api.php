@@ -6,6 +6,7 @@ use \App\Http\Controllers\Api\V1\AuthController;
 use \App\Http\Controllers\Api\V1\SaleController;
 use \App\Http\Controllers\Api\V1\ExpenseController;
 use \App\Http\Controllers\Api\V1\ExpenseTypeController;
+use \App\Http\Controllers\Api\V1\ImageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,6 +27,13 @@ Route::middleware('auth:sanctum')
         Route::post('/logout', [AuthController::class, 'logout']);
         Route::get('/me', [AuthController::class, 'currentUser']);
 
+        Route::prefix('upload')
+            ->group(function () {
+                Route::post('/image', [ImageController::class, 'store']);
+
+                Route::delete('/image/{image}', [ImageController::class, 'destroy'])
+                    ->where('shop_id', '[0-9]+');
+            });
 
         Route::prefix('sale')
             ->middleware('permission:SALES_REPORT')

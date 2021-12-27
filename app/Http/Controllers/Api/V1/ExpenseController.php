@@ -6,6 +6,7 @@ use App\Http\Requests\StoreExpenseRequest;
 use App\Http\Requests\UpdateExpenseRequest;
 use App\Models\Expense;
 use App\Models\ExpenseTypeShop;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class ExpenseController extends Controller
@@ -15,7 +16,7 @@ class ExpenseController extends Controller
 
         // 1- report date should not be older than 1 day. (checked in form request).
         // TODO 2- strictly limited expenses should be checked if theres enough balance left.
-        // TODO 3- accountant only expenses should be submitted by accountant only.
+        // TODO 3- accountant only expenses should be submitted by accountants only.
 
         // 4- shopId and ExpenseTypeId should match with expenseTypeShopId and submitted shopId.
         $expenseRule = ExpenseTypeShop::where('id', $request->expense_type_shop_id)
@@ -45,7 +46,13 @@ class ExpenseController extends Controller
             ], 403);
         }
 
-        // TODO 2- disable editing old reports.
+        // 2- disable editing old reports.
+        // 3- TODO move constants to config file.
+        if (Carbon::createFromDate($report->created_at)->addHours(4) < now()) {
+            return response()->json([
+                "errors" => (object)["message" => ["Old reports can't be edited."]]
+            ], 403);
+        }
 
         return $report->update($request->safe()->except(['report_date', 'shop_id', 'expense_type_shop_id']));
     }

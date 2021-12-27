@@ -6,6 +6,7 @@ use App\Http\Requests\StoreSaleRequest;
 use App\Http\Requests\UpdateSaleRequest;
 use App\Http\Resources\SaleResource;
 use App\Models\Sale;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class SaleController extends Controller
@@ -62,7 +63,13 @@ class SaleController extends Controller
             ], 403);
         }
 
-        // TODO 2- disable editing old reports.
+        // 2- disable editing old reports.
+        // 3- TODO move constants to config file.
+        if (Carbon::createFromDate($report->created_at)->addHours(4) < now()) {
+            return response()->json([
+                "errors" => (object)["message" => ["Old reports can't be edited."]]
+            ], 403);
+        }
 
 
         return $report->update($request->safe()->except(['report_date', 'shop_id']));

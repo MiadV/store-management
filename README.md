@@ -36,9 +36,9 @@ Expense:
 - POST* `api/v1/expense` new expense report.
 - PUT* `api/v1/expense/{report_id}` update expense report.
 
-Media:
-- POST* `api/v1/upload` upload photos.
-- DELETE* `api/v1/upload` delete photos.
+File:
+- POST* `api/v1/upload/image` upload photos.
+- DELETE* `api/v1/upload/image` delete photos.
 
 #### Accounting Dashboard Only
 - Modify users

@@ -53,4 +53,9 @@ class Expense extends Model
     {
         return $this->belongsTo(ExpenseType::class);
     }
+
+    public function images()
+    {
+        return $this->hasMany(Image::class);
+    }
 }
