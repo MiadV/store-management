@@ -55,13 +55,25 @@ Route::middleware('auth:sanctum')
             ->middleware('permission:EXPENSE_REPORT')
             ->group(function () {
 
+                Route::get('/{report}', [ExpenseController::class, 'show'])
+                    ->where('report', '[0-9]+');
+
+                Route::get('/types/{shop_id}', [ExpenseTypeController::class, 'shopExpenseTypes'])
+                    ->where('shop_id', '[0-9]+');
+
+                Route::get('/limit-balance/{expense_type_shop_id}', [ExpenseTypeController::class, 'limitBalance'])
+                    ->where('expense_type_shop_id', '[0-9]+');
+
+                Route::get('/current-month/{shop_id}', [ExpenseController::class, 'currentMonthReports'])
+                    ->where('shop_id', '[0-9]+');
+
+
+
                 Route::post('/', [ExpenseController::class, 'store']);
 
                 Route::put('/{report}', [ExpenseController::class, 'update'])
                     ->where('report', '[0-9]+');
 
-                Route::get('/types/{shop_id}', [ExpenseTypeController::class, 'shopExpenseTypes'])
-                    ->where('shop_id', '[0-9]+');
             });
 
     });

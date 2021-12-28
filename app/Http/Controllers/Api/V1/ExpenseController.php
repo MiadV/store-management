@@ -4,13 +4,47 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Requests\StoreExpenseRequest;
 use App\Http\Requests\UpdateExpenseRequest;
+use App\Http\Resources\ExpenseResource;
 use App\Models\Expense;
 use App\Models\ExpenseTypeShop;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use function MongoDB\BSON\toJSON;
 
 class ExpenseController extends Controller
 {
+
+    public function show(Request $request, $report)
+    {
+        $expenseReport = Expense::with(['user', 'images', 'shop', 'expenseType'])
+            ->where('id', $report)
+            ->firstOrFail();
+
+        return (new ExpenseResource($expenseReport))
+            ->response()
+            ->setEncodingOptions(JSON_UNESCAPED_SLASHES);
+    }
+
+
+    public function currentMonthReports(Request $request)
+    {
+        // 1- should not return accountant_only expenses.
+        // 2- return paginated data.
+
+        $expenseReports = Expense::with(['user', 'images', 'shop', 'expenseType'])
+            ->where('shop_id', $request->shop_id)
+            ->whereRelation('expenseType', 'accountant_only', false)
+            ->whereYear('report_date', Carbon::now()->year)
+            ->whereMonth('report_date', Carbon::now()->month)
+            ->orderBy('report_date', 'desc')
+            ->simplePaginate(10);
+
+        return ExpenseResource::collection($expenseReports)
+            ->response()
+            ->setEncodingOptions(JSON_UNESCAPED_SLASHES);
+    }
+
+
     public function store(StoreExpenseRequest $request)
     {
 

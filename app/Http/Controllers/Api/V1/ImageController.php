@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 
 class ImageController extends Controller
 {
+
     public function store(ImageRequest $request)
     {
 

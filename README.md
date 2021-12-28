@@ -8,7 +8,7 @@
 
 Initial roles and permissions can be modified from `database/seeders/PermissionsSeeder.php`
 
-####Current permissions are:
+#### Current permissions are:
 - sales-report
 - expense-report
 - report-history
@@ -30,13 +30,13 @@ Sales:
 
 Expense:
 - GET* `api/v1/expense/types/{shop_id}` get expense types list for a shop.
-- GET* `api/v1/expense/limit-balance/{expense_type_id}` get balance of expense type for the current month.
-- GET* `api/v1/expense/current-month` get expense reports list for the current month.
-- GET* `api/v1/expense/{report_id}` get expense report by id.
+- GET* `api/v1/expense/limit-balance/{expense_type_shop_id}` get balance of expense type for the current month.
+- GET* `api/v1/expense/current-month/{shop_id}` get expense reports list for the current month.
+- GET* `api/v1/expense/{report_id}` get expense by id.
 - POST* `api/v1/expense` new expense report.
 - PUT* `api/v1/expense/{report_id}` update expense report.
 
-File:
+Upload:
 - POST* `api/v1/upload/image` upload photos.
 - DELETE* `api/v1/upload/image` delete photos.
 

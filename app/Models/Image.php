@@ -15,6 +15,18 @@ class Image extends Model
         'image_path',
     ];
 
+    /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = ['full_path'];
+
+
+    public function getFullPathAttribute()
+    {
+        return asset("{$this->image_path}{$this->name}");
+    }
 
     public function expense()
     {
