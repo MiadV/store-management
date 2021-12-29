@@ -2,7 +2,8 @@
 
 - Create the database and Config DB Credentials in .env file.
 - Run `php artisan migrate:fresh --seed`.
-- Define token expiration time in config/sanctum.php
+- Define token expiration time in `config/sanctum.php`.
+- Edit app specific variables in `config/constants.php`.
 
 ## Developer Notes
 

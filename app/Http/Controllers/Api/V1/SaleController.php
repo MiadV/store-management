@@ -55,7 +55,6 @@ class SaleController extends Controller
 
     public function update(UpdateSaleRequest $request, Sale $report)
     {
-
         // 1- Each user can edit his submitted report only.
         if ($report->user_id != auth()->id()) {
             return response()->json([
@@ -64,8 +63,7 @@ class SaleController extends Controller
         }
 
         // 2- disable editing old reports.
-        // 3- TODO move constants to config file.
-        if (Carbon::createFromDate($report->created_at)->addHours(4) < now()) {
+        if (Carbon::createFromDate($report->created_at)->addHours(config('constants.sale_edit_cutoff_time', 4)) < now()) {
             return response()->json([
                 "errors" => (object)["message" => ["Old reports can't be edited."]]
             ], 403);
