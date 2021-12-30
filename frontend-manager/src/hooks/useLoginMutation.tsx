@@ -1,11 +1,7 @@
 import { useMutation, useQueryClient } from "react-query";
-import { string } from "yup/lib/locale";
 import api from "../util/api";
 
-type LoginResponseError = {
-    message: string;
-    errors: {};
-};
+type ErrorType = Record<string, [string]>;
 
 type LoginResponse = {
     token: string;
@@ -24,7 +20,7 @@ const login = async (data: ILogin): Promise<LoginResponse> => {
 
 export default function useLoginMutation() {
     const queryClient = useQueryClient();
-    return useMutation<LoginResponse, LoginResponseError, ILogin>(
+    return useMutation<LoginResponse, any, ILogin>(
         async (data) => login(data),
         {
             onError: () => {

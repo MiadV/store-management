@@ -47,12 +47,12 @@ class AuthController extends Controller
 
         // Check password
         if (!$user || !Hash::check($fields['password'], $user->password)) {
-            return response()->json(["errors" => (object)["message" => ["Wrong credentials."]]], 401);
+            return response()->json(["errors" => (object)["message" => ["Wrong credentials."]]], 403);
         }
 
         // Check if user is disabled.
         if (!$user["is_active"]) {
-            return response()->json(["errors" => (object)["email" => ["Disabled Account."]]], 401);
+            return response()->json(["errors" => (object)["email" => ["Disabled Account."]]], 403);
         }
 
         // TODO => Replace token-name with device name.

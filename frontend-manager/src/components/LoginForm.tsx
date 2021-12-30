@@ -18,11 +18,12 @@ import { FaLock, FaRegEnvelope } from "react-icons/fa";
 import Card from "./Card";
 import LoginFormSchema from "../validations/LoginFormValidation";
 import useLoginMutation, { ILogin } from "../hooks/useLoginMutation";
+import mapServerSideErrors from "../util/mapServerSideErrors";
 
 const LoginForm: React.FC<any> = () => {
     const toast = useToast();
     const loginMutation = useLoginMutation();
-    const { handleSubmit, register, reset, formState } = useForm({
+    const { handleSubmit, register, reset, setError, formState } = useForm({
         resolver: yupResolver(LoginFormSchema),
     });
     const { isSubmitting, errors } = formState;
@@ -30,16 +31,17 @@ const LoginForm: React.FC<any> = () => {
     const onSubmit = async (data: ILogin) => {
         try {
             await loginMutation.mutateAsync(data);
-        } catch (error) {
-            reset();
-            toast({
-                title: "Authentication Error",
-                // description: error.message,
-                description: "Sdsdsd",
-                status: "error",
-                duration: 3000,
-                isClosable: true,
-            });
+        } catch (err) {
+            // @ts-ignore
+            console.log("sd", err.response?.data);
+            // reset();
+            // toast({
+            //     title: "Authentication Error",
+            //     description: (errors as Error).message,
+            //     status: "error",
+            //     duration: 3000,
+            //     isClosable: true,
+            // });
         }
     };
 
