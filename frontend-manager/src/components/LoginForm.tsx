@@ -17,29 +17,30 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { FaLock, FaRegEnvelope } from "react-icons/fa";
 import Card from "./Card";
 import LoginFormSchema from "../validations/LoginFormValidation";
-// import useLoginMutation, { ILogin } from "../hooks/useLoginMutation";
+import useLoginMutation, { ILogin } from "../hooks/useLoginMutation";
 
 const LoginForm: React.FC<any> = () => {
     const toast = useToast();
-    // const loginMutation = useLoginMutation();
+    const loginMutation = useLoginMutation();
     const { handleSubmit, register, reset, formState } = useForm({
         resolver: yupResolver(LoginFormSchema),
     });
     const { isSubmitting, errors } = formState;
 
-    const onSubmit = async () => {
-        // try {
-        //     await loginMutation.mutateAsync(data);
-        // } catch (error) {
-        //     reset();
-        //     toast({
-        //         title: "Authentication Error",
-        //         description: error.message,
-        //         status: "error",
-        //         duration: 3000,
-        //         isClosable: true,
-        //     });
-        // }
+    const onSubmit = async (data: ILogin) => {
+        try {
+            await loginMutation.mutateAsync(data);
+        } catch (error) {
+            reset();
+            toast({
+                title: "Authentication Error",
+                // description: error.message,
+                description: "Sdsdsd",
+                status: "error",
+                duration: 3000,
+                isClosable: true,
+            });
+        }
     };
 
     return (
