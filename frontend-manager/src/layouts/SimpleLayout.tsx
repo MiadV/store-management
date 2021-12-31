@@ -1,27 +1,13 @@
 import React from "react";
-import {
-    useColorModeValue,
-    Box,
-    BoxProps,
-    VStack,
-    Grid,
-} from "@chakra-ui/react";
-
-import { ColorModeSwitcher } from "../ColorModeSwitcher";
+import { useColorModeValue, Box, BoxProps } from "@chakra-ui/react";
 
 const Simple = ({ children, ...rest }: { children: any }) => {
-    const bgColor = useColorModeValue("gray.100", "gray.900");
+    const bgColor = useColorModeValue("white", "gray.900");
+
     return (
-        <>
-            <Box as="section" bgColor={bgColor}>
-                <Grid minH="100vh">
-                    <ColorModeSwitcher justifySelf="flex-end" />
-                    <VStack>
-                        <Box {...rest}>{children}</Box>
-                    </VStack>
-                </Grid>
-            </Box>
-        </>
+        <Box as="section" bgColor={bgColor}>
+            <Box {...rest}>{children}</Box>
+        </Box>
     );
 };
 

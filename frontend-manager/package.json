@@ -16,6 +16,7 @@
     "@types/react-dom": "^16.9.14",
     "axios": "^0.24.0",
     "framer-motion": "^4.1.17",
+    "js-cookie": "^3.0.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-hook-form": "^7.22.5",
@@ -47,5 +48,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/js-cookie": "^3.0.1"
   }
 }

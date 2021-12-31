@@ -1,11 +1,9 @@
 import React from "react";
 import {
     FormControl,
-    FormLabel,
     Input,
     Stack,
     Button,
-    Heading,
     InputGroup,
     InputLeftElement,
     Icon,
@@ -14,10 +12,13 @@ import {
 } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { FaLock, FaRegEnvelope } from "react-icons/fa";
-import Card from "./Card";
+import { BiEnvelope, BiLock } from "react-icons/bi";
+
 import LoginFormSchema from "../validations/LoginFormValidation";
-import useLoginMutation, { ILogin } from "../hooks/useLoginMutation";
+import useLoginMutation, {
+    ILogin,
+    LoginErrorType,
+} from "../hooks/useLoginMutation";
 import mapServerSideErrors from "../util/mapServerSideErrors";
 
 const LoginForm: React.FC<any> = () => {
@@ -32,91 +33,79 @@ const LoginForm: React.FC<any> = () => {
         try {
             await loginMutation.mutateAsync(data);
         } catch (err) {
-            // @ts-ignore
-            console.log("sd", err.response?.data);
-            // reset();
-            // toast({
-            //     title: "Authentication Error",
-            //     description: (errors as Error).message,
-            //     status: "error",
-            //     duration: 3000,
-            //     isClosable: true,
-            // });
+            const { response } = err as LoginErrorType;
+
+            if (response?.data.errors.message) {
+                toast({
+                    title: "Authentication Error",
+                    description: response?.data.errors.message,
+                    status: "error",
+                    duration: 3000,
+                    isClosable: true,
+                });
+            } else {
+                mapServerSideErrors(response?.data.errors!, setError);
+            }
         }
     };
 
     return (
-        <Card w={"full"} maxW={"md"} p={8}>
-            <Heading size="lg" as="h4" textAlign="center" marginBottom={4}>
-                Login
-            </Heading>
-            <form autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
-                <Stack spacing={4} marginBottom={4}>
-                    <FormControl
-                        id="email"
-                        isRequired
-                        isInvalid={!!errors.email}
-                    >
-                        <FormLabel htmlFor="email">Email Address</FormLabel>
-                        <InputGroup>
-                            <InputLeftElement
-                                children={
-                                    <Icon as={FaRegEnvelope} color="gray.300" />
-                                }
-                            />
-                            <Input
-                                focusBorderColor="main.500"
-                                type="email"
-                                placeholder="name@example.com"
-                                {...register("email")}
-                            />
-                        </InputGroup>
-                        {errors.email && (
-                            <FormErrorMessage>
-                                {errors.email.message}
-                            </FormErrorMessage>
-                        )}
-                    </FormControl>
+        <form autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
+            <Stack spacing={4} marginBottom={4}>
+                <FormControl id="email" isRequired isInvalid={!!errors.email}>
+                    <InputGroup>
+                        <InputLeftElement
+                            children={<Icon as={BiEnvelope} color="gray.400" />}
+                        />
+                        <Input
+                            variant="filled"
+                            type="email"
+                            placeholder="Email"
+                            {...register("email")}
+                        />
+                    </InputGroup>
+                    {errors.email && (
+                        <FormErrorMessage>
+                            {errors.email.message}
+                        </FormErrorMessage>
+                    )}
+                </FormControl>
 
-                    <FormControl
-                        id="password"
-                        isRequired
-                        isInvalid={!!errors.password}
-                    >
-                        <Stack justifyContent="space-between" isInline>
-                            <FormLabel htmlFor="password">Password</FormLabel>
-                        </Stack>
-                        <InputGroup>
-                            <InputLeftElement
-                                children={<Icon as={FaLock} color="gray.300" />}
-                            />
-                            <Input
-                                focusBorderColor="main.500"
-                                type="password"
-                                placeholder="Enter your password"
-                                {...register("password")}
-                            />
-                        </InputGroup>
-                        {errors.password && (
-                            <FormErrorMessage>
-                                {errors.password.message}
-                            </FormErrorMessage>
-                        )}
-                    </FormControl>
-                </Stack>
-                <Stack>
-                    <Button
-                        isLoading={isSubmitting}
-                        variant="solid"
-                        type="submit"
-                        loadingText="Please wait..."
-                        colorScheme="teal"
-                    >
-                        Sign in
-                    </Button>
-                </Stack>
-            </form>
-        </Card>
+                <FormControl
+                    id="password"
+                    isRequired
+                    isInvalid={!!errors.password}
+                >
+                    <InputGroup>
+                        <InputLeftElement
+                            children={<Icon as={BiLock} color="gray.400" />}
+                        />
+                        <Input
+                            variant="filled"
+                            type="password"
+                            placeholder="Password"
+                            {...register("password")}
+                        />
+                    </InputGroup>
+                    {errors.password && (
+                        <FormErrorMessage>
+                            {errors.password.message}
+                        </FormErrorMessage>
+                    )}
+                </FormControl>
+            </Stack>
+            <Stack>
+                <Button
+                    isLoading={isSubmitting}
+                    variant="solid"
+                    type="submit"
+                    loadingText="Please wait..."
+                    colorScheme="teal"
+                >
+                    Login
+                </Button>
+            </Stack>
+        </form>
     );
 };
 

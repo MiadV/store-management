@@ -1,4 +1,5 @@
-import axios from "axios";
+import axios, { AxiosRequestConfig } from "axios";
+import Cookies from "js-cookie";
 
 export default function api() {
     const api = axios.create({
@@ -12,47 +13,27 @@ export default function api() {
         },
     });
 
-    // api.interceptors.response.use(
-    //     (response) => response,
-    //     (error) => {
-    //         if (error.response) {
-    //             switch (error.response.status) {
-    //                 case 401:
-    //                     // Not logged in
-    //                     // logout();
-    //                     return Promise.reject(error?.response?.data);
+    // Request interceptor. Runs before your request reaches the server
+    const onRequest = (config: AxiosRequestConfig<any>) => {
+        if (
+            (config.method === "post" ||
+                config.method === "put" ||
+                config.method === "delete") &&
+            !Cookies.get("XSRF-TOKEN")
+        ) {
+            return setCSRFToken().then(() => config);
+        }
+        return config;
+    };
 
-    //                 case 419:
-    //                     // Session expired
-    //                     // logout();
-    //                     return Promise.reject(error?.response?.data);
+    const setCSRFToken = () => {
+        console.log("getting CSRF");
+        return api.get(
+            `${process.env.REACT_APP_API_BASE_URL}/sanctum/csrf-cookie`
+        );
+    };
 
-    //                 case 422:
-    //                     return Promise.reject(error?.response?.data);
-
-    //                 case 503:
-    //                     // Down for maintenance
-    //                     // logout();
-    //                     return Promise.reject(error?.response?.data);
-
-    //                 default:
-    //                     // code block
-    //                     return Promise.reject(error?.response?.data);
-    //             }
-    //         }
-
-    //         return Promise.reject(error);
-    //     }
-    // );
+    api.interceptors.request.use(onRequest);
 
     return api;
 }
-
-// const logout = async () => {
-//     localStorage.removeItem(
-//         `${process.env.REACT_APP_LOCAL_STORAGE_PREFIX}-token`
-//     );
-//     // window.location.reload();
-
-//     console.log("logged out by inrecepter");
-// };

@@ -9,10 +9,6 @@ export type AuthUserObject = {
 
 const getAuthUser = async (): Promise<AuthUserObject> => {
     console.log("tried get auth user");
-
-    await api().get(
-        `${process.env.REACT_APP_API_BASE_URL}/sanctum/csrf-cookie`
-    );
     const { data } = await api().get("/me");
     return data;
 };
