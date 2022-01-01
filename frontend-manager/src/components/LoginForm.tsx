@@ -24,7 +24,7 @@ import mapServerSideErrors from "../util/mapServerSideErrors";
 const LoginForm: React.FC<any> = () => {
     const toast = useToast();
     const loginMutation = useLoginMutation();
-    const { handleSubmit, register, reset, setError, formState } = useForm({
+    const { handleSubmit, register, setError, formState } = useForm({
         resolver: yupResolver(LoginFormSchema),
     });
     const { isSubmitting, errors } = formState;

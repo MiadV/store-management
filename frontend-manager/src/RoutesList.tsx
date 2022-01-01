@@ -6,6 +6,8 @@ import useAuth from "./hooks/useAuth";
 import LoginPage from "./pages/Login";
 import SelectShop from "./pages/SelectShop";
 import NotFound from "./pages/NotFound";
+import StoreDashboard from "./pages/StoreDashboard";
+import SalesPage from "./pages/Sales";
 
 const RoutesList = () => {
     const queryClient = useQueryClient();
@@ -28,6 +30,9 @@ const RoutesList = () => {
             <Route path="/login" element={<LoginPage />} />
             <Route path="/" element={<PrivateOutlet />}>
                 <Route index element={<SelectShop />} />
+                <Route path="/store/:storeId" element={<StoreDashboard />} />
+                <Route path="/sales/:storeId" element={<SalesPage />} />
+                {/* <Route path="/expenses/:storeId" element={<StoreDashboard />} /> */}
             </Route>
             <Route path="*" element={<NotFound />} />
         </Routes>

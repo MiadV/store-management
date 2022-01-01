@@ -37,7 +37,7 @@ const LoginPage = () => {
             <Flex marginBottom={4} marginTop={16} justifyContent={"center"}>
                 <Logo fill={bgColor} display={"block"} />
             </Flex>
-            <Heading size="lg" as="h4" textAlign="center" marginBottom={12}>
+            <Heading fontSize="lg" as="h4" textAlign="center" marginBottom={12}>
                 Store Managment Portal
             </Heading>
             <LoginForm />

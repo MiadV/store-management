@@ -8,11 +8,22 @@ import {
     Stack,
     Text,
 } from "@chakra-ui/react";
-import { BiStore } from "react-icons/bi";
+import { Link } from "react-router-dom";
+import { format } from "date-fns";
+import { BiStore, BiArrowBack } from "react-icons/bi";
 import Card from "./Card";
 import SettingMenu from "./SettingMenu";
 
-const Header = () => {
+type HeaderProps = {
+    title: string;
+    showSetting?: boolean;
+    showSelectStore?: boolean;
+    goBackPath?: string;
+};
+
+const Header: React.FC<HeaderProps> = (props) => {
+    const { title, showSelectStore, showSetting, goBackPath } = props;
+
     return (
         <Card
             borderTopRadius={0}
@@ -22,26 +33,44 @@ const Header = () => {
         >
             <Flex justifyContent={"space-between"} alignItems={"center"}>
                 <Box>
-                    <Avatar size={"md"} boxShadow={"md"} />
+                    {!goBackPath ? (
+                        <Avatar size={"md"} boxShadow={"md"} />
+                    ) : (
+                        <Link to={goBackPath}>
+                            <IconButton
+                                variant="ghost"
+                                isRound
+                                aria-label="Go back one page"
+                                icon={<BiArrowBack size={32} />}
+                            />
+                        </Link>
+                    )}
                 </Box>
                 <Stack spacing={1} direction="row">
-                    <IconButton
-                        variant="ghost"
-                        isRound
-                        aria-label="Change Shop"
-                        icon={<BiStore size={32} />}
-                    />
-                    <SettingMenu />
+                    {showSelectStore && (
+                        <Link to="/">
+                            <IconButton
+                                variant="ghost"
+                                isRound
+                                aria-label="Change current shop"
+                                icon={<BiStore size={32} />}
+                            />
+                        </Link>
+                    )}
+                    {showSetting && <SettingMenu />}
                 </Stack>
             </Flex>
-            <Heading as="h4" size="md" marginTop={4} color="gray.700">
-                Hello, John Doe
+            <Heading as="h4" fontSize="md" marginTop={4}>
+                {title}
             </Heading>
-            <Text fontSize="lg" color="gray.600">
-                Sunday,27th December
-            </Text>
+            <Text>{format(new Date(), "EEEE, do LLLL yy")}</Text>
         </Card>
     );
 };
 
 export default Header;
+
+Header.defaultProps = {
+    showSetting: true,
+    showSelectStore: true,
+};

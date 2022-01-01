@@ -1,4 +1,9 @@
-import { extendTheme, StyleProps, ThemeConfig } from "@chakra-ui/react";
+import {
+    extendTheme,
+    StyleProps,
+    ThemeConfig,
+    theme as base,
+} from "@chakra-ui/react";
 import { mode } from "@chakra-ui/theme-tools";
 
 const config: ThemeConfig = {
@@ -8,7 +13,10 @@ const config: ThemeConfig = {
 
 const theme = extendTheme({
     config,
-
+    fonts: {
+        heading: `Inter, ${base.fonts.heading}`,
+        body: `Inter, ${base.fonts.body}`,
+    },
     styles: {
         global: (props: StyleProps) => ({
             body: {
