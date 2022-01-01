@@ -22,6 +22,7 @@ class Sale extends Model
         'cash_amount',
         'card_amount',
         'online_transfer_amount',
+        'total_amount',
     ];
 
     /**
@@ -33,7 +34,13 @@ class Sale extends Model
         'cash_amount' => 'decimal:2',
         'card_amount' => 'decimal:2',
         'online_transfer_amount' => 'decimal:2',
+        'total_amount' => 'decimal:2',
     ];
+
+    public function getTotalAmountAttribute()
+    {
+        return $this->cash_amount + $this->card_amount + $this->online_transfer_amount;
+    }
 
 
     public function user()

@@ -1,20 +1,24 @@
 import React from "react";
 import { Box, Text } from "@chakra-ui/react";
 import { useParams } from "react-router-dom";
+import { BiFile, BiMessageSquareAdd } from "react-icons/bi";
 import Header from "../components/Header";
 import PageLayout from "../layouts/PageLayout";
 import useAuth from "../hooks/useAuth";
+import useLatestSaleReport from "../hooks/useLatestSaleReport";
 import NoOptionsCard from "../components/NoOptionsCard";
 import CustomButton from "../components/CustomButton";
 import ReportListItem from "../components/ReportListItem";
-import { BiFile, BiMessageSquareAdd } from "react-icons/bi";
 
 const SalesPage: React.FC<{}> = () => {
     let { storeId } = useParams();
+    const sanitizedStoreId = storeId ? parseInt(storeId) : 0;
     const { data: authUser } = useAuth();
+    const { data: saleReport, isLoading } =
+        useLatestSaleReport(sanitizedStoreId);
 
     // validate storeId
-    if (!storeId || authUser?.shops[parseInt(storeId)] === undefined) {
+    if (!storeId || authUser?.shops[sanitizedStoreId] === undefined) {
         return (
             <PageLayout>
                 <Header title="No Store!" goBackPath="/" />
@@ -29,7 +33,7 @@ const SalesPage: React.FC<{}> = () => {
     return (
         <PageLayout>
             <Header
-                title={authUser!.shops[parseInt(storeId!)].title}
+                title={authUser!.shops[sanitizedStoreId].title}
                 goBackPath={`/store/${storeId}`}
             />
             <Box padding={6}>
@@ -45,9 +49,10 @@ const SalesPage: React.FC<{}> = () => {
                 <Text marginTop={8}>Latest report</Text>
                 <Box marginTop={4}>
                     <ReportListItem
-                        amount="10,000"
-                        date="2021-12-15"
+                        amount={saleReport?.TotalAmount}
+                        date={saleReport?.reportDate}
                         icon={<BiFile size={32} />}
+                        isLoading={isLoading}
                         callback={() => {}}
                     />
                 </Box>

@@ -1,4 +1,4 @@
-import react from "react";
+import React from "react";
 import { Heading, Text, Flex, useColorModeValue, Box } from "@chakra-ui/react";
 import AlertIcon from "../assets/vectors/AlertIcon";
 import Card from "./Card";

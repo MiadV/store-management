@@ -1,19 +1,40 @@
 import React from "react";
-import { Flex, Text, Box, IconButton } from "@chakra-ui/react";
+import { Flex, Text, Box, IconButton, Stack, Skeleton } from "@chakra-ui/react";
 import { format } from "date-fns";
 import { BiChevronRight } from "react-icons/bi";
 
 import Card from "./Card";
+import currencyFormat from "../util/currencyFormat";
 
 type ReportListItemProps = {
-    amount: string;
+    amount?: string;
     callback?: () => void;
     icon?: JSX.Element;
-    date: string;
+    date?: string;
+    isLoading?: boolean;
 };
 
 const ReportListItem: React.FC<ReportListItemProps> = (props) => {
-    const { amount, callback, icon, date } = props;
+    const { amount, callback, icon, date, isLoading } = props;
+
+    if (isLoading) {
+        return (
+            <Card padding={3}>
+                <Stack>
+                    <Skeleton height="10px" />
+                    <Skeleton height="10px" />
+                </Stack>
+            </Card>
+        );
+    }
+
+    if (!amount || !date) {
+        return (
+            <Card padding={3}>
+                <Text>Nothing yet...ss</Text>
+            </Card>
+        );
+    }
 
     return (
         <Card padding={3}>
@@ -25,7 +46,7 @@ const ReportListItem: React.FC<ReportListItemProps> = (props) => {
                             {format(new Date(date), "dd MMMM Y")}
                         </Text>
                         <Text fontSize="xl" fontWeight="semibold">
-                            RM {amount}
+                            {currencyFormat(amount)}
                         </Text>
                     </Flex>
                 </Flex>
@@ -45,3 +66,7 @@ const ReportListItem: React.FC<ReportListItemProps> = (props) => {
 };
 
 export default ReportListItem;
+
+ReportListItem.defaultProps = {
+    isLoading: false,
+};

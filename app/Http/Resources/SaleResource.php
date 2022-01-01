@@ -26,6 +26,7 @@ class SaleResource extends JsonResource
             'cashAmount' => $this->cash_amount,
             'cardAmount' => $this->card_amount,
             'onlineTransferAmount' => $this->online_transfer_amount,
+            'TotalAmount' => (string)$this->total_amount,
 
             'shop' => new  ShopResource($shop),
             $this->mergeWhen($user, [
