@@ -1,6 +1,6 @@
 import React from "react";
 import { Box, Text } from "@chakra-ui/react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { BiFile, BiMessageSquareAdd } from "react-icons/bi";
 import Header from "../components/Header";
 import PageLayout from "../layouts/PageLayout";
@@ -16,6 +16,7 @@ const SalesPage: React.FC<{}> = () => {
     const { data: authUser } = useAuth();
     const { data: saleReport, isLoading } =
         useLatestSaleReport(sanitizedStoreId);
+    const navigate = useNavigate();
 
     // validate storeId
     if (!storeId || authUser?.shops[sanitizedStoreId] === undefined) {
@@ -43,7 +44,9 @@ const SalesPage: React.FC<{}> = () => {
                     <CustomButton
                         title="New Report"
                         icon={<BiMessageSquareAdd size={32} />}
-                        callback={() => {}}
+                        callback={() =>
+                            navigate(`/sales/new/${sanitizedStoreId}`)
+                        }
                     />
                 </Box>
                 <Text marginTop={8}>Latest report</Text>

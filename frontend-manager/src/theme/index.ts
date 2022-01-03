@@ -1,10 +1,4 @@
-import {
-    extendTheme,
-    StyleProps,
-    ThemeConfig,
-    theme as base,
-} from "@chakra-ui/react";
-import { mode } from "@chakra-ui/theme-tools";
+import { extendTheme, ThemeConfig, theme as base } from "@chakra-ui/react";
 
 const config: ThemeConfig = {
     initialColorMode: "light",
@@ -17,12 +11,47 @@ const theme = extendTheme({
         heading: `Inter, ${base.fonts.heading}`,
         body: `Inter, ${base.fonts.body}`,
     },
-    styles: {
-        global: (props: StyleProps) => ({
-            body: {
-                color: mode("gray.700", "whiteAlpha.900")(props),
+    components: {
+        Input: {
+            variants: {
+                outline: ({ colorMode }: { colorMode: "dark" | "light" }) => ({
+                    field: {
+                        bg: colorMode === "dark" ? "gray.700" : "white",
+                    },
+                }),
+                sizes: {},
+                variants: {},
+                defaultProps: {
+                    variant: null, // null here
+                },
             },
-        }),
+        },
+        NumberInput: {
+            variants: {
+                outline: ({ colorMode }: { colorMode: "dark" | "light" }) => ({
+                    field: {
+                        bg: colorMode === "dark" ? "gray.700" : "white",
+                    },
+                }),
+                sizes: {},
+                variants: {},
+                defaultProps: {
+                    variant: null, // null here
+                },
+            },
+        },
+        Textarea: {
+            variants: {
+                outline: ({ colorMode }: { colorMode: "dark" | "light" }) => ({
+                    bg: colorMode === "dark" ? "gray.700" : "white",
+                }),
+                sizes: {},
+                variants: {},
+                defaultProps: {
+                    variant: null, // null here
+                },
+            },
+        },
     },
 });
 

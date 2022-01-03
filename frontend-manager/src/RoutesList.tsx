@@ -8,6 +8,7 @@ import SelectShop from "./pages/SelectShop";
 import NotFound from "./pages/NotFound";
 import StoreDashboard from "./pages/StoreDashboard";
 import SalesPage from "./pages/Sales";
+import NewSalesReport from "./pages/NewSalesReport";
 
 const RoutesList = () => {
     const queryClient = useQueryClient();
@@ -32,6 +33,10 @@ const RoutesList = () => {
                 <Route index element={<SelectShop />} />
                 <Route path="/store/:storeId" element={<StoreDashboard />} />
                 <Route path="/sales/:storeId" element={<SalesPage />} />
+                <Route
+                    path="/sales/new/:storeId"
+                    element={<NewSalesReport />}
+                />
                 {/* <Route path="/expenses/:storeId" element={<StoreDashboard />} /> */}
             </Route>
             <Route path="*" element={<NotFound />} />
