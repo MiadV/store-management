@@ -6,10 +6,9 @@ import {
     InputProps,
     useNumberInput,
 } from "@chakra-ui/react";
-import { AnyTxtRecord } from "dns";
 
 const CustomPriceInput: React.ForwardRefRenderFunction<
-    AnyTxtRecord,
+    any,
     InputProps & {
         icon: React.ReactNode;
         defaultValue?: string | number | undefined;
@@ -26,7 +25,7 @@ const CustomPriceInput: React.ForwardRefRenderFunction<
     return (
         <InputGroup>
             <InputLeftElement color="gray.400" children={icon} />
-            <Input {...input} {...otherProps} {...ref} />
+            <Input {...input} {...otherProps} ref={ref} />
         </InputGroup>
     );
 };
