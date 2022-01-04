@@ -39,7 +39,7 @@ class Sale extends Model
 
     public function getTotalAmountAttribute()
     {
-        return $this->cash_amount + $this->card_amount + $this->online_transfer_amount;
+        return number_format($this->cash_amount + $this->card_amount + $this->online_transfer_amount, 2);
     }
 
 
