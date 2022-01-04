@@ -40,9 +40,12 @@ const SaleReportItem: React.FC<{ report: SaleReportType }> = ({ report }) => {
                 </Text>
 
                 <Flex direction="column" paddingX={6} marginTop={8} gap={1}>
-                    <Flex justifyContent={"space-between"} color={"gray.500"}>
-                        <Text>Store</Text>
-                        <Text>{shop?.title}</Text>
+                    <Flex
+                        justifyContent={"center"}
+                        color={"gray.500"}
+                        borderBottom={"1px"}
+                    >
+                        <Text fontWeight={"semibold"}>{shop?.title}</Text>
                     </Flex>
                     <Flex justifyContent={"space-between"} color={"gray.500"}>
                         <Text>Cash</Text>
@@ -59,7 +62,7 @@ const SaleReportItem: React.FC<{ report: SaleReportType }> = ({ report }) => {
                     <Flex
                         justifyContent={"space-between"}
                         color={"gray.500"}
-                        borderTop="2px"
+                        borderTop="1px"
                     >
                         <Text fontWeight={"semibold"}>Total Sale</Text>
                         <Text fontWeight={"semibold"}>
