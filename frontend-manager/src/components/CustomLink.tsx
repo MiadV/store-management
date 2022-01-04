@@ -2,15 +2,16 @@ import React from "react";
 import { Flex, Text, Box, IconButton } from "@chakra-ui/react";
 import { BiChevronRight } from "react-icons/bi";
 import Card from "./Card";
+import { Link } from "react-router-dom";
 
-type CustomButtonProps = {
+type CustomLinkProps = {
     title: string;
-    callback: () => void;
+    toPath: string;
     icon?: JSX.Element;
 };
 
-const CustomButton: React.FC<CustomButtonProps> = (props) => {
-    const { title, callback, icon } = props;
+const CustomLink: React.FC<CustomLinkProps> = (props) => {
+    const { title, toPath, icon } = props;
 
     return (
         <Card padding={3}>
@@ -28,7 +29,8 @@ const CustomButton: React.FC<CustomButtonProps> = (props) => {
                     variant="outline"
                     aria-label="select store"
                     size="sm"
-                    onClick={callback}
+                    to={toPath}
+                    as={Link}
                     icon={<BiChevronRight size={24} />}
                 />
             </Flex>
@@ -36,4 +38,4 @@ const CustomButton: React.FC<CustomButtonProps> = (props) => {
     );
 };
 
-export default CustomButton;
+export default CustomLink;

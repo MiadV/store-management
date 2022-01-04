@@ -5,7 +5,6 @@ import PageLayout from "../layouts/PageLayout";
 import useAuth from "../hooks/useAuth";
 import SelectStoreItem from "../components/SelectStoreItem";
 import NoOptionsCard from "../components/NoOptionsCard";
-import { useNavigate } from "react-router-dom";
 import { ShopType } from "../types";
 
 const SelectShop = () => {
@@ -37,13 +36,12 @@ export default SelectShop;
 
 const RenderShopItems: React.FC<{ shopsArray: ShopType[] }> = (props) => {
     const { shopsArray } = props;
-    let navigate = useNavigate();
 
     const storeItems = shopsArray.map((item) => (
         <SelectStoreItem
             shopTitle={item.title}
             key={item.shopId}
-            callback={() => navigate(`/store/${item.shopId}`)}
+            toPath={`/store/${item.shopId}`}
         />
     ));
 

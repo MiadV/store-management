@@ -2,14 +2,15 @@ import React from "react";
 import { Flex, Text, Box, IconButton } from "@chakra-ui/react";
 import { BiStore, BiChevronRight } from "react-icons/bi";
 import Card from "./Card";
+import { Link } from "react-router-dom";
 
 type SelectStoreItemProps = {
     shopTitle: string;
-    callback: () => void;
+    toPath: string;
 };
 
 const SelectStoreItem: React.FC<SelectStoreItemProps> = (props) => {
-    const { shopTitle, callback } = props;
+    const { shopTitle, toPath } = props;
 
     return (
         <Card padding={3}>
@@ -29,7 +30,8 @@ const SelectStoreItem: React.FC<SelectStoreItemProps> = (props) => {
                     variant="outline"
                     aria-label="select store"
                     size="sm"
-                    onClick={callback}
+                    as={Link}
+                    to={toPath}
                     icon={<BiChevronRight size={24} />}
                 />
             </Flex>

@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Spinner, Text, VStack } from "@chakra-ui/react";
+import { Box, Spinner, VStack } from "@chakra-ui/react";
 import { useParams } from "react-router-dom";
 import Header from "../components/Header";
 import PageLayout from "../layouts/PageLayout";

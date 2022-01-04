@@ -5,17 +5,19 @@ import { BiChevronRight } from "react-icons/bi";
 
 import Card from "./Card";
 import currencyFormat from "../util/currencyFormat";
+import { Link } from "react-router-dom";
+import { toPath } from "lodash";
 
 type ReportListItemProps = {
     amount?: string;
-    callback?: () => void;
+    toPath?: string;
     icon?: JSX.Element;
     date?: string;
     isLoading?: boolean;
 };
 
 const ReportListItem: React.FC<ReportListItemProps> = (props) => {
-    const { amount, callback, icon, date, isLoading } = props;
+    const { amount, toPath, icon, date, isLoading } = props;
 
     if (isLoading) {
         return (
@@ -51,12 +53,13 @@ const ReportListItem: React.FC<ReportListItemProps> = (props) => {
                     </Flex>
                 </Flex>
 
-                {callback && (
+                {toPath && (
                     <IconButton
                         variant="outline"
                         aria-label="select store"
                         size="sm"
-                        onClick={callback}
+                        to={toPath}
+                        as={Link}
                         icon={<BiChevronRight size={24} />}
                     />
                 )}
