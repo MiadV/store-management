@@ -6,9 +6,11 @@ import useAuth from "../hooks/useAuth";
 import SelectStoreItem from "../components/SelectStoreItem";
 import NoOptionsCard from "../components/NoOptionsCard";
 import { ShopType } from "../types";
+import { useSelectedStore } from "../context/selectedStoreContext";
 
 const SelectShop = () => {
     const { data: authUser } = useAuth();
+    const {setSelectedStore} = useSelectedStore()
 
     return (
         <PageLayout>
@@ -28,6 +30,7 @@ const SelectShop = () => {
                     />
                 )}
             </Box>
+            <button onClick={() => setSelectedStore(authUser!.shops[0])}>test</button>
         </PageLayout>
     );
 };

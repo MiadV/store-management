@@ -5,7 +5,9 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
 import RoutesList from "./RoutesList";
 import theme from "./theme";
+import { SelectedStoreProvider } from "./context/selectedStoreContext";
 import "./theme/style.css";
+
 
 // Create a client
 const queryClient = new QueryClient();
@@ -14,7 +16,9 @@ export const App = () => (
     <QueryClientProvider client={queryClient}>
         <BrowserRouter>
             <ChakraProvider theme={theme}>
-                <RoutesList />
+                <SelectedStoreProvider>
+                    <RoutesList />
+                </SelectedStoreProvider>
             </ChakraProvider>
         </BrowserRouter>
         <ReactQueryDevtools initialIsOpen={false} />
