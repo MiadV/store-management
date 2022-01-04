@@ -56,7 +56,11 @@ const SalesPage: React.FC<{}> = () => {
                         date={saleReport?.reportDate}
                         icon={<BiFile size={32} />}
                         isLoading={isLoading}
-                        callback={() => {}}
+                        callback={() =>
+                            navigate(
+                                `/sales/${storeId}/report/${saleReport?.saleId}`
+                            )
+                        }
                     />
                 </Box>
             </Box>

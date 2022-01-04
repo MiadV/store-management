@@ -1,4 +1,3 @@
-export default function currencyFormat(x:string) {
-
-    return "RM " +  x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+export default function currencyFormat(price: string | number) {
+    return "RM " + price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }

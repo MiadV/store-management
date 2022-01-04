@@ -2,10 +2,11 @@ import React from "react";
 import { Box, Stack, Text } from "@chakra-ui/react";
 import Header from "../components/Header";
 import PageLayout from "../layouts/PageLayout";
-import useAuth, { ShopType } from "../hooks/useAuth";
+import useAuth from "../hooks/useAuth";
 import SelectStoreItem from "../components/SelectStoreItem";
 import NoOptionsCard from "../components/NoOptionsCard";
 import { useNavigate } from "react-router-dom";
+import { ShopType } from "../types";
 
 const SelectShop = () => {
     const { data: authUser } = useAuth();

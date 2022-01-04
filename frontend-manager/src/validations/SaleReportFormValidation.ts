@@ -5,24 +5,9 @@ const SaleReportFormSchema = yup
     .shape({
         description: yup.string(),
         report_date: yup.date().defined(),
-        cash_amount: yup
-            .number()
-            .test("is-decimal", "invalid amount.", (value) =>
-                (value + "").match(/^[0-9]\d?(?:\.\d{0,2})?$/) ? true : false
-            )
-            .defined(),
-        card_amount: yup
-            .number()
-            .test("is-decimal", "invalid amount.", (value) =>
-                (value + "").match(/^[0-9]\d?(?:\.\d{0,2})?$/) ? true : false
-            )
-            .defined(),
-        online_transfer_amount: yup
-            .number()
-            .test("is-decimal", "invalid amount.", (value) =>
-                (value + "").match(/^[0-9]\d?(?:\.\d{0,2})?$/) ? true : false
-            )
-            .defined(),
+        cash_amount: yup.number().defined(),
+        card_amount: yup.number().defined(),
+        online_transfer_amount: yup.number().defined(),
     })
     .defined();
 

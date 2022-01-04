@@ -9,6 +9,7 @@ import NotFound from "./pages/NotFound";
 import StoreDashboard from "./pages/StoreDashboard";
 import SalesPage from "./pages/Sales";
 import NewSalesReport from "./pages/NewSalesReport";
+import SaleReport from "./pages/SaleReport";
 
 const RoutesList = () => {
     const queryClient = useQueryClient();
@@ -36,6 +37,10 @@ const RoutesList = () => {
                 <Route
                     path="/sales/new/:storeId"
                     element={<NewSalesReport />}
+                />
+                <Route
+                    path="/sales/:storeId/report/:reportId"
+                    element={<SaleReport />}
                 />
                 {/* <Route path="/expenses/:storeId" element={<StoreDashboard />} /> */}
             </Route>

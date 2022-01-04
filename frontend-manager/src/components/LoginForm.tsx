@@ -15,11 +15,9 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { BiEnvelope, BiLock } from "react-icons/bi";
 
 import LoginFormSchema from "../validations/LoginFormValidation";
-import useLoginMutation, {
-    ILogin,
-    LoginErrorType,
-} from "../hooks/useLoginMutation";
+import useLoginMutation from "../hooks/useLoginMutation";
 import mapServerSideErrors from "../util/mapServerSideErrors";
+import { ILogin, ResponseErrorType } from "../types";
 
 const LoginForm: React.FC<any> = () => {
     const toast = useToast();
@@ -33,7 +31,7 @@ const LoginForm: React.FC<any> = () => {
         try {
             await loginMutation.mutateAsync(data);
         } catch (err) {
-            const { response } = err as LoginErrorType;
+            const { response } = err as ResponseErrorType;
 
             if (response?.data.errors.message) {
                 toast({

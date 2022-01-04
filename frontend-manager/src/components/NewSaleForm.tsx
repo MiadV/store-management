@@ -6,29 +6,33 @@ import {
     InputGroup,
     FormErrorMessage,
     Textarea,
-    Box,
+    Text,
+    useToast,
 } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { BiCreditCardFront, BiMoney, BiTransfer } from "react-icons/bi";
 
-// import mapServerSideErrors from "../util/mapServerSideErrors";
+import mapServerSideErrors from "../util/mapServerSideErrors";
 import CustomDatePicker from "./CustomDatePicker";
-import { subDays } from "date-fns";
+import { format, subDays } from "date-fns";
 import CustomPriceInput from "./CustomPriceInput";
 import SaleReportFormSchema from "../validations/SaleReportFormValidation";
-import { INewSaleReport } from "../hooks/useNewSaleReportMutation";
+import useNewSaleReportMutation from "../hooks/useNewSaleReportMutation";
 import currencyFormat from "../util/currencyFormat";
+import { INewSaleReport, ResponseErrorType } from "../types";
+import { useNavigate } from "react-router-dom";
 
-const NewSaleForm: React.FC<any> = () => {
+const NewSaleForm: React.FC<{ storeId: number | string }> = ({ storeId }) => {
+    let navigate = useNavigate();
     const [reportDate, setReportDate] = useState<Date | null>(null);
     const [state, setState] = useState({
-        cash_amount: "0.00",
-        card_amount: "0.00",
-        online_transfer_amount: "0.00",
+        cash_amount: "",
+        card_amount: "",
+        online_transfer_amount: "",
     });
-    // const toast = useToast();
-    // const newSaleReportMutation = useNewSaleReportMutation();
+    const toast = useToast();
+    const newSaleReportMutation = useNewSaleReportMutation();
     const { handleSubmit, register, setError, formState, setValue } = useForm({
         resolver: yupResolver(SaleReportFormSchema),
     });
@@ -51,23 +55,31 @@ const NewSaleForm: React.FC<any> = () => {
     }, [state.online_transfer_amount, setValue]);
 
     const onSubmit = async (data: INewSaleReport) => {
-        console.log(data);
-        // try {
-        //     await loginMutation.mutateAsync(data);
-        // } catch (err) {
-        //     const { response } = err as LoginErrorType;
-        //     if (response?.data.errors.message) {
-        //         toast({
-        //             title: "Authentication Error",
-        //             description: response?.data.errors.message,
-        //             status: "error",
-        //             duration: 3000,
-        //             isClosable: true,
-        //         });
-        //     } else {
-        //         mapServerSideErrors(response?.data.errors!, setError);
-        //     }
-        // }
+        const formatedData = {
+            ...data,
+            shop_id: storeId,
+            report_date: format(reportDate!, "yyyy-MM-dd"),
+        };
+        try {
+            await newSaleReportMutation
+                .mutateAsync(formatedData)
+                .then((res) => {
+                    navigate(`/sales/${storeId}/report/${res.data.saleId}`);
+                });
+        } catch (err) {
+            const { response } = err as ResponseErrorType;
+            if (response?.data.errors.message) {
+                toast({
+                    title: "Something went wrong!",
+                    description: response?.data.errors.message,
+                    status: "error",
+                    duration: 3000,
+                    isClosable: true,
+                });
+            } else {
+                mapServerSideErrors(response?.data.errors!, setError);
+            }
+        }
     };
 
     return (
@@ -180,17 +192,22 @@ const NewSaleForm: React.FC<any> = () => {
                         </FormErrorMessage>
                     )}
                 </FormControl>
-            </Stack>
-            <Box>
-                {currencyFormat(
-                    (
+                <Text fontSize="xl" fontWeight={"bold"} textAlign={"center"}>
+                    {"Total: "}
+                    {(
                         Number(state.cash_amount) +
                         Number(state.card_amount) +
                         Number(state.online_transfer_amount)
-                    ).toFixed(2)
-                )}
-            </Box>
-            <Stack>
+                    ).toFixed(2) === "NaN"
+                        ? currencyFormat("0.00")
+                        : currencyFormat(
+                              (
+                                  Number(state.cash_amount) +
+                                  Number(state.card_amount) +
+                                  Number(state.online_transfer_amount)
+                              ).toFixed(2)
+                          )}
+                </Text>
                 <Button
                     isLoading={isSubmitting}
                     variant="solid"

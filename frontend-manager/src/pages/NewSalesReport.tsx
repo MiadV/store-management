@@ -34,7 +34,7 @@ const NewSalesReport: React.FC<{}> = () => {
             <Box padding={6}>
                 <Text>Daily Sale form</Text>
                 <VStack marginTop={4}>
-                    <NewSaleForm />
+                    <NewSaleForm storeId={storeId} />
                 </VStack>
             </Box>
         </PageLayout>

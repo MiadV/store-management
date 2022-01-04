@@ -3,11 +3,12 @@ import { Box, SimpleGrid, Text } from "@chakra-ui/react";
 import { useNavigate, useParams } from "react-router-dom";
 import Header from "../components/Header";
 import PageLayout from "../layouts/PageLayout";
-import useAuth, { PermissionsType } from "../hooks/useAuth";
+import useAuth from "../hooks/useAuth";
 import NoOptionsCard from "../components/NoOptionsCard";
 import TaskItem from "../components/TaskItem";
 import SalesIcon from "../assets/vectors/SalesIcon";
 import ExpenseIcon from "../assets/vectors/ExpenseIcon";
+import { PermissionsType } from "../types";
 
 const StoreDashboard: React.FC<{}> = () => {
     let { storeId } = useParams();
