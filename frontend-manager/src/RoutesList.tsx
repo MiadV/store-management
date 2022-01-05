@@ -11,6 +11,7 @@ import SalesPage from "./pages/Sales";
 import NewSalesReport from "./pages/NewSalesReport";
 import SaleReport from "./pages/SaleReport";
 import ExpensesPage from "./pages/Expenses";
+import NewExpenseReport from "./pages/NewExpenseReport";
 
 const RoutesList = () => {
     const queryClient = useQueryClient();
@@ -33,17 +34,15 @@ const RoutesList = () => {
             <Route path="/login" element={<LoginPage />} />
             <Route path="/" element={<PrivateOutlet />}>
                 <Route index element={<SelectShop />} />
-                <Route path="/store/:storeId" element={<StoreDashboard />} />
-                <Route path="/sales/:storeId" element={<SalesPage />} />
+                <Route path="/store-dashboard" element={<StoreDashboard />} />
+                <Route path="/sales" element={<SalesPage />} />
+                <Route path="/sales/new" element={<NewSalesReport />} />
                 <Route
-                    path="/sales/new/:storeId"
-                    element={<NewSalesReport />}
-                />
-                <Route
-                    path="/sales/:storeId/report/:reportId"
+                    path="/sales/report/:reportId"
                     element={<SaleReport />}
                 />
-                <Route path="/expenses/:storeId" element={<ExpensesPage />} />
+                <Route path="/expenses" element={<ExpensesPage />} />
+                <Route path="/expenses/new" element={<NewExpenseReport />} />
             </Route>
             <Route path="*" element={<NotFound />} />
         </Routes>

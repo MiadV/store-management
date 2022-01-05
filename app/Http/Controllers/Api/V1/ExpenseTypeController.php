@@ -24,14 +24,7 @@ class ExpenseTypeController extends Controller
 
         $expenseTypeShop = ExpenseTypeShop::findOrFail($expense_type_shop_id);
 
-        // 1- check if passed expenseTypeShopId any has spend limit.
-        if ($expenseTypeShop->limit_amount == null) {
-            return response()->json([
-                "errors" => (object)["message" => ["Expense type is not limited for this shop."]]
-            ], 403);
-        }
-
-        // 2- calculate current month total amount for the this expenseType.
+        // 1- calculate current month total amount for the this expenseType.
         $currentTotal = Expense::where('shop_id', $expenseTypeShop->shop_id)
             ->where('expense_type_id', $expenseTypeShop->expense_type_id)
             ->whereYear('report_date', Carbon::now()->year)
@@ -41,7 +34,7 @@ class ExpenseTypeController extends Controller
 
         return Response()->json([
             'limit' => $expenseTypeShop->limit_amount,
-            'currentTotal' => $currentTotal,
+            'currentTotal' => number_format($currentTotal,2),
             'balance' => number_format($expenseTypeShop->limit_amount - $currentTotal, 2),
             'isStrict' => $expenseTypeShop->strict_limit,
         ]);

@@ -22,7 +22,7 @@ const theme = extendTheme({
                 sizes: {},
                 variants: {},
                 defaultProps: {
-                    variant: null, // null here
+                    variant: null,
                 },
             },
         },
@@ -36,7 +36,7 @@ const theme = extendTheme({
                 sizes: {},
                 variants: {},
                 defaultProps: {
-                    variant: null, // null here
+                    variant: null,
                 },
             },
         },
@@ -48,7 +48,40 @@ const theme = extendTheme({
                 sizes: {},
                 variants: {},
                 defaultProps: {
-                    variant: null, // null here
+                    variant: null,
+                },
+            },
+        },
+        Select: {
+            variants: {
+                outline: ({ colorMode }: { colorMode: "dark" | "light" }) => ({
+                    field: {
+                        bg: colorMode === "dark" ? "gray.700" : "white",
+                    },
+                }),
+                sizes: {},
+                variants: {},
+                defaultProps: {
+                    variant: null,
+                },
+            },
+        },
+        Progress: {
+            variants: {
+                outline: () => ({
+                    track: {
+                        bg: "teal.200",
+                        border: "1px",
+                        borderRadius: "5px",
+                    },
+                    filledTrack: {
+                        bg: "teal.800",
+                    },
+                }),
+                sizes: {},
+                variants: {},
+                defaultProps: {
+                    variant: null,
                 },
             },
         },

@@ -1,49 +1,23 @@
 import React from "react";
-import { Box, Spinner, VStack } from "@chakra-ui/react";
-import { useParams } from "react-router-dom";
-import Header from "../components/Header";
-import PageLayout from "../layouts/PageLayout";
-import useAuth from "../hooks/useAuth";
-import NoOptionsCard from "../components/NoOptionsCard";
+import { Box } from "@chakra-ui/react";
+import { Navigate, useParams } from "react-router-dom";
 import SimpleLayout from "../layouts/SimpleLayout";
 import SaleReportItem from "../components/SaleReportItem";
 import useSaleReportById from "../hooks/useSaleReportById";
+import LoadingOverlay from "../components/LoadingOverlay";
 
 const SaleReport: React.FC<{}> = () => {
-    let { reportId, storeId } = useParams();
+    let { reportId } = useParams();
     const sanitizedReportId = reportId ? parseInt(reportId) : 0;
-    const sanitizedStoreId = storeId ? parseInt(storeId) : 0;
-    const { data: authUser } = useAuth();
     const { data: saleReport, isLoading } =
         useSaleReportById(sanitizedReportId);
 
-    // validate storeId
-    if (!storeId || authUser?.shops[sanitizedStoreId] === undefined) {
-        return (
-            <PageLayout>
-                <Header title="No Store!" goBackPath="/" />
-                <NoOptionsCard
-                    title="Oops!"
-                    subtitle="Something went wrong. Try again."
-                />
-            </PageLayout>
-        );
+    if (isLoading) {
+        return <LoadingOverlay />;
     }
 
-    if (isLoading || !saleReport) {
-        return (
-            <SimpleLayout>
-                <VStack justifyContent={"center"} align={"center"}>
-                    <Spinner
-                        thickness="4px"
-                        speed="0.65s"
-                        emptyColor="gray.200"
-                        color="teal.300"
-                        size="xl"
-                    />
-                </VStack>
-            </SimpleLayout>
-        );
+    if (!saleReport) {
+        return <Navigate to="/404" replace />;
     }
 
     return (

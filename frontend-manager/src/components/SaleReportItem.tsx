@@ -40,26 +40,22 @@ const SaleReportItem: React.FC<{ report: SaleReportType }> = ({ report }) => {
                 </Text>
 
                 <Flex direction="column" paddingX={6} marginTop={8} gap={1}>
-                    <Flex justifyContent={"center"} color={"gray.500"}>
+                    <Flex justifyContent={"center"}>
                         <Text fontWeight={"semibold"}>{shop?.title}</Text>
                     </Flex>
-                    <Flex justifyContent={"space-between"} color={"gray.500"}>
+                    <Flex justifyContent={"space-between"}>
                         <Text>Cash</Text>
                         <Text>{currencyFormat(cashAmount)}</Text>
                     </Flex>
-                    <Flex justifyContent={"space-between"} color={"gray.500"}>
+                    <Flex justifyContent={"space-between"}>
                         <Text>Card</Text>
                         <Text>{currencyFormat(cardAmount)}</Text>
                     </Flex>
-                    <Flex justifyContent={"space-between"} color={"gray.500"}>
+                    <Flex justifyContent={"space-between"}>
                         <Text>Online Transfer</Text>
                         <Text>{currencyFormat(onlineTransferAmount)}</Text>
                     </Flex>
-                    <Flex
-                        justifyContent={"space-between"}
-                        color={"gray.500"}
-                        borderTop="1px"
-                    >
+                    <Flex justifyContent={"space-between"} borderTop="1px">
                         <Text fontWeight={"semibold"}>Total Sale</Text>
                         <Text fontWeight={"semibold"}>
                             {currencyFormat(TotalAmount)}
@@ -72,7 +68,7 @@ const SaleReportItem: React.FC<{ report: SaleReportType }> = ({ report }) => {
                         variant="outline"
                         colorScheme="teal"
                         onClick={() =>
-                            navigate(`/store/${shop?.shopId}`, {
+                            navigate(`/store-dashboard`, {
                                 replace: true,
                             })
                         }

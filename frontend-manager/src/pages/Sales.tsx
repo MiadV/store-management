@@ -1,26 +1,35 @@
 import React from "react";
 import { Box, Text } from "@chakra-ui/react";
-import { useParams } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { BiFile, BiMessageSquareAdd } from "react-icons/bi";
 import Header from "../components/Header";
 import PageLayout from "../layouts/PageLayout";
-import useAuth from "../hooks/useAuth";
 import useLatestSaleReport from "../hooks/useLatestSaleReport";
 import ReportListItem from "../components/ReportListItem";
 import CustomLink from "../components/CustomLink";
+import { useSelectedStore } from "../context/selectedStoreContext";
+import LoadingOverlay from "../components/LoadingOverlay";
 
 const SalesPage: React.FC<{}> = () => {
-    let { storeId } = useParams();
-    const sanitizedStoreId = storeId ? parseInt(storeId) : 0;
-    const { data: authUser } = useAuth();
-    const { data: saleReport, isLoading } =
-        useLatestSaleReport(sanitizedStoreId);
+    const { selectedStore } = useSelectedStore();
+    const { data: saleReport, isLoading } = useLatestSaleReport(
+        selectedStore!.shopId,
+        { enabled: !!selectedStore }
+    );
+
+    if (isLoading) {
+        return <LoadingOverlay />;
+    }
+
+    if (!selectedStore) {
+        return <Navigate to={"/"} />;
+    }
 
     return (
         <PageLayout>
             <Header
-                title={authUser!.shops[sanitizedStoreId].title}
-                goBackPath={`/store/${storeId}`}
+                title={selectedStore.title}
+                goBackPath={`/store-dashboard`}
             />
             <Box padding={6}>
                 <Text>Sales report</Text>
@@ -29,7 +38,7 @@ const SalesPage: React.FC<{}> = () => {
                     <CustomLink
                         title="New Report"
                         icon={<BiMessageSquareAdd size={32} />}
-                        toPath={`/sales/new/${sanitizedStoreId}`}
+                        toPath={`/sales/new`}
                     />
                 </Box>
                 <Text marginTop={8}>Latest report</Text>
@@ -39,7 +48,7 @@ const SalesPage: React.FC<{}> = () => {
                         date={saleReport?.reportDate}
                         icon={<BiFile size={32} />}
                         isLoading={isLoading}
-                        toPath={`/sales/${storeId}/report/${saleReport?.saleId}`}
+                        toPath={`/sales/report/${saleReport?.saleId}`}
                     />
                 </Box>
             </Box>

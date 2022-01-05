@@ -64,7 +64,7 @@ const NewSaleForm: React.FC<{ storeId: number | string }> = ({ storeId }) => {
             await newSaleReportMutation
                 .mutateAsync(formatedData)
                 .then((res) => {
-                    navigate(`/sales/${storeId}/report/${res.data.saleId}`);
+                    navigate(`/sales/report/${res.data.saleId}`);
                 });
         } catch (err) {
             const { response } = err as ResponseErrorType;

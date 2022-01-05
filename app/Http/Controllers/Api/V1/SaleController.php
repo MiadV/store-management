@@ -6,6 +6,7 @@ use App\Http\Requests\StoreSaleRequest;
 use App\Http\Requests\UpdateSaleRequest;
 use App\Http\Resources\SaleResource;
 use App\Models\Sale;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -28,6 +29,14 @@ class SaleController extends Controller
 
         $saleReport = Sale::with(['shop', 'user'])->findOrFail($sale_id);
 
+        // check if user has access to this shop
+        $authUser = User::with(['shops'])->find(auth()->id());
+
+        if (!$authUser->shops->pluck('id')->contains($saleReport->shop_id)) {
+            return response()->json([
+                "errors" => (object)["message" => ["You dont have access to view this report."]]
+            ], 401);
+        }
         return new SaleResource($saleReport);
     }
 

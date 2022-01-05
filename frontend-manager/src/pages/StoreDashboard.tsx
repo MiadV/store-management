@@ -1,56 +1,26 @@
-import React, { useEffect, useState } from "react";
-import { Box, SimpleGrid, Spinner, Text, VStack } from "@chakra-ui/react";
-import { useParams } from "react-router-dom";
+import React from "react";
+import { Box, SimpleGrid, Text } from "@chakra-ui/react";
 import Header from "../components/Header";
 import PageLayout from "../layouts/PageLayout";
 import useAuth from "../hooks/useAuth";
-import NoOptionsCard from "../components/NoOptionsCard";
 import TaskItem from "../components/TaskItem";
 import SalesIcon from "../assets/vectors/SalesIcon";
 import ExpenseIcon from "../assets/vectors/ExpenseIcon";
-import { PermissionsType, ShopType } from "../types";
-import SimpleLayout from "../layouts/SimpleLayout";
+import { PermissionsType } from "../types";
+import { useSelectedStore } from "../context/selectedStoreContext";
+import { Navigate } from "react-router-dom";
+import LoadingOverlay from "../components/LoadingOverlay";
 
 const StoreDashboard: React.FC<{}> = () => {
-    const [selectedStore, setSelectedStore] = useState<ShopType | undefined>();
-    let { storeId } = useParams();
+    const { selectedStore } = useSelectedStore();
     const { data: authUser, isLoading } = useAuth();
 
-    useEffect(() => {
-        if (authUser && storeId) {
-            setSelectedStore(
-                authUser.shops.find((s) => s.shopId === parseInt(storeId!))
-            );
-        }
-    }, [isLoading, authUser, storeId, setSelectedStore]);
-
     if (isLoading) {
-        return (
-            <SimpleLayout>
-                <VStack justifyContent={"center"} align={"center"}>
-                    <Spinner
-                        thickness="4px"
-                        speed="0.65s"
-                        emptyColor="gray.200"
-                        color="teal.300"
-                        size="xl"
-                    />
-                </VStack>
-            </SimpleLayout>
-        );
+        return <LoadingOverlay />;
     }
 
-    // validate storeId
-    if (!storeId || !selectedStore) {
-        return (
-            <PageLayout>
-                <Header title="No Store!" goBackPath="/" />
-                <NoOptionsCard
-                    title="Oops!"
-                    subtitle="Something went wrong. Try again."
-                />
-            </PageLayout>
-        );
+    if (!selectedStore) {
+        return <Navigate to={"/"} />;
     }
 
     return (
@@ -60,10 +30,7 @@ const StoreDashboard: React.FC<{}> = () => {
                 <Text>Please select a task</Text>
 
                 {authUser && (
-                    <RenderTaskItems
-                        permissionsArray={authUser.permissions}
-                        storeId={parseInt(storeId)}
-                    />
+                    <RenderTaskItems permissionsArray={authUser.permissions} />
                 )}
             </Box>
         </PageLayout>
@@ -74,7 +41,6 @@ export default StoreDashboard;
 
 const RenderTaskItems: React.FC<{
     permissionsArray: PermissionsType;
-    storeId: number;
 }> = (props) => {
     const { permissionsArray } = props;
 
@@ -84,14 +50,14 @@ const RenderTaskItems: React.FC<{
                 <TaskItem
                     taskTitle="Sales Report"
                     icon={<SalesIcon width="60px" />}
-                    toPath={`/sales/${props.storeId}`}
+                    toPath={`/sales`}
                 />
             )}
             {permissionsArray.includes("EXPENSE_REPORT") && (
                 <TaskItem
                     taskTitle="Expense Report"
                     icon={<ExpenseIcon width="60px" />}
-                    toPath={`/expenses/${props.storeId}`}
+                    toPath={`/expenses`}
                 />
             )}
         </SimpleGrid>

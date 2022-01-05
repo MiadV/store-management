@@ -1,4 +1,4 @@
-import { useQuery } from "react-query";
+import { useQuery, UseQueryOptions } from "react-query";
 import api from "../util/api";
 import { SaleReportType } from "../types";
 
@@ -9,13 +9,18 @@ const getLatestSaleReport = async (
     return data;
 };
 
-export default function useLatestSaleReport(storeId: number) {
+export default function useLatestSaleReport(
+    storeId: number,
+    options?: UseQueryOptions<
+        unknown,
+        unknown,
+        SaleReportType,
+        ["latestSaleReport", number]
+    >
+) {
     return useQuery(
         ["latestSaleReport", storeId],
         () => getLatestSaleReport(storeId),
-
-        {
-            staleTime: Infinity,
-        }
+        { staleTime: Infinity, ...options }
     );
 }

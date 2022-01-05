@@ -7,10 +7,23 @@ import SelectStoreItem from "../components/SelectStoreItem";
 import NoOptionsCard from "../components/NoOptionsCard";
 import { ShopType } from "../types";
 import { useSelectedStore } from "../context/selectedStoreContext";
+import { useNavigate } from "react-router-dom";
 
 const SelectShop = () => {
     const { data: authUser } = useAuth();
-    const {setSelectedStore} = useSelectedStore()
+    const { setSelectedStore } = useSelectedStore();
+    const navigate = useNavigate();
+
+    function handleSelectedStore(storeId: string | number) {
+        const selected = authUser!.shops.find((i) => i.shopId === storeId);
+
+        if (selected) {
+            setSelectedStore(selected);
+            navigate(`/store-dashboard`);
+        } else {
+            setSelectedStore(null);
+        }
+    }
 
     return (
         <PageLayout>
@@ -22,7 +35,10 @@ const SelectShop = () => {
                 <Text>Please select your current store</Text>
 
                 {authUser && authUser.shops.length > 0 ? (
-                    <RenderShopItems shopsArray={authUser.shops} />
+                    <RenderShopItems
+                        shopsArray={authUser.shops}
+                        callback={handleSelectedStore}
+                    />
                 ) : (
                     <NoOptionsCard
                         title="No stores!"
@@ -30,22 +46,20 @@ const SelectShop = () => {
                     />
                 )}
             </Box>
-            <button onClick={() => setSelectedStore(authUser!.shops[0])}>test</button>
         </PageLayout>
     );
 };
 
 export default SelectShop;
 
-const RenderShopItems: React.FC<{ shopsArray: ShopType[] }> = (props) => {
-    const { shopsArray } = props;
+const RenderShopItems: React.FC<{
+    shopsArray: ShopType[];
+    callback: (storeId: string | number) => void;
+}> = (props) => {
+    const { shopsArray, callback } = props;
 
     const storeItems = shopsArray.map((item) => (
-        <SelectStoreItem
-            shopTitle={item.title}
-            key={item.shopId}
-            toPath={`/store/${item.shopId}`}
-        />
+        <SelectStoreItem key={item.shopId} store={item} callback={callback} />
     ));
 
     return (
