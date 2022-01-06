@@ -1,21 +1,16 @@
 import React from "react";
 import { Box, Button, Flex, Text } from "@chakra-ui/react";
 import ReportCheckIcon from "../assets/vectors/ReportCheckIcon";
-import { SaleReportType } from "../types";
+import { ExpenseReportType } from "../types";
 import currencyFormat from "../util/currencyFormat";
 import { format } from "date-fns";
 import { useNavigate } from "react-router-dom";
 
-const SaleReportItem: React.FC<{ report: SaleReportType }> = ({ report }) => {
-    const {
-        reportDate,
-        shop,
-        cardAmount,
-        cashAmount,
-        onlineTransferAmount,
-        TotalAmount,
-        description,
-    } = report;
+const ExpenseReportItem: React.FC<{ report: ExpenseReportType }> = ({
+    report,
+}) => {
+    const { reportDate, shop, description, amount, expenseType, images, user } =
+        report;
     const navigate = useNavigate();
 
     return (
@@ -45,31 +40,29 @@ const SaleReportItem: React.FC<{ report: SaleReportType }> = ({ report }) => {
                         <Text fontWeight={"semibold"}>{shop?.title}</Text>
                     </Flex>
                     <Flex justifyContent={"space-between"}>
-                        <Text>Cash</Text>
-                        <Text>{currencyFormat(cashAmount)}</Text>
+                        <Text>Type</Text>
+                        <Text>{expenseType.title}</Text>
                     </Flex>
                     <Flex justifyContent={"space-between"}>
-                        <Text>Card</Text>
-                        <Text>{currencyFormat(cardAmount)}</Text>
-                    </Flex>
-                    <Flex justifyContent={"space-between"}>
-                        <Text>Online Transfer</Text>
-                        <Text>{currencyFormat(onlineTransferAmount)}</Text>
+                        <Text>Added By</Text>
+                        <Text>{user?.name}</Text>
                     </Flex>
                     <Flex
                         justifyContent={"space-between"}
                         borderTop="1px"
                         borderBottom="1px"
                     >
-                        <Text fontWeight={"semibold"}>Total Sale</Text>
+                        <Text fontWeight={"semibold"}>Amount</Text>
                         <Text fontWeight={"semibold"}>
-                            {currencyFormat(TotalAmount)}
+                            {currencyFormat(amount)}
                         </Text>
                     </Flex>
 
                     <Flex justifyContent={"space-between"} marginTop={4}>
                         {description}
                     </Flex>
+
+                    {JSON.stringify(images)}
                 </Flex>
 
                 <Box marginTop={8}>
@@ -90,4 +83,4 @@ const SaleReportItem: React.FC<{ report: SaleReportType }> = ({ report }) => {
     );
 };
 
-export default SaleReportItem;
+export default ExpenseReportItem;

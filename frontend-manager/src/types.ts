@@ -2,6 +2,11 @@ export type PermissionsType = ["SALES_REPORT" | "EXPENSE_REPORT"];
 
 type ErrorType = Record<string, [string]>;
 
+export type uploadedImageType = {
+    dataUrl: string;
+    imageId: number;
+};
+
 export type ResponseErrorType = {
     response: {
         data: {
@@ -109,6 +114,7 @@ export interface INewExpenseReport {
     description: string;
     report_date: string;
     amount: number;
+    image_ids: string[] | number[];
 }
 
 export type ExpenseBalanceType = {
@@ -116,4 +122,11 @@ export type ExpenseBalanceType = {
     currentTotal: string;
     balance: string;
     isStrict: boolean;
+};
+
+export type ImageUploadResponse = {
+    data: {
+        id: string | number;
+        name: string;
+    };
 };

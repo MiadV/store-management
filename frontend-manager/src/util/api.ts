@@ -1,7 +1,7 @@
 import axios, { AxiosRequestConfig } from "axios";
 import Cookies from "js-cookie";
 
-export default function api() {
+export default function api(config?: AxiosRequestConfig<any>) {
     const api = axios.create({
         baseURL: `${process.env.REACT_APP_API_BASE_URL}/api/v1`,
         // withCredentials: true,
@@ -11,6 +11,7 @@ export default function api() {
             )}`,
             Accept: "application/json",
         },
+        ...config,
     });
 
     // Request interceptor. Runs before your request reaches the server
@@ -27,7 +28,6 @@ export default function api() {
     };
 
     const setCSRFToken = () => {
-        console.log("getting CSRF");
         return api.get(
             `${process.env.REACT_APP_API_BASE_URL}/sanctum/csrf-cookie`
         );

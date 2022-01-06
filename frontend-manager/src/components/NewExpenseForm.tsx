@@ -7,22 +7,34 @@ import {
     FormErrorMessage,
     Textarea,
     Skeleton,
+    useToast,
 } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { BiMoney } from "react-icons/bi";
+import { useNavigate } from "react-router-dom";
+import { format, subDays } from "date-fns";
 import CustomDatePicker from "./CustomDatePicker";
-import { subDays } from "date-fns";
 import CustomPriceInput from "./CustomPriceInput";
 import ExpenseReportFormSchema from "../validations/ExpenseReportFormSchema";
-import { ExpenseTypeType, INewExpenseReport } from "../types";
+
 import CustomExpenseTypeSelect from "./CustomExpenseTypeSelect";
 import ExpenseTypeBalanceProgress from "./ExpenseTypeBalanceProgress";
 import useExpenseBalance from "../hooks/useExpenseBalance";
 import CustomImageUpload from "./CustomImageUpload";
+import useNewExpenseReportMutation from "../hooks/useNewExpenseReportMutation";
+import mapServerSideErrors from "../util/mapServerSideErrors";
+import {
+    ExpenseTypeType,
+    INewExpenseReport,
+    ResponseErrorType,
+} from "../types";
 
 const NewExpenseForm: React.FC<{ storeId: number }> = ({ storeId }) => {
+    let navigate = useNavigate();
+    const toast = useToast();
     const [reportDate, setReportDate] = useState<Date | null>(null);
+    const [imageIds, setImageIds] = useState<number[] | string[]>([]);
     const [canSubmit, setCanSubmit] = useState(true);
     const [state, setState] = useState<{
         amount: string;
@@ -42,8 +54,8 @@ const NewExpenseForm: React.FC<{ storeId: number }> = ({ storeId }) => {
         }
     );
 
-    // const newSaleReportMutation = useNewSaleReportMutation();
-    const { handleSubmit, register, formState, setValue } = useForm({
+    const newExpenseReportMutation = useNewExpenseReportMutation();
+    const { handleSubmit, register, formState, setValue, setError } = useForm({
         resolver: yupResolver(ExpenseReportFormSchema),
     });
     const { isSubmitting, errors } = formState;
@@ -75,7 +87,32 @@ const NewExpenseForm: React.FC<{ storeId: number }> = ({ storeId }) => {
     }, [expenseBalance, state.amount]);
 
     const onSubmit = async (data: INewExpenseReport) => {
-        console.log("submitted", data);
+        const formatedData = {
+            ...data,
+            image_ids: imageIds,
+            shop_id: storeId,
+            report_date: format(reportDate!, "yyyy-MM-dd"),
+        };
+        try {
+            await newExpenseReportMutation
+                .mutateAsync(formatedData)
+                .then((res) => {
+                    navigate(`/expense/report/${res.data.expenseId}`);
+                });
+        } catch (err) {
+            const { response } = err as ResponseErrorType;
+            if (response?.data.errors.message) {
+                toast({
+                    title: "Something went wrong!",
+                    description: response?.data.errors.message,
+                    status: "error",
+                    duration: 3000,
+                    isClosable: true,
+                });
+            } else {
+                mapServerSideErrors(response?.data.errors!, setError);
+            }
+        }
     };
 
     return (
@@ -162,7 +199,7 @@ const NewExpenseForm: React.FC<{ storeId: number }> = ({ storeId }) => {
                     )}
                 </FormControl>
 
-                <CustomImageUpload />
+                <CustomImageUpload setImageIds={setImageIds} />
 
                 <Button
                     isLoading={isSubmitting}

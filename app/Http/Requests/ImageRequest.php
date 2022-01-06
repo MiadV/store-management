@@ -24,7 +24,6 @@ class ImageRequest extends FormRequest
     public function rules()
     {
         return [
-            "expense_id" => ['required', 'integer', 'exists:expenses,id'],
             'image' => ['required', 'image', 'mimes:jpeg,png,jpg', 'max:6000'], // max image size 6mb
         ];
     }

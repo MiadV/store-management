@@ -30,9 +30,7 @@ Route::middleware('auth:sanctum')
         Route::prefix('upload')
             ->group(function () {
                 Route::post('/image', [ImageController::class, 'store']);
-
-                Route::delete('/image/{image}', [ImageController::class, 'destroy'])
-                    ->where('shop_id', '[0-9]+');
+                Route::delete('/image', [ImageController::class, 'destroy']);
             });
 
         Route::prefix('sale')
@@ -66,7 +64,6 @@ Route::middleware('auth:sanctum')
 
                 Route::get('/current-month/{shop_id}', [ExpenseController::class, 'currentMonthReports'])
                     ->where('shop_id', '[0-9]+');
-
 
 
                 Route::post('/', [ExpenseController::class, 'store']);

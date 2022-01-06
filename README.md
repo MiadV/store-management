@@ -39,7 +39,7 @@ Expense:
 
 Upload:
 - POST* `api/v1/upload/image` upload photos.
-- DELETE* `api/v1/upload/image` delete photos.
+- DELETE* `api/v1/upload/image` delete photos by passing aray of ids.
 
 #### Accounting Dashboard Only
 - Modify users

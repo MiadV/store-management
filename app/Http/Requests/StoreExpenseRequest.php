@@ -29,6 +29,7 @@ class StoreExpenseRequest extends FormRequest
             'description' => ['required', 'string', 'min:0', 'max:250'],
             'amount' => ['required', 'regex:/^\d+(\.\d{1,2})?$/'],
             'report_date' => ['required', 'date_format:Y-m-d', 'after_or_equal:yesterday', 'before:tomorrow'], // today or in the past
+            "image_ids" => ['present', 'array'],
         ];
     }
 }

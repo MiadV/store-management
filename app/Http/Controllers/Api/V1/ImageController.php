@@ -21,17 +21,27 @@ class ImageController extends Controller
         $request->image->move(public_path('uploads/image/expense'), $fileName);
 
         return Image::create([
+            'uploaded_by' => auth()->id(),
             "name" => $fileName,
             "image_path" => 'uploads/image/expense/',
         ]);
     }
 
 
-    public function destroy(Request $request, Image $image)
+    public function destroy(Request $request)
     {
+        $fields = $request->validate([
+            'ids' => 'required|array',
+        ]);
 
-        unlink($image->image_path . $image->name);
+        // select all images from db
+        $images = Image::whereIn('id', $fields['ids'])->get();
 
-        return $image->delete();
+        foreach ($images as $image) {
+            unlink($image->image_path . $image->name);
+            $image->delete();
+        }
+
+        return true;
     }
 }
