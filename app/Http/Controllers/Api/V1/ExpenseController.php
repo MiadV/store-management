@@ -68,6 +68,7 @@ class ExpenseController extends Controller
         return Expense::create($request->safe()
             ->merge(['user_id' => auth()->id(), 'expense_type_id' => $expenseRule->expense_type_id])
             ->all());
+        // TODO 5- update expense_id in images table if there is any media uploaded.
     }
 
     public function update(UpdateExpenseRequest $request, Expense $report)
@@ -81,12 +82,13 @@ class ExpenseController extends Controller
         }
 
         // 2- disable editing old reports.
-        // 3- TODO move constants to config file.
-        if (Carbon::createFromDate($report->created_at)->addHours(4) < now()) {
+        if (Carbon::createFromDate($report->created_at)->addHours(config('constants.expense_edit_cutoff_time', 4)) < now()) {
             return response()->json([
                 "errors" => (object)["message" => ["Old reports can't be edited."]]
             ], 403);
         }
+
+        // TODO 3- update images if has been edited.
 
         return $report->update($request->safe()->except(['report_date', 'shop_id', 'expense_type_shop_id']));
     }

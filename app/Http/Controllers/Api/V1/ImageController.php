@@ -15,17 +15,15 @@ class ImageController extends Controller
     public function store(ImageRequest $request)
     {
 
-        $fileName = $request->expense_id . '_' . Carbon::now()->timestamp . '_' . Str::random(5) . '.' . $request->file('image')
+        $fileName = Carbon::now()->timestamp . '_' . Str::random(5) . '.' . $request->file('image')
                 ->getClientOriginalExtension();
 
         $request->image->move(public_path('uploads/image/expense'), $fileName);
 
         return Image::create([
-            "expense_id" => $request->expense_id,
             "name" => $fileName,
             "image_path" => 'uploads/image/expense/',
         ]);
-
     }
 
 

@@ -19,6 +19,7 @@ import { ExpenseTypeType, INewExpenseReport } from "../types";
 import CustomExpenseTypeSelect from "./CustomExpenseTypeSelect";
 import ExpenseTypeBalanceProgress from "./ExpenseTypeBalanceProgress";
 import useExpenseBalance from "../hooks/useExpenseBalance";
+import CustomImageUpload from "./CustomImageUpload";
 
 const NewExpenseForm: React.FC<{ storeId: number }> = ({ storeId }) => {
     const [reportDate, setReportDate] = useState<Date | null>(null);
@@ -160,6 +161,8 @@ const NewExpenseForm: React.FC<{ storeId: number }> = ({ storeId }) => {
                         </FormErrorMessage>
                     )}
                 </FormControl>
+
+                <CustomImageUpload />
 
                 <Button
                     isLoading={isSubmitting}
