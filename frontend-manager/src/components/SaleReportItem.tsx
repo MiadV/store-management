@@ -15,6 +15,7 @@ const SaleReportItem: React.FC<{ report: SaleReportType }> = ({ report }) => {
         onlineTransferAmount,
         TotalAmount,
         description,
+        user
     } = report;
     const navigate = useNavigate();
 
@@ -43,6 +44,10 @@ const SaleReportItem: React.FC<{ report: SaleReportType }> = ({ report }) => {
                 <Flex direction="column" paddingX={6} marginTop={8} gap={1}>
                     <Flex justifyContent={"center"}>
                         <Text fontWeight={"semibold"}>{shop?.title}</Text>
+                    </Flex>
+                    <Flex justifyContent={"space-between"}>
+                        <Text>Added By</Text>
+                        <Text>{user?.name}</Text>
                     </Flex>
                     <Flex justifyContent={"space-between"}>
                         <Text>Cash</Text>

@@ -17,7 +17,6 @@ import { format, subDays } from "date-fns";
 import CustomDatePicker from "./CustomDatePicker";
 import CustomPriceInput from "./CustomPriceInput";
 import ExpenseReportFormSchema from "../validations/ExpenseReportFormSchema";
-
 import CustomExpenseTypeSelect from "./CustomExpenseTypeSelect";
 import ExpenseTypeBalanceProgress from "./ExpenseTypeBalanceProgress";
 import useExpenseBalance from "../hooks/useExpenseBalance";
@@ -97,7 +96,7 @@ const NewExpenseForm: React.FC<{ storeId: number }> = ({ storeId }) => {
             await newExpenseReportMutation
                 .mutateAsync(formatedData)
                 .then((res) => {
-                    navigate(`/expense/report/${res.data.expenseId}`);
+                    navigate(`/expenses/report/${res.data.expenseId}`);
                 });
         } catch (err) {
             const { response } = err as ResponseErrorType;

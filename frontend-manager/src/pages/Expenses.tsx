@@ -36,7 +36,7 @@ const ExpensesPage: React.FC<{}> = () => {
                         title="View Reports"
                         icon={<BiListUl size={32} />}
                         // toPath={`/expenses/list`}
-                        toPath={`/expenses/report/7`}
+                        toPath={`/expenses/report/1`}
                     />
                 </Box>
             </Box>
