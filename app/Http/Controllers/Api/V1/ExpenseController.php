@@ -38,7 +38,7 @@ class ExpenseController extends Controller
             ->whereYear('report_date', Carbon::now()->year)
             ->whereMonth('report_date', Carbon::now()->month)
             ->orderBy('report_date', 'desc')
-            ->simplePaginate(10);
+            ->simplePaginate(3);
 
         return ExpenseResource::collection($expenseReports)
             ->response()

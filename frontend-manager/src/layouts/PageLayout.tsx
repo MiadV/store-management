@@ -6,7 +6,9 @@ const Page = ({ children, ...rest }: { children: any }) => {
 
     return (
         <Box as="section" bgColor={bgColor} minHeight={"100vh"}>
-            <Box {...rest}>{children}</Box>
+            <Box {...rest} maxWidth={"lg"} marginX={"auto"}>
+                {children}
+            </Box>
         </Box>
     );
 };

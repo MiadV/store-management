@@ -6,7 +6,9 @@ const Simple = ({ children, ...rest }: { children: any }) => {
 
     return (
         <Box as="section" bgColor={bgColor}>
-            <Box {...rest}>{children}</Box>
+            <Box {...rest} maxWidth={"lg"} marginX={"auto"}>
+                {children}
+            </Box>
         </Box>
     );
 };

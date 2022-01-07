@@ -15,7 +15,7 @@ const NewExpenseReport: React.FC<{}> = () => {
 
     return (
         <PageLayout>
-            <Header title={selectedStore?.title} goBackPath={`/sales`} />
+            <Header title={selectedStore?.title} goBackPath={`/expenses`} />
             <Box padding={6}>
                 <Text>Daily expense form</Text>
                 <VStack marginTop={4}>

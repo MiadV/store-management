@@ -1,23 +1,42 @@
-import React from "react";
-import { Box, Button, Flex, Text } from "@chakra-ui/react";
+import React, { useState } from "react";
+import {
+    Box,
+    Flex,
+    IconButton,
+    Image,
+    Text,
+    useColorModeValue,
+} from "@chakra-ui/react";
+import { format } from "date-fns";
+import { Link } from "react-router-dom";
+import { BiArrowBack } from "react-icons/bi";
 import ReportCheckIcon from "../assets/vectors/ReportCheckIcon";
 import { ExpenseReportType } from "../types";
 import currencyFormat from "../util/currencyFormat";
-import { format } from "date-fns";
-import { useNavigate } from "react-router-dom";
+import ImagePreviewModal from "./ImagePreviewModal";
 
 const ExpenseReportItem: React.FC<{ report: ExpenseReportType }> = ({
     report,
 }) => {
+    const bgColor = useColorModeValue("gray.200", "gray.700");
     const { reportDate, shop, description, amount, expenseType, images, user } =
         report;
-    const navigate = useNavigate();
 
     return (
-        <Box marginTop={8}>
-            <Flex justifyContent="center">
+        <Box>
+            <Flex alignItems={"center"}>
+                <Link to="/expenses" replace={true}>
+                    <IconButton
+                        variant="ghost"
+                        isRound
+                        aria-label="Go back one page"
+                        icon={<BiArrowBack size={32} />}
+                    />
+                </Link>
+            </Flex>
+            <Flex justifyContent="center" marginY={8}>
                 <Flex
-                    bg="green.400"
+                    bg="teal.400"
                     width="130px"
                     height="130px"
                     borderRadius="100%"
@@ -27,60 +46,92 @@ const ExpenseReportItem: React.FC<{ report: ExpenseReportType }> = ({
                     <ReportCheckIcon fill="white" width="80px" />
                 </Flex>
             </Flex>
-            <Flex direction="column" textAlign="center" marginTop={4}>
-                <Text fontSize="lg" fontWeight="bold">
-                    Sales Report Summary
-                </Text>
-                <Text fontSize="lg" fontWeight="bold">
-                    {format(new Date(reportDate), "dd MMMM yyyy")}
-                </Text>
-
-                <Flex direction="column" paddingX={6} marginTop={8} gap={1}>
+            <Flex
+                direction="column"
+                textAlign="center"
+                padding={4}
+                borderRadius={8}
+                bg={bgColor}
+            >
+                <Flex direction="column" gap={1}>
                     <Flex justifyContent={"center"}>
-                        <Text fontWeight={"semibold"}>{shop?.title}</Text>
+                        <Text fontWeight={"bold"} fontSize="2xl">
+                            {currencyFormat(amount)}
+                        </Text>
+                    </Flex>
+
+                    <Flex justifyContent={"space-between"}>
+                        <Text>Store</Text>
+                        <Text>{shop?.title}</Text>
                     </Flex>
                     <Flex justifyContent={"space-between"}>
                         <Text>Type</Text>
                         <Text>{expenseType.title}</Text>
                     </Flex>
+
+                    <Flex justifyContent={"space-between"}>
+                        <Text>Date</Text>
+                        <Text>
+                            {format(new Date(reportDate), "dd MMMM yyyy")}
+                        </Text>
+                    </Flex>
                     <Flex justifyContent={"space-between"}>
                         <Text>Added By</Text>
                         <Text>{user?.name}</Text>
                     </Flex>
-                    <Flex
-                        justifyContent={"space-between"}
-                        borderTop="1px"
-                        borderBottom="1px"
-                    >
-                        <Text fontWeight={"semibold"}>Amount</Text>
-                        <Text fontWeight={"semibold"}>
-                            {currencyFormat(amount)}
-                        </Text>
-                    </Flex>
 
-                    <Flex justifyContent={"space-between"} marginTop={4}>
-                        {description}
-                    </Flex>
+                    {description && (
+                        <Flex direction={"column"}>
+                            <Text fontWeight={"bold"}>Notes</Text>
+                            <Text alignSelf={"start"}>{description}</Text>
+                        </Flex>
+                    )}
 
-                    {JSON.stringify(images)}
+                    {images.length !== 0 && (
+                        <Flex marginTop={4} direction={"column"}>
+                            <Text fontWeight={"bold"}>Attachments</Text>
+                            <Box marginTop={2}>
+                                <RenderImageItems imageList={images} />
+                            </Box>
+                        </Flex>
+                    )}
                 </Flex>
-
-                <Box marginTop={8}>
-                    <Button
-                        variant="outline"
-                        colorScheme="teal"
-                        onClick={() =>
-                            navigate(`/store-dashboard`, {
-                                replace: true,
-                            })
-                        }
-                    >
-                        Back to Dashboard
-                    </Button>
-                </Box>
             </Flex>
         </Box>
     );
 };
 
 export default ExpenseReportItem;
+
+const RenderImageItems: React.FC<{ imageList: string[] }> = ({ imageList }) => {
+    const [src, setSrc] = useState<string | null>(null);
+
+    function openModal(image: string) {
+        setSrc(image);
+    }
+
+    function closeModal() {
+        setSrc(null);
+    }
+
+    const items = imageList.map((image, i) => (
+        <Image
+            key={i}
+            src={image}
+            alt="receipt"
+            boxSize="70px"
+            boxShadow="md"
+            objectFit="cover"
+            loading="lazy"
+            borderRadius={5}
+            cursor="pointer"
+            onClick={() => openModal(image)}
+        />
+    ));
+    return (
+        <>
+            <Flex gap={4}>{items}</Flex>
+            <ImagePreviewModal imageSrc={src} onClose={closeModal} />
+        </>
+    );
+};

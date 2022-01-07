@@ -1,12 +1,20 @@
 import React from "react";
-import { Box, Button, Flex, Text } from "@chakra-ui/react";
+import {
+    Box,
+    Flex,
+    IconButton,
+    Text,
+    useColorModeValue,
+} from "@chakra-ui/react";
+import { Link } from "react-router-dom";
+import { format } from "date-fns";
+import { BiArrowBack } from "react-icons/bi";
 import ReportCheckIcon from "../assets/vectors/ReportCheckIcon";
 import { SaleReportType } from "../types";
 import currencyFormat from "../util/currencyFormat";
-import { format } from "date-fns";
-import { useNavigate } from "react-router-dom";
 
 const SaleReportItem: React.FC<{ report: SaleReportType }> = ({ report }) => {
+    const bgColor = useColorModeValue("gray.200", "gray.700");
     const {
         reportDate,
         shop,
@@ -15,13 +23,22 @@ const SaleReportItem: React.FC<{ report: SaleReportType }> = ({ report }) => {
         onlineTransferAmount,
         TotalAmount,
         description,
-        user
+        user,
     } = report;
-    const navigate = useNavigate();
 
     return (
-        <Box marginTop={8}>
-            <Flex justifyContent="center">
+        <Box>
+            <Flex alignItems={"center"}>
+                <Link to="/sales" replace={true}>
+                    <IconButton
+                        variant="ghost"
+                        isRound
+                        aria-label="Go back one page"
+                        icon={<BiArrowBack size={32} />}
+                    />
+                </Link>
+            </Flex>
+            <Flex justifyContent="center" marginY={8}>
                 <Flex
                     bg="green.400"
                     width="130px"
@@ -33,22 +50,20 @@ const SaleReportItem: React.FC<{ report: SaleReportType }> = ({ report }) => {
                     <ReportCheckIcon fill="white" width="80px" />
                 </Flex>
             </Flex>
-            <Flex direction="column" textAlign="center" marginTop={4}>
-                <Text fontSize="lg" fontWeight="bold">
-                    Sales Report Summary
-                </Text>
-                <Text fontSize="lg" fontWeight="bold">
-                    {format(new Date(reportDate), "dd MMMM yyyy")}
-                </Text>
-
-                <Flex direction="column" paddingX={6} marginTop={8} gap={1}>
+            <Flex
+                direction="column"
+                textAlign="center"
+                padding={4}
+                borderRadius={8}
+                bg={bgColor}
+            >
+                <Flex direction="column" gap={1}>
                     <Flex justifyContent={"center"}>
-                        <Text fontWeight={"semibold"}>{shop?.title}</Text>
+                        <Text fontWeight={"bold"} fontSize="2xl">
+                            <Text>{shop?.title}</Text>
+                        </Text>
                     </Flex>
-                    <Flex justifyContent={"space-between"}>
-                        <Text>Added By</Text>
-                        <Text>{user?.name}</Text>
-                    </Flex>
+
                     <Flex justifyContent={"space-between"}>
                         <Text>Cash</Text>
                         <Text>{currencyFormat(cashAmount)}</Text>
@@ -71,25 +86,24 @@ const SaleReportItem: React.FC<{ report: SaleReportType }> = ({ report }) => {
                             {currencyFormat(TotalAmount)}
                         </Text>
                     </Flex>
-
-                    <Flex justifyContent={"space-between"} marginTop={4}>
-                        {description}
+                    <Flex justifyContent={"space-between"} marginTop={2}>
+                        <Text>Date</Text>
+                        <Text>
+                            {format(new Date(reportDate), "dd MMMM yyyy")}
+                        </Text>
                     </Flex>
-                </Flex>
+                    <Flex justifyContent={"space-between"}>
+                        <Text>Added By</Text>
+                        <Text>{user?.name}</Text>
+                    </Flex>
 
-                <Box marginTop={8}>
-                    <Button
-                        variant="outline"
-                        colorScheme="teal"
-                        onClick={() =>
-                            navigate(`/store-dashboard`, {
-                                replace: true,
-                            })
-                        }
-                    >
-                        Back to Dashboard
-                    </Button>
-                </Box>
+                    {description && (
+                        <Flex direction={"column"}>
+                            <Text fontWeight={"bold"}>Notes</Text>
+                            <Text alignSelf={"start"}>{description}</Text>
+                        </Flex>
+                    )}
+                </Flex>
             </Flex>
         </Box>
     );

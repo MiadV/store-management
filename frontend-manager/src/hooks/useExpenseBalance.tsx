@@ -24,7 +24,6 @@ export default function useExpenseBalance(
         ["expenseBalance", expenseTypeShopId],
         () => getExpenseBalance(expenseTypeShopId),
         {
-            staleTime: Infinity,
             ...options,
         }
     );

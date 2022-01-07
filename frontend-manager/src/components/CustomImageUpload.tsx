@@ -4,6 +4,7 @@ import {
     Button,
     Flex,
     IconButton,
+    Image,
     useColorModeValue,
     useToast,
 } from "@chakra-ui/react";
@@ -159,17 +160,16 @@ const PreviewImageItem: React.FC<{
 }> = ({ image, isDeleting, onDelete }) => {
     return (
         <Box position="relative">
-            <Box boxSize="70px" borderRadius={5} overflow="hidden">
-                <img
-                    src={image.dataUrl}
-                    alt="receipt"
-                    style={{
-                        objectFit: "cover",
-                        width: "100%",
-                        height: "100%",
-                    }}
-                />
-            </Box>
+            <Image
+                src={image.dataUrl}
+                alt="receipt"
+                boxSize="70px"
+                boxShadow="md"
+                objectFit="cover"
+                loading="lazy"
+                borderRadius={5}
+            />
+
             <IconButton
                 aria-label="remove image"
                 icon={<BiTrash size={18} />}

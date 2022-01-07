@@ -1,12 +1,10 @@
 import React from "react";
 import { Flex, Text, Box, IconButton, Stack, Skeleton } from "@chakra-ui/react";
+import { Link } from "react-router-dom";
 import { format } from "date-fns";
 import { BiChevronRight } from "react-icons/bi";
-
 import Card from "./Card";
 import currencyFormat from "../util/currencyFormat";
-import { Link } from "react-router-dom";
-import { toPath } from "lodash";
 
 type ReportListItemProps = {
     amount?: string;
