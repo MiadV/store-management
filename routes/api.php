@@ -7,6 +7,7 @@ use \App\Http\Controllers\Api\V1\SaleController;
 use \App\Http\Controllers\Api\V1\ExpenseController;
 use \App\Http\Controllers\Api\V1\ExpenseTypeController;
 use \App\Http\Controllers\Api\V1\ImageController;
+use \App\Http\Controllers\Api\V1\ReportHistoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -70,6 +71,14 @@ Route::middleware('auth:sanctum')
 
                 Route::put('/{report}', [ExpenseController::class, 'update'])
                     ->where('report', '[0-9]+');
+
+            });
+
+        Route::prefix('history')
+            ->middleware('permission:REPORT_HISTORY')
+            ->group(function () {
+                Route::get('/{shop_id}/{year}/{month}/{day}', [ReportHistoryController::class, 'show'])
+                    ->where(['shop_id' => '[0-9]+', 'year' => '[0-9]+', 'month' => '[0-9]+', 'day' => '[0-9]+']);
 
             });
 

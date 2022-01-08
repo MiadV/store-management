@@ -70,6 +70,7 @@ const ExpenseReportItem: React.FC<{ report: ExpenseReportType }> = ({
                     </Flex>
 
                     <Flex justifyContent={"space-between"}>
+                        
                         <Text>Date</Text>
                         <Text>
                             {format(new Date(reportDate), "dd MMMM yyyy")}

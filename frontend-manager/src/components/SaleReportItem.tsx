@@ -60,7 +60,7 @@ const SaleReportItem: React.FC<{ report: SaleReportType }> = ({ report }) => {
                 <Flex direction="column" gap={1}>
                     <Flex justifyContent={"center"}>
                         <Text fontWeight={"bold"} fontSize="2xl">
-                            <Text>{shop?.title}</Text>
+                            {shop?.title}
                         </Text>
                     </Flex>
 

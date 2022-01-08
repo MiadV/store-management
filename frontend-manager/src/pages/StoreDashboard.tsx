@@ -1,14 +1,16 @@
 import React from "react";
 import { Box, SimpleGrid, Text } from "@chakra-ui/react";
+import { Navigate } from "react-router-dom";
 import Header from "../components/Header";
 import PageLayout from "../layouts/PageLayout";
 import useAuth from "../hooks/useAuth";
 import TaskItem from "../components/TaskItem";
 import SalesIcon from "../assets/vectors/SalesIcon";
 import ExpenseIcon from "../assets/vectors/ExpenseIcon";
+import ReportHistoryIcon from "../assets/vectors/ReportHistoryIcon";
 import { PermissionsType } from "../types";
 import { useSelectedStore } from "../context/selectedStoreContext";
-import { Navigate } from "react-router-dom";
+
 import LoadingOverlay from "../components/LoadingOverlay";
 
 const StoreDashboard: React.FC<{}> = () => {
@@ -58,6 +60,13 @@ const RenderTaskItems: React.FC<{
                     taskTitle="Expense Report"
                     icon={<ExpenseIcon width="60px" />}
                     toPath={`/expenses`}
+                />
+            )}
+            {permissionsArray.includes("REPORT_HISTORY") && (
+                <TaskItem
+                    taskTitle="Report History"
+                    icon={<ReportHistoryIcon width="60px" />}
+                    toPath={`/history`}
                 />
             )}
         </SimpleGrid>

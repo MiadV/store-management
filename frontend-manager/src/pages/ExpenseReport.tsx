@@ -23,7 +23,7 @@ const ExpenseReport: React.FC<{}> = () => {
     return (
         <SimpleLayout>
             <Box padding={6}>
-                {<ExpenseReportItem report={expenseReport} />}
+                <ExpenseReportItem report={expenseReport} />
             </Box>
         </SimpleLayout>
     );

@@ -5,7 +5,7 @@ const Simple = ({ children, ...rest }: { children: any }) => {
     const bgColor = useColorModeValue("white", "gray.800");
 
     return (
-        <Box as="section" bgColor={bgColor}>
+        <Box as="section" bgColor={bgColor} height={"100vh"}>
             <Box {...rest} maxWidth={"lg"} marginX={"auto"}>
                 {children}
             </Box>

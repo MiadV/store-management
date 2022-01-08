@@ -1,4 +1,6 @@
-export type PermissionsType = ["SALES_REPORT" | "EXPENSE_REPORT"];
+export type PermissionsType = [
+    "SALES_REPORT" | "EXPENSE_REPORT" | "REPORT_HISTORY"
+];
 
 type ErrorType = Record<string, [string]>;
 
@@ -146,4 +148,10 @@ export type ImageUploadResponse = {
         id: string | number;
         name: string;
     };
+};
+
+export type ReportHistoryType = {
+    saleReport: SaleReportType;
+    expenseReports: ExpenseReportType[];
+    sumOfExpenses: number | string;
 };

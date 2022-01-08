@@ -14,6 +14,8 @@ import ExpensesPage from "./pages/Expenses";
 import NewExpenseReport from "./pages/NewExpenseReport";
 import ExpenseReport from "./pages/ExpenseReport";
 import ExpenseList from "./pages/ExpenseList";
+import ReportHistory from "./pages/ReportHistory";
+import ReportHistorySummary from "./pages/ReportHistorySummary";
 
 const RoutesList = () => {
     const queryClient = useQueryClient();
@@ -49,6 +51,12 @@ const RoutesList = () => {
                 <Route
                     path="/expenses/report/:reportId"
                     element={<ExpenseReport />}
+                />
+
+                <Route path="/history" element={<ReportHistory />} />
+                <Route
+                    path="/history/summary/:date"
+                    element={<ReportHistorySummary />}
                 />
             </Route>
             <Route path="*" element={<NotFound />} />

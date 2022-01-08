@@ -1,14 +1,14 @@
 import React from "react";
-import { Box, Text } from "@chakra-ui/react";
+import { Box, Skeleton, Stack, Text } from "@chakra-ui/react";
 import { Navigate } from "react-router-dom";
-import { BiFile, BiMessageSquareAdd } from "react-icons/bi";
+import { BiMessageSquareAdd } from "react-icons/bi";
 import Header from "../components/Header";
 import PageLayout from "../layouts/PageLayout";
 import useLatestSaleReport from "../hooks/useLatestSaleReport";
-import ReportListItem from "../components/ReportListItem";
+import ReportListItem from "../components/SaleReportListItem";
 import CustomLink from "../components/CustomLink";
 import { useSelectedStore } from "../context/selectedStoreContext";
-import LoadingOverlay from "../components/LoadingOverlay";
+import Card from "../components/Card";
 
 const SalesPage: React.FC<{}> = () => {
     const { selectedStore } = useSelectedStore();
@@ -16,10 +16,6 @@ const SalesPage: React.FC<{}> = () => {
         selectedStore!.shopId,
         { enabled: !!selectedStore }
     );
-
-    if (isLoading) {
-        return <LoadingOverlay />;
-    }
 
     if (!selectedStore) {
         return <Navigate to={"/"} />;
@@ -43,13 +39,16 @@ const SalesPage: React.FC<{}> = () => {
                 </Box>
                 <Text marginTop={8}>Latest report</Text>
                 <Box marginTop={4}>
-                    <ReportListItem
-                        amount={saleReport?.TotalAmount}
-                        date={saleReport?.reportDate}
-                        icon={<BiFile size={32} />}
-                        isLoading={isLoading}
-                        toPath={`/sales/report/${saleReport?.saleId}`}
-                    />
+                    {isLoading || !saleReport ? (
+                        <Card padding={3}>
+                            <Stack>
+                                <Skeleton height="10px" />
+                                <Skeleton height="10px" />
+                            </Stack>
+                        </Card>
+                    ) : (
+                        <ReportListItem report={saleReport} />
+                    )}
                 </Box>
             </Box>
         </PageLayout>

@@ -5,7 +5,7 @@ import SimpleLayout from "../layouts/SimpleLayout";
 export default function LoadingOverlay() {
     return (
         <SimpleLayout>
-            <VStack justifyContent={"center"} align={"center"}>
+            <VStack justifyContent={"center"} align={"center"} height={"100vh"}>
                 <Spinner
                     thickness="4px"
                     speed="0.65s"

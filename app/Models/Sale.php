@@ -22,8 +22,10 @@ class Sale extends Model
         'cash_amount',
         'card_amount',
         'online_transfer_amount',
-        'total_amount',
     ];
+
+    protected $appends = ['total_amount'];
+
 
     /**
      * The attributes that should be cast.

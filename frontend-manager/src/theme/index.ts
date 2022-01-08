@@ -1,4 +1,6 @@
 import { extendTheme, ThemeConfig, theme as base } from "@chakra-ui/react";
+import { mode } from "@chakra-ui/theme-tools";
+import { Dict } from "@chakra-ui/utils";
 
 const config: ThemeConfig = {
     initialColorMode: "light",
@@ -7,6 +9,13 @@ const config: ThemeConfig = {
 
 const theme = extendTheme({
     config,
+    styles: {
+        global: (props: Dict) => ({
+            body: {
+                bg: mode("gray.100", "gray.800")(props),
+            },
+        }),
+    },
     fonts: {
         heading: `Inter, ${base.fonts.heading}`,
         body: `Inter, ${base.fonts.body}`,
