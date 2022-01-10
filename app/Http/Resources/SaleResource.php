@@ -23,10 +23,10 @@ class SaleResource extends JsonResource
             'saleId' => $this->id,
             'description' => $this->description,
             'reportDate' => $this->report_date,
-            'cashAmount' => $this->cash_amount,
-            'cardAmount' => $this->card_amount,
-            'onlineTransferAmount' => $this->online_transfer_amount,
-            'TotalAmount' => (string)$this->total_amount,
+            'cashAmount' => floatval($this->cash_amount),
+            'cardAmount' => floatval($this->card_amount),
+            'onlineTransferAmount' => floatval($this->online_transfer_amount),
+            'TotalAmount' => floatval($this->total_amount),
 
             'shop' => new  ShopResource($shop),
             $this->mergeWhen($user, [

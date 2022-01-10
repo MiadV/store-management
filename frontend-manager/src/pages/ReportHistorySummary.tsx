@@ -6,6 +6,8 @@ import LoadingOverlay from "../components/LoadingOverlay";
 import useReportHistoryByDate from "../hooks/useReportHistoryByDate";
 import { useSelectedStore } from "../context/selectedStoreContext";
 import { ResponseErrorType } from "../types";
+import ReportHistorySummaryItem from "../components/ReportHistorySummaryItem";
+import NoReportHistorySummary from "../components/NoReportHistorySummary";
 
 const ReportHistorySummary: React.FC<{}> = () => {
     let { date } = useParams();
@@ -38,10 +40,17 @@ const ReportHistorySummary: React.FC<{}> = () => {
     return (
         <SimpleLayout>
             <Box padding={6}>
-                {reportHistorySummary
-                    ? JSON.stringify(reportHistorySummary)
-                    : (error as ResponseErrorType).response.data.errors
-                          .message[0] ?? "Something went wrong. try again."}
+                {reportHistorySummary ? (
+                    <ReportHistorySummaryItem report={reportHistorySummary} />
+                ) : (
+                    <NoReportHistorySummary
+                        message={
+                            (error as ResponseErrorType).response.data.errors
+                                .message[0] ??
+                            "Something went wrong. try again."
+                        }
+                    />
+                )}
             </Box>
         </SimpleLayout>
     );

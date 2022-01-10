@@ -10,7 +10,7 @@ import {
 import { format } from "date-fns";
 import { Link } from "react-router-dom";
 import { BiArrowBack } from "react-icons/bi";
-import ReportCheckIcon from "../assets/vectors/ReportCheckIcon";
+import ExpenseIcon from "../assets/vectors/ExpenseIcon";
 import { ExpenseReportType } from "../types";
 import currencyFormat from "../util/currencyFormat";
 import ImagePreviewModal from "./ImagePreviewModal";
@@ -36,14 +36,14 @@ const ExpenseReportItem: React.FC<{ report: ExpenseReportType }> = ({
             </Flex>
             <Flex justifyContent="center" marginY={8}>
                 <Flex
-                    bg="teal.400"
+                    bg="green.400"
                     width="130px"
                     height="130px"
                     borderRadius="100%"
                     justifyContent="center"
                     alignItems="center"
                 >
-                    <ReportCheckIcon fill="white" width="80px" />
+                    <ExpenseIcon fill="white" width="80px" height="80px" />
                 </Flex>
             </Flex>
             <Flex
@@ -70,15 +70,10 @@ const ExpenseReportItem: React.FC<{ report: ExpenseReportType }> = ({
                     </Flex>
 
                     <Flex justifyContent={"space-between"}>
-                        
                         <Text>Date</Text>
                         <Text>
                             {format(new Date(reportDate), "dd MMMM yyyy")}
                         </Text>
-                    </Flex>
-                    <Flex justifyContent={"space-between"}>
-                        <Text>Added By</Text>
-                        <Text>{user?.name}</Text>
                     </Flex>
 
                     {description && (
@@ -96,6 +91,15 @@ const ExpenseReportItem: React.FC<{ report: ExpenseReportType }> = ({
                             </Box>
                         </Flex>
                     )}
+
+                    <Flex
+                        justifyContent={"space-between"}
+                        fontSize={"sm"}
+                        marginTop={2}
+                    >
+                        <Text>Submitted by</Text>
+                        <Text>{user?.name}</Text>
+                    </Flex>
                 </Flex>
             </Flex>
         </Box>

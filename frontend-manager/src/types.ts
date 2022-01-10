@@ -154,4 +154,5 @@ export type ReportHistoryType = {
     saleReport: SaleReportType;
     expenseReports: ExpenseReportType[];
     sumOfExpenses: number | string;
+    balance: number | string;
 };

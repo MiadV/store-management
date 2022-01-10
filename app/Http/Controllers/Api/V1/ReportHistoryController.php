@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Http\Resources\ExpenseResource;
+use App\Http\Resources\SaleResource;
 use App\Models\Expense;
 use App\Models\Sale;
 use Illuminate\Http\Request;
@@ -10,7 +12,8 @@ class ReportHistoryController extends Controller
 {
     public function show(Request $request, $shop_id, $year, $month, $day)
     {
-        $saleReport = Sale::where('shop_id', $shop_id)
+        $saleReport = Sale::with('shop')
+            ->where('shop_id', $shop_id)
             ->whereDate('report_date', $year . '-' . $month . '-' . $day)
             ->first();
 
@@ -21,13 +24,18 @@ class ReportHistoryController extends Controller
         }
 
         // should not contain accountant only expenses.
-        $expenseReports = Expense::with(['expenseType'])
+        $expenseReports = Expense::with(['expenseType', 'images'])
             ->where('shop_id', $request->shop_id)
             ->whereDate('report_date', $year . '-' . $month . '-' . $day)
             ->whereRelation('expenseType', 'accountant_only', false)
             ->get();
 
 
-        return response()->json(['saleReport' => $saleReport, 'expenseReports' => $expenseReports, 'sumOfExpenses' => $expenseReports->sum('amount')]);
+        return response()->json([
+            'saleReport' => new SaleResource($saleReport),
+            'expenseReports' => ExpenseResource::collection($expenseReports),
+            'sumOfExpenses' => $expenseReports->sum('amount'),
+            'balance' => floatval(str_replace(',', '', $saleReport['total_amount'])) - $expenseReports->sum('amount'),
+        ]);
     }
 }

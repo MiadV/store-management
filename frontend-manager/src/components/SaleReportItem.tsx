@@ -38,7 +38,7 @@ const SaleReportItem: React.FC<{ report: SaleReportType }> = ({ report }) => {
                     />
                 </Link>
             </Flex>
-            <Flex justifyContent="center" marginY={8}>
+            <Flex justifyContent="center" marginTop={8} marginBottom={2}>
                 <Flex
                     bg="green.400"
                     width="130px"
@@ -50,6 +50,18 @@ const SaleReportItem: React.FC<{ report: SaleReportType }> = ({ report }) => {
                     <ReportCheckIcon fill="white" width="80px" />
                 </Flex>
             </Flex>
+            <Flex justifyContent="center" direction="column" marginBottom={2}>
+                <Flex justifyContent={"center"}>
+                    <Text fontWeight={"bold"} fontSize="large">
+                        {shop?.title}
+                    </Text>
+                </Flex>
+                <Flex justifyContent={"center"}>
+                    <Text fontWeight={"bold"} fontSize="md">
+                        {format(new Date(reportDate), "dd MMMM yyyy")}
+                    </Text>
+                </Flex>
+            </Flex>
             <Flex
                 direction="column"
                 textAlign="center"
@@ -58,12 +70,6 @@ const SaleReportItem: React.FC<{ report: SaleReportType }> = ({ report }) => {
                 bg={bgColor}
             >
                 <Flex direction="column" gap={1}>
-                    <Flex justifyContent={"center"}>
-                        <Text fontWeight={"bold"} fontSize="2xl">
-                            {shop?.title}
-                        </Text>
-                    </Flex>
-
                     <Flex justifyContent={"space-between"}>
                         <Text>Cash</Text>
                         <Text>{currencyFormat(cashAmount)}</Text>
@@ -86,16 +92,6 @@ const SaleReportItem: React.FC<{ report: SaleReportType }> = ({ report }) => {
                             {currencyFormat(TotalAmount)}
                         </Text>
                     </Flex>
-                    <Flex justifyContent={"space-between"} marginTop={2}>
-                        <Text>Date</Text>
-                        <Text>
-                            {format(new Date(reportDate), "dd MMMM yyyy")}
-                        </Text>
-                    </Flex>
-                    <Flex justifyContent={"space-between"}>
-                        <Text>Added By</Text>
-                        <Text>{user?.name}</Text>
-                    </Flex>
 
                     {description && (
                         <Flex direction={"column"}>
@@ -103,6 +99,15 @@ const SaleReportItem: React.FC<{ report: SaleReportType }> = ({ report }) => {
                             <Text alignSelf={"start"}>{description}</Text>
                         </Flex>
                     )}
+
+                    <Flex
+                        justifyContent={"space-between"}
+                        fontSize={"sm"}
+                        marginTop={2}
+                    >
+                        <Text>Submitted by</Text>
+                        <Text>{user?.name}</Text>
+                    </Flex>
                 </Flex>
             </Flex>
         </Box>
