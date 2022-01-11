@@ -35,7 +35,7 @@ class AuthController extends Controller
 //        return response($response, 201);
 //    }
 
-    public function login(Request $request)
+    public function managerLogin(Request $request)
     {
         $fields = $request->validate([
             'email' => 'required|string',
@@ -56,7 +56,38 @@ class AuthController extends Controller
         }
 
         // TODO => Replace token-name with device name.
-        $token = $user->createToken('auth_token')->plainTextToken;
+        $token = $user->createToken('auth_token_manager')->plainTextToken;
+
+        return response()->json(["token" => $token], 200);
+    }
+
+    public function accountantLogin(Request $request)
+    {
+        $fields = $request->validate([
+            'email' => 'required|string',
+            'password' => 'required|string'
+        ]);
+
+        // Check email
+        $user = User::where('email', $fields['email'])->first();
+
+        // Check password
+        if (!$user || !Hash::check($fields['password'], $user->password)) {
+            return response()->json(["errors" => (object)["message" => ["Wrong credentials."]]], 403);
+        }
+
+        // Check if user is disabled.
+        if (!$user["is_active"]) {
+            return response()->json(["errors" => (object)["email" => ["Disabled Account."]]], 403);
+        }
+
+        // Check if user is accountant.
+        if (!$user->hasPermissionTo('ACCOUNTING_MODULE')) {
+            return response()->json(["errors" => (object)["email" => ["You dont have access to accounting module."]]], 403);
+        }
+
+        // TODO => Replace token-name with device name.
+        $token = $user->createToken('auth_token_accountant')->plainTextToken;
 
         return response()->json(["token" => $token], 200);
     }
@@ -76,3 +107,7 @@ class AuthController extends Controller
         return new UserResource($authUser);
     }
 }
+
+
+
+

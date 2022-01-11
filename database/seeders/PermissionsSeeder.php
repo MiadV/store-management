@@ -25,11 +25,13 @@ class PermissionsSeeder extends Seeder
         $sales_report = "SALES_REPORT";
         $expense_report = "EXPENSE_REPORT";
         $report_history = "REPORT_HISTORY";
+        $accounting_module = "ACCOUNTING_MODULE";
 
         // create permissions
         Permission::create(['name' => $sales_report]);
         Permission::create(['name' => $expense_report]);
         Permission::create(['name' => $report_history]);
+        Permission::create(['name' => $accounting_module]);
 
         // create roles and assign existing permissions
 //        $roleSuperAdmin = Role::create(['name' => 'Super-Admin']);
@@ -40,7 +42,7 @@ class PermissionsSeeder extends Seeder
             'name' => 'Test User',
             'email' => 'test@test.com',
         ]);
-        $user->givePermissionTo($sales_report, $expense_report);
+        $user->givePermissionTo($sales_report, $expense_report, $accounting_module);
 
 
         $user = User::factory()->create([

@@ -8,6 +8,7 @@ use \App\Http\Controllers\Api\V1\ExpenseController;
 use \App\Http\Controllers\Api\V1\ExpenseTypeController;
 use \App\Http\Controllers\Api\V1\ImageController;
 use \App\Http\Controllers\Api\V1\ReportHistoryController;
+use \App\Http\Controllers\Api\V1\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,7 +21,8 @@ use \App\Http\Controllers\Api\V1\ReportHistoryController;
 |
 */
 
-Route::post('/login', [AuthController::class, 'login']);
+Route::post('/login', [AuthController::class, 'managerLogin']);
+Route::post('/accountant/login', [AuthController::class, 'accountantLogin']);
 
 Route::middleware('auth:sanctum')
     ->group(function () {
@@ -82,15 +84,13 @@ Route::middleware('auth:sanctum')
 
             });
 
+        Route::prefix('accountant')
+            ->middleware('permission:ACCOUNTING_MODULE')
+            ->group(function () {
+                Route::get('/user', [UserController::class, 'index']);
+            });
+
     });
 
 
 
-//
-//Route::get('/expense/{id}', function (Request $request, $id) {
-//    return \App\Models\Expense::with(["expenseRule.expenseType","expenseRule.shop"])->get();
-//});
-
-//    Route::get('/shop/{id}', function (Request $request, $id) {
-//        return \App\Models\Shop::with("expenseTypes")->find($id);
-//    }
