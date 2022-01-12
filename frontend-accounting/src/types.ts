@@ -1,5 +1,5 @@
 export type PermissionsType = [
-    "SALES_REPORT" | "EXPENSE_REPORT" | "REPORT_HISTORY"
+    "SALES_REPORT" | "EXPENSE_REPORT" | "REPORT_HISTORY" | "ACCOUNTING_MODULE"
 ];
 
 type ErrorType = Record<string, [string]>;
@@ -155,4 +155,14 @@ export type ReportHistoryType = {
     expenseReports: ExpenseReportType[];
     sumOfExpenses: number | string;
     balance: number | string;
+};
+
+export type UserType = {
+    userId: string | number;
+    name: string;
+    email: string;
+    phone: string | null;
+    isActive: Boolean;
+    shops: ShopType[];
+    permissions: string[];
 };

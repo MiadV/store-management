@@ -35,8 +35,8 @@ const SidebarContent: React.FC<BoxProps> = (props) => {
             pb="10"
             overflowX="hidden"
             overflowY="auto"
-            bg={useColorModeValue("white", "gray.800")}
-            borderColor={useColorModeValue("inherit", "gray.700")}
+            bg={useColorModeValue("white", "gray.700")}
+            borderColor={useColorModeValue("inherit", "gray.600")}
             borderRightWidth="1px"
             w="60"
             {...props}

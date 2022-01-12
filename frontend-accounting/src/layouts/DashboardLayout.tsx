@@ -21,7 +21,7 @@ const Dashboard: React.FC<BoxProps> = ({ children, ...rest }) => {
     return (
         <Box
             as="section"
-            bg={useColorModeValue("gray.50", "gray.700")}
+            bg={useColorModeValue("gray.50", "gray.800")}
             minH="100vh"
             {...rest}
         >
@@ -43,9 +43,9 @@ const Dashboard: React.FC<BoxProps> = ({ children, ...rest }) => {
                     justify="space-between"
                     w="full"
                     px="4"
-                    bg={useColorModeValue("white", "gray.800")}
+                    bg={useColorModeValue("white", "gray.700")}
                     borderBottomWidth="1px"
-                    borderColor={useColorModeValue("inherit", "gray.700")}
+                    borderColor={useColorModeValue("inherit", "gray.600")}
                     h="14"
                 >
                     <IconButton
