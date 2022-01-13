@@ -17,11 +17,10 @@ import {
     BiChevronRight,
     BiGroup,
 } from "react-icons/bi";
-import { useNavigate, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Logo from "../assets/vectors/Logo";
 
 const SidebarContent: React.FC<BoxProps> = (props) => {
-    const navigate = useNavigate();
     const integrations = useDisclosure();
 
     return (
