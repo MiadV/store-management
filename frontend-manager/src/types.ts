@@ -1,7 +1,7 @@
-export type PermissionsType = [
-    "SALES_REPORT" | "EXPENSE_REPORT" | "REPORT_HISTORY"
-];
-
+export type PermissionType = {
+    name: string;
+    id: number;
+};
 type ErrorType = Record<string, [string]>;
 
 export type uploadedImageType = {
@@ -48,7 +48,7 @@ export type AuthUserObject = {
     phone: string;
     isActive: boolean;
     shops: ShopType[];
-    permissions: PermissionsType;
+    permissions: PermissionType[];
 };
 
 export type SaleReportType = {

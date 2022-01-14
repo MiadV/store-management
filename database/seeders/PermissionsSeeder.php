@@ -20,8 +20,7 @@ class PermissionsSeeder extends Seeder
         // Reset cached roles and permissions
         app()[PermissionRegistrar::class]->forgetCachedPermissions();
 
-
-        // define permissions
+        // Define all permissions names here.
         $sales_report = "SALES_REPORT";
         $expense_report = "EXPENSE_REPORT";
         $report_history = "REPORT_HISTORY";

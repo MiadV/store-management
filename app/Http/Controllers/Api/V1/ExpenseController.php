@@ -50,7 +50,7 @@ class ExpenseController extends Controller
     {
 
         // 1- report date should not be older than 1 day. (checked in form request).
-        // TODO 2- strictly limited expenses should be checked if theres enough balance left.
+        // TODO 2- strictly limited expenses should be checked if there is enough balance left.
         // TODO 3- accountant only expenses should be submitted by accountants only.
 
         // 4- shopId and ExpenseTypeId should match with expenseTypeShopId and submitted shopId.

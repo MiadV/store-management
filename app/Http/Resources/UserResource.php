@@ -24,7 +24,7 @@ class UserResource extends JsonResource
             'phone' => $this->phone,
             'isActive' => $this->is_active,
             'shops' => ShopResource::collection($shops),
-            'permissions' => $permissions->pluck('name'),
+            'permissions' => PermissionsResource::collection($permissions),
         ];
     }
 }

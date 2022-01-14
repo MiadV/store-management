@@ -9,6 +9,8 @@ use \App\Http\Controllers\Api\V1\ExpenseTypeController;
 use \App\Http\Controllers\Api\V1\ImageController;
 use \App\Http\Controllers\Api\V1\ReportHistoryController;
 use \App\Http\Controllers\Api\V1\UserController;
+use \App\Http\Controllers\Api\V1\PermissionController;
+use \App\Http\Controllers\Api\V1\ShopController;
 
 /*
 |--------------------------------------------------------------------------
@@ -87,7 +89,12 @@ Route::middleware('auth:sanctum')
         Route::prefix('accountant')
             ->middleware('permission:ACCOUNTING_MODULE')
             ->group(function () {
+                Route::get('/permissions', [PermissionController::class, 'index']);
+
+                Route::get('/shops', [ShopController::class, 'index']);
+
                 Route::get('/user', [UserController::class, 'index']);
+                Route::post('/user', [UserController::class, 'store']);
             });
 
     });

@@ -8,7 +8,7 @@ import TaskItem from "../components/TaskItem";
 import SalesIcon from "../assets/vectors/SalesIcon";
 import ExpenseIcon from "../assets/vectors/ExpenseIcon";
 import ReportHistoryIcon from "../assets/vectors/ReportHistoryIcon";
-import { PermissionsType } from "../types";
+import { PermissionType } from "../types";
 import { useSelectedStore } from "../context/selectedStoreContext";
 
 import LoadingOverlay from "../components/LoadingOverlay";
@@ -42,27 +42,29 @@ const StoreDashboard: React.FC<{}> = () => {
 export default StoreDashboard;
 
 const RenderTaskItems: React.FC<{
-    permissionsArray: PermissionsType;
+    permissionsArray: PermissionType[];
 }> = (props) => {
     const { permissionsArray } = props;
 
+    const permNames = permissionsArray.map((i) => i.name);
+
     return (
         <SimpleGrid columns={2} spacing={4} marginTop={4}>
-            {permissionsArray.includes("SALES_REPORT") && (
+            {permNames.includes("SALES_REPORT") && (
                 <TaskItem
                     taskTitle="Sales Report"
                     icon={<SalesIcon width="60px" />}
                     toPath={`/sales`}
                 />
             )}
-            {permissionsArray.includes("EXPENSE_REPORT") && (
+            {permNames.includes("EXPENSE_REPORT") && (
                 <TaskItem
                     taskTitle="Expense Report"
                     icon={<ExpenseIcon width="60px" />}
                     toPath={`/expenses`}
                 />
             )}
-            {permissionsArray.includes("REPORT_HISTORY") && (
+            {permNames.includes("REPORT_HISTORY") && (
                 <TaskItem
                     taskTitle="Report History"
                     icon={<ReportHistoryIcon width="60px" />}

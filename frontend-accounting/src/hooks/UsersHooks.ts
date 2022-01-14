@@ -1,5 +1,5 @@
-import { useQuery, UseQueryOptions } from "react-query";
-import { PaginatedList, UserType } from "../types";
+import { useQuery, UseQueryOptions, useMutation } from "react-query";
+import { INewUser, MutationReponse, PaginatedList, UserType } from "../types";
 import api from "../util/api";
 
 const getUsersList = async (
@@ -24,4 +24,16 @@ export function useUsersList({
     return useQuery(["usersList", pageIndex], () => getUsersList(pageIndex), {
         ...options,
     });
+}
+
+const postNewUser = async (
+    data: INewUser
+): Promise<MutationReponse<UserType>> => {
+    return await api().post("/accountant/user", data);
+};
+
+export function useNewUserMutation() {
+    return useMutation<MutationReponse<UserType>, any, INewUser>(async (data) =>
+        postNewUser(data)
+    );
 }
