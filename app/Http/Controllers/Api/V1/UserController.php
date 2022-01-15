@@ -3,10 +3,8 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Requests\StoreUserRequest;
-use App\Http\Resources\ExpenseResource;
+use App\Http\Requests\UpdateUserRequest;
 use App\Http\Resources\UserResource;
-use App\Models\Expense;
-use App\Models\Image;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -55,6 +53,51 @@ class UserController extends Controller
 
             return response()->json([
                 "errors" => (object)["message" => ["Something went wrong, please try again."]]
+            ], 403);
+
+        }
+
+    }
+
+    public function update(UpdateUserRequest $request, User $user)
+    {
+
+
+        try {
+            DB::beginTransaction();
+
+            $payload = [
+                'phone' => $request['phone'],
+                'is_active' => $request['isActive'],
+            ];
+
+            if ($request['new_password']) {
+                $payload = array_merge($payload, ['password' => bcrypt($request['new_password'])]);
+            }
+
+            // update user
+            $user->update($payload);
+
+            // assign shops.
+            $user->shops()->sync($request['shops']);
+
+            // assign permissions.
+            $user->syncPermissions($request['permissions']);
+
+            // success
+            DB::commit();
+
+            $updatedUser = User::with(['shops', 'permissions'])->find($user->id);
+
+            return new UserResource($updatedUser);
+
+
+        } catch (\Exception $e) {
+            // failed
+            DB::rollBack();
+
+            return response()->json([
+                "errors" => (object)["message" => ["Something went wrong, please try again." . $e]]
             ], 403);
 
         }

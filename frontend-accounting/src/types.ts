@@ -167,7 +167,7 @@ export type UserType = {
   name: string;
   email: string;
   phone: string | null;
-  isActive: Boolean;
+  isActive: boolean;
   shops: ShopType[];
   permissions: PermissionType[];
 };
@@ -178,6 +178,18 @@ export interface INewUser {
   phone: string | null;
   password: string;
   password_confirmation: string;
-  shops: number[];
+  shops: ShopType[];
   permissions: number[];
+}
+
+export interface IEditUser {
+  userId: string | number;
+  name: string;
+  email: string;
+  phone: string | null;
+  isActive: boolean;
+  shops: ShopType[];
+  permissions: number[];
+  new_password?: string;
+  new_password_confirmation?: string;
 }

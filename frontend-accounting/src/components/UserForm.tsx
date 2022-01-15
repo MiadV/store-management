@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   Button,
   FormControl,
@@ -11,31 +11,25 @@ import {
 import { useQueryClient } from 'react-query';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { INewUser, PermissionType, ResponseErrorType, ShopType } from '../types';
+import { INewUser, ResponseErrorType } from '../types';
 import mapServerSideErrors from '../util/mapServerSideErrors';
 import UserFormSchema from '../validations/UserFormValidtaion';
 import { useNewUserMutation } from '../hooks/UsersHooks';
-import CustomMultiSelectPermissions from './CustomMultiSelectPermissions';
 import CustomMultiSelectShops from './CustomMultiSelectShops';
+import CustomPermissionsCheckbox from './CustomPermissionsCheckbox';
 
 const UserForm: React.FC<{ closeModal: () => void }> = ({ closeModal }) => {
   const queryClient = useQueryClient();
-  const [permissions, setPermissions] = useState<PermissionType[]>([]);
-  const [shops, setShops] = useState<ShopType[]>([]);
   const toast = useToast();
   const newUserMutation = useNewUserMutation();
-  const { handleSubmit, register, setError, formState } = useForm({
+  const { handleSubmit, register, setError, formState, control } = useForm({
     resolver: yupResolver(UserFormSchema),
   });
   const { isSubmitting, errors } = formState;
 
   const onSubmit = async (data: INewUser) => {
-    let shopIds = shops.map((i) => i.shopId);
-    let permIds = permissions.map((i) => i.id);
-    let payload = { ...data, shops: shopIds, permissions: permIds };
-
     try {
-      await newUserMutation.mutateAsync(payload).then(() => {
+      await newUserMutation.mutateAsync(data).then(() => {
         queryClient.refetchQueries(['usersList'], { active: true });
         closeModal();
       });
@@ -80,14 +74,14 @@ const UserForm: React.FC<{ closeModal: () => void }> = ({ closeModal }) => {
           {errors.phone && <FormErrorMessage>{errors.phone.message}</FormErrorMessage>}
         </FormControl>
 
-        <FormControl id="permissions" isRequired isInvalid={!!errors.permissions}>
-          <CustomMultiSelectPermissions onChange={setPermissions} />
+        <FormControl id="permissions" isInvalid={!!errors.permissions}>
+          <CustomPermissionsCheckbox name="permissions" control={control} />
 
           {errors.permissions && <FormErrorMessage>{errors.permissions.message}</FormErrorMessage>}
         </FormControl>
 
         <FormControl id="shops" isRequired isInvalid={!!errors.shops}>
-          <CustomMultiSelectShops onChange={setShops} />
+          <CustomMultiSelectShops name="shops" control={control} />
 
           {errors.shops && <FormErrorMessage>{errors.shops.message}</FormErrorMessage>}
         </FormControl>

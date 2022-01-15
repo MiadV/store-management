@@ -8,8 +8,8 @@ const UserFormSchema = yup
     phone: yup.string().nullable(),
     password: yup.string().defined(),
     password_confirmation: yup.string().oneOf([yup.ref('password'), null], 'Passwords must match'),
-    permissions: yup.array(),
-    shops: yup.array(),
+    permissions: yup.array().min(1).defined(),
+    shops: yup.array().min(1).defined(),
   })
   .defined();
 

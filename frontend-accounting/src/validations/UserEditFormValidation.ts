@@ -3,12 +3,9 @@ import * as yup from 'yup';
 const UserEditFormSchema = yup
   .object()
   .shape({
-    name: yup.string().min(3).defined(),
-    email: yup.string().email().defined(),
     phone: yup.string().nullable(),
-    permissions: yup.array(),
-    shops: yup.array(),
-    isActive: yup.boolean().defined(),
+    permissions: yup.array().min(1).defined(),
+    shops: yup.array().min(1).defined(),
     new_password: yup.string().nullable(),
     new_password_confirmation: yup
       .string()

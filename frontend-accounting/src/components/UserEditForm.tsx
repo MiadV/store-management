@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import {
   Box,
   Button,
@@ -14,58 +14,60 @@ import {
 } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { INewUser, PermissionType, ResponseErrorType, ShopType, UserType } from '../types';
+import { IEditUser, ResponseErrorType, UserType } from '../types';
 import mapServerSideErrors from '../util/mapServerSideErrors';
-import { useNewUserMutation } from '../hooks/UsersHooks';
-import CustomMultiSelectPermissions from './CustomMultiSelectPermissions';
+import { useUpdateUserMutation } from '../hooks/UsersHooks';
 import CustomMultiSelectShops from './CustomMultiSelectShops';
 import { useQueryClient } from 'react-query';
 import UserEditFormSchema from '../validations/UserEditFormValidation';
+import CustomPermissionsCheckbox from './CustomPermissionsCheckbox';
 
 const UserEditForm: React.FC<{ closeModal: () => void; user: UserType }> = ({
-  closeModal,
   user,
+  closeModal,
 }) => {
   const queryClient = useQueryClient();
-  const [permissions, setPermissions] = useState<PermissionType[]>([]);
-  const [shops, setShops] = useState<ShopType[]>([]);
   const toast = useToast();
-  const newUserMutation = useNewUserMutation();
-  const { handleSubmit, register, setError, formState, reset, getValues } = useForm({
+  const userUpdateMutation = useUpdateUserMutation();
+  const { handleSubmit, register, setError, formState, control } = useForm({
     resolver: yupResolver(UserEditFormSchema),
+    defaultValues: {
+      ...user,
+      permissions: user.permissions.map((i) => i.id),
+      new_password: '',
+      new_password_confirmation: '',
+    },
   });
   const { isSubmitting, errors } = formState;
 
-  useEffect(() => {
-    if (user) {
-      reset(user);
+  const onSubmit = async (data: IEditUser) => {
+    try {
+      await userUpdateMutation.mutateAsync(data).then(() => {
+        queryClient.refetchQueries(['usersList'], { active: true });
+        toast({
+          title: 'Successful',
+          description: 'User info updated.',
+          status: 'success',
+          duration: 3000,
+          isClosable: true,
+        });
+        closeModal();
+      });
+    } catch (err) {
+      const { response } = err as ResponseErrorType;
+      if (response?.data.errors.message) {
+        toast({
+          title: 'Authentication Error',
+          description: response?.data.errors.message,
+          status: 'error',
+          duration: 3000,
+          isClosable: true,
+        });
+      } else {
+        // @ts-ignore
+        mapServerSideErrors(response?.data.errors!, setError);
+      }
     }
-  }, [user, reset, setPermissions]);
-
-  const onSubmit = async (data: INewUser) => {
-    console.log({ ...data, permissions });
-    // let shopIds = shops.map((i) => i.shopId);
-    // let permIds = permissions.map((i) => i.id);
-    // let payload = { ...data, shops: shopIds, permissions: permIds };
-    // try {
-    //   await newUserMutation.mutateAsync(payload).then(() => {
-    //     queryClient.refetchQueries(['usersList'], { active: true });
-    //     closeModal();
-    //   });
-    // } catch (err) {
-    //   const { response } = err as ResponseErrorType;
-    //   if (response?.data.errors.message) {
-    //     toast({
-    //       title: 'Authentication Error',
-    //       description: response?.data.errors.message,
-    //       status: 'error',
-    //       duration: 3000,
-    //       isClosable: true,
-    //     });
-    //   } else {
-    //     mapServerSideErrors(response?.data.errors!, setError);
-    //   }
-    // }
   };
 
   return (
@@ -93,25 +95,23 @@ const UserEditForm: React.FC<{ closeModal: () => void; user: UserType }> = ({
         </FormControl>
 
         <FormControl id="permissions" isInvalid={!!errors.permissions}>
-          <CustomMultiSelectPermissions
-            onChange={setPermissions}
-            defaultValue={getValues('permissions')}
-          />
+          <CustomPermissionsCheckbox name="permissions" control={control} />
 
-          {errors.permissions && <FormErrorMessage>{errors.permissions.message}</FormErrorMessage>}
+          {errors.permissions && <FormErrorMessage>{errors.permissions}</FormErrorMessage>}
         </FormControl>
 
         <FormControl id="shops" isInvalid={!!errors.shops}>
-          <CustomMultiSelectShops onChange={setShops} />
+          <CustomMultiSelectShops name="shops" control={control} />
 
-          {errors.shops && <FormErrorMessage>{errors.shops.message}</FormErrorMessage>}
+          {errors.shops && <FormErrorMessage>{errors.shops}</FormErrorMessage>}
         </FormControl>
 
         <FormControl display="flex" alignItems="center">
           <FormLabel htmlFor="isActive" mb="0">
             Is Active ?
           </FormLabel>
-          <Switch id="isActive" {...register('isActive')} />
+
+          <Switch {...register('isActive')} />
         </FormControl>
 
         <Box>

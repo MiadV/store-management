@@ -1,47 +1,44 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Select } from 'chakra-react-select';
 import { Skeleton } from '@chakra-ui/react';
+import { useController } from 'react-hook-form';
 import { ShopType } from '../types';
 import { useShopsList } from '../hooks/ShopHooks';
 
-interface OptionType {
-  label: string;
-  value: ShopType;
-}
-
 const CustomMultiSelectShops: React.FC<{
-  onChange: (val: ShopType[]) => void;
-}> = ({ onChange }) => {
-  const [options, setOptions] = useState<OptionType[]>([]);
+  name: string;
+  control: any;
+}> = ({ name, control }) => {
   const { data, isLoading } = useShopsList({
     staleTime: Infinity,
   });
 
-  useEffect(() => {
-    if (data) {
-      let options = [];
-      options = data.map((i) => {
-        return { label: i.title, value: i };
-      });
-
-      setOptions(options);
-    }
-  }, [data, setOptions]);
+  const { field } = useController({
+    name,
+    control,
+    rules: { required: true },
+  });
 
   return (
     <Skeleton isLoaded={!isLoading}>
-      <Select<OptionType, true, any>
+      <Select
         isMulti
-        name="shops"
-        options={options}
+        getOptionLabel={(i) => i.title}
+        getOptionValue={(i) => i}
+        options={data}
+        filterOption={(i) => {
+          let filter = field.value ? field.value.map((o: ShopType) => o.title) : [];
+          return !filter.includes(i.label);
+        }}
         placeholder="Shops"
         closeMenuOnSelect={false}
         selectedOptionStyle="check"
         colorScheme="purple"
-        onChange={(op) => {
-          let list = op.map((item) => item.value);
-          onChange(list);
-        }}
+        name={field.name}
+        onChange={field.onChange}
+        onBlur={field.onBlur}
+        value={field.value}
+        ref={field.ref}
       />
     </Skeleton>
   );
