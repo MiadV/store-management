@@ -10,6 +10,20 @@ class ExpenseTypeShop extends Pivot
     use HasFactory;
 
     /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'expense_type_id',
+        'shop_id',
+        'limit_amount',
+        'strict_limit',
+        'is_active',
+    ];
+
+
+    /**
      * Indicates if the IDs are auto-incrementing.
      *
      * @var bool

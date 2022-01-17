@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ExpenseTypeResource extends JsonResource
+class ExpenseTypeItemResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -18,10 +18,7 @@ class ExpenseTypeResource extends JsonResource
             'expenseTypeId' => $this->id,
             'title' => ucwords($this->title),
             'accountantOnly' => $this->accountant_only,
-            'expenseTypeShopId' => $this->pivot->id,
-            'limitAmount' => $this->pivot->limit_amount,
-            'isLimitStrict' => $this->pivot->strict_limit,
-            'createdAt' => $this->pivot->created_at,
+            'createdAt' => $this->created_at,
         ];
     }
 }

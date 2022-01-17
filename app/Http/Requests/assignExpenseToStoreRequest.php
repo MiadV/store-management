@@ -1,10 +1,11 @@
 <?php
 
+
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ImageRequest
+class assignExpenseToStoreRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,7 +25,10 @@ class ImageRequest
     public function rules()
     {
         return [
-            'image' => ['required', 'image', 'mimes:jpeg,png,jpg', 'max:6000'], // max image size 6mb
+            "shop_id" => ['required', 'integer'],
+            "expense_type_id" => ['required', 'integer'],
+            'limit_amount' => ['nullable', 'regex:/^\d+(\.\d{1,2})?$/'],
+            'strict_limit' => ['nullable', 'boolean'],
         ];
     }
 }

@@ -12,13 +12,14 @@ import {
   Text,
   useToast,
 } from '@chakra-ui/react';
+import { useQueryClient } from 'react-query';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { IEditUser, ResponseErrorType, UserType } from '../types';
 import mapServerSideErrors from '../util/mapServerSideErrors';
 import { useUpdateUserMutation } from '../hooks/UsersHooks';
 import CustomMultiSelectShops from './CustomMultiSelectShops';
-import { useQueryClient } from 'react-query';
+
 import UserEditFormSchema from '../validations/UserEditFormValidation';
 import CustomPermissionsCheckbox from './CustomPermissionsCheckbox';
 

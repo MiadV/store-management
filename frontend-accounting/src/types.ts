@@ -74,13 +74,33 @@ export type SaleReportType = {
   };
 };
 
-export type ExpenseTypeType = {
+export type ExpenseRuleType = {
   expenseTypeId: number;
   title: string;
   accountantOnly: boolean;
   expenseTypeShopId: number;
   limitAmount: string | null;
   isLimitStrict: boolean;
+  createdAt: string;
+};
+
+export type ExpenseItemType = {
+  expenseTypeId: number;
+  title: string;
+  accountantOnly: boolean;
+  createdAt: string;
+};
+
+export type INewExpenseItem = {
+  title: string;
+  accountant_only: boolean;
+};
+
+export type IAssignExpenseItem = {
+  expense_type_id: number | string;
+  shop_id: number | string;
+  limit_amount: string | number | null;
+  strict_limit: boolean;
 };
 
 export type ExpenseReportType = {
@@ -114,10 +134,6 @@ export interface ILogin {
   email: string;
   password: string;
 }
-
-export type NewSaleReportResponse = {
-  data: SaleReportType;
-};
 
 export interface INewSaleReport {
   shop_id: string | number;
