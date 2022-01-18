@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Requests\StoreExpenseRequest;
 use App\Http\Requests\UpdateExpenseRequest;
 use App\Http\Resources\ExpenseResource;
+use Illuminate\Support\Facades\Validator;
 use App\Models\Expense;
 use App\Models\ExpenseTypeShop;
 use App\Models\Image;
@@ -14,6 +15,33 @@ use Illuminate\Support\Facades\DB;
 
 class ExpenseController extends Controller
 {
+
+    public function index(Request $request)
+    {
+
+        $validator = Validator::make($request->all(), [
+            'page' => ['integer'],
+            'shop_id' => ['integer'],
+            'date_from' => ['date_format:Y-m-d'],
+            'date_to' => ['date_format:Y-m-d'],
+        ])->safe()->all();
+
+        $shopId = $validator['shop_id'] ?? null;
+        $dateFrom = $validator['date_from'] ?? null;
+        $dateTo = $validator['date_to'] ?? null;
+
+        $expenseReports = Expense::with(['user', 'images', 'shop', 'expenseType'])
+            ->where(function ($query) use ($shopId, $dateFrom, $dateTo) {
+                if ($shopId) $query->where('shop_id', $shopId);
+                if ($dateFrom && $dateTo) $query->whereBetween('report_date', [$dateFrom, $dateTo]);
+            })
+            ->orderBy('report_date', 'desc')
+            ->simplePaginate(10);
+
+        return ExpenseResource::collection($expenseReports)
+            ->response()
+            ->setEncodingOptions(JSON_UNESCAPED_SLASHES);
+    }
 
     public function show(Request $request, $report)
     {

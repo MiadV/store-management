@@ -98,10 +98,10 @@ Route::middleware('auth:sanctum')
                 Route::put('/user/{user}', [UserController::class, 'update'])
                     ->where('user', '[0-9]+');
 
+                Route::get('/expense', [ExpenseController::class, 'index']);
                 Route::post('/expense', [ExpenseTypeController::class, 'store']);
                 Route::post('/expense/assign', [ExpenseTypeController::class, 'assignExpenseToShop']);
                 Route::get('/expense/types', [ExpenseTypeController::class, 'index']);
-
 
             });
 

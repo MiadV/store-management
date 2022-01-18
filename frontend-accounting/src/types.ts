@@ -157,6 +157,13 @@ export interface INewExpenseReport {
   image_ids: string[] | number[];
 }
 
+export interface IEditExpenseReport {
+  description: string;
+  report_date: string;
+  amount: number;
+  image_ids: string[] | number[];
+}
+
 export type ExpenseBalanceType = {
   limit: string | null;
   currentTotal: string;
