@@ -9,16 +9,15 @@ import {
   useToast,
   NumberInput,
   NumberInputField,
+  FormLabel,
 } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { format, subDays } from 'date-fns';
 import { useQueryClient } from 'react-query';
-import CustomDatePicker from './CustomDatePicker';
 import { ExpenseReportEditSchema } from '../validations/ExpenseReportFormSchema';
 import CustomImageUpload from './CustomImageUpload';
-import mapServerSideErrors from '../util/mapServerSideErrors';
 import { ExpenseReportType, IEditExpenseReport, ResponseErrorType } from '../types';
+import { useUpdateExpenseMutation } from '../hooks/ExpenseHooks';
 
 const ExpenseEditForm: React.FC<{ closeModal: () => void; report: ExpenseReportType }> = ({
   closeModal,
@@ -28,68 +27,48 @@ const ExpenseEditForm: React.FC<{ closeModal: () => void; report: ExpenseReportT
   const toast = useToast();
   const [imageIds, setImageIds] = useState<number[] | string[]>([]);
 
-  // const newExpenseReportMutation = useNewExpenseReportMutation();
-  const { handleSubmit, register, formState, setValue, setError, watch } = useForm({
+  const updateExpenseReportMutation = useUpdateExpenseMutation();
+  const { handleSubmit, register, formState } = useForm({
     resolver: yupResolver(ExpenseReportEditSchema),
     defaultValues: {
       description: report.description,
       amount: report.amount,
-      report_date: new Date(report.reportDate),
     },
   });
   const { isSubmitting, errors } = formState;
 
   const onSubmit = async (data: IEditExpenseReport) => {
+    console.log(data);
     const payload = {
       ...data,
+      reportId: report.expenseId,
       image_ids: imageIds,
-      report_date: format(new Date(data.report_date), 'yyyy-MM-dd'),
     };
 
-    console.log(payload);
-
-    // try {
-    //   await newExpenseReportMutation.mutateAsync(payload).then(() => {
-    //     queryClient.refetchQueries(['expenseList'], { active: true });
-    //     closeModal();
-    //   });
-    // } catch (err) {
-    //   const { response } = err as ResponseErrorType;
-    //   if (response?.data.errors.message) {
-    //     toast({
-    //       title: 'Something went wrong!',
-    //       description: response?.data.errors.message,
-    //       status: 'error',
-    //       duration: 3000,
-    //       isClosable: true,
-    //     });
-    //   } else {
-    //     mapServerSideErrors(response?.data.errors!, setError);
-    //   }
-    // }
+    try {
+      await updateExpenseReportMutation.mutateAsync(payload).then(() => {
+        queryClient.refetchQueries(['expenseList'], { active: true });
+        closeModal();
+      });
+    } catch (err) {
+      const { response } = err as ResponseErrorType;
+      if (response?.data.errors.message) {
+        toast({
+          title: 'Something went wrong!',
+          description: response?.data.errors.message,
+          status: 'error',
+          duration: 3000,
+          isClosable: true,
+        });
+      }
+    }
   };
 
   return (
     <form autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
       <Stack spacing={4} marginBottom={4}>
-        <FormControl
-          id="report_date"
-          isRequired
-          isInvalid={!!errors.report_date}
-          placeholder="Report date"
-        >
-          <CustomDatePicker
-            isClearable
-            placeholderText="Expense Date"
-            minDate={subDays(new Date(), 1)}
-            maxDate={new Date()}
-            selected={watch('report_date')}
-            onChange={(date) => setValue('report_date', date!)}
-          />
-
-          {errors.report_date && <FormErrorMessage>{errors.report_date.message}</FormErrorMessage>}
-        </FormControl>
         <FormControl id="amount" isRequired isInvalid={!!errors.amount}>
+          <FormLabel htmlFor="amount">Amount</FormLabel>
           <NumberInput precision={2}>
             <NumberInputField placeholder="Amount" {...register('amount')} />
           </NumberInput>
@@ -98,6 +77,7 @@ const ExpenseEditForm: React.FC<{ closeModal: () => void; report: ExpenseReportT
         </FormControl>
 
         <FormControl id="description" isInvalid={!!errors.description}>
+          <FormLabel htmlFor="description">Description</FormLabel>
           <InputGroup>
             <Textarea placeholder="Description" {...register('description')} />
           </InputGroup>
@@ -105,7 +85,7 @@ const ExpenseEditForm: React.FC<{ closeModal: () => void; report: ExpenseReportT
           {errors.description && <FormErrorMessage>{errors.description.message}</FormErrorMessage>}
         </FormControl>
 
-        <CustomImageUpload setImageIds={setImageIds} />
+        <CustomImageUpload setImageIds={setImageIds} initialImages={report.images} />
 
         <Button
           isLoading={isSubmitting}
@@ -114,7 +94,7 @@ const ExpenseEditForm: React.FC<{ closeModal: () => void; report: ExpenseReportT
           loadingText="Please wait..."
           colorScheme="teal"
         >
-          Submit
+          Update
         </Button>
       </Stack>
     </form>

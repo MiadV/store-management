@@ -4,10 +4,13 @@ const SaleReportFormSchema = yup
     .object()
     .shape({
         description: yup.string(),
-        report_date: yup.date().defined(),
-        cash_amount: yup.number().defined(),
-        card_amount: yup.number().defined(),
-        online_transfer_amount: yup.number().defined(),
+        report_date: yup.date().typeError("Please select a date").defined(),
+        cash_amount: yup.number().typeError("Please enter amount").defined(),
+        card_amount: yup.number().typeError("Please enter amount").defined(),
+        online_transfer_amount: yup
+            .number()
+            .typeError("Please enter amount")
+            .defined(),
     })
     .defined();
 

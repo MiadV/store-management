@@ -9,6 +9,7 @@ import NotFound from './pages/NotFound';
 import ShopExpenseRulesTable from './pages/ShopExpenseRulesPage';
 import ExpenseList from './pages/ExpenseListPage';
 import ExpenseTypesPage from './pages/ExpenseTypesPage';
+import SalesPage from './pages/SalesPage';
 
 const RoutesList = () => {
   const queryClient = useQueryClient();
@@ -29,10 +30,14 @@ const RoutesList = () => {
       <Route path="/login" element={<LoginPage />} />
       <Route path="/" element={<PrivateOutlet />}>
         <Route index element={<DashboardPage />} />
-        <Route path="users" element={<UsersPage />} />
+
+        <Route path="sales" element={<SalesPage />} />
+
         <Route path="expenses" element={<ExpenseList />} />
         <Route path="expenses/type" element={<ExpenseTypesPage />} />
         <Route path="expenses/shop-rules" element={<ShopExpenseRulesTable />} />
+
+        <Route path="users" element={<UsersPage />} />
       </Route>
       <Route path="*" element={<NotFound />} />
     </Routes>

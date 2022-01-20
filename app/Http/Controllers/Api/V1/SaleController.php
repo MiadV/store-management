@@ -9,9 +9,38 @@ use App\Models\Sale;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class SaleController extends Controller
 {
+    public function index(Request $request)
+    {
+
+        $validator = Validator::make($request->all(), [
+            'page' => ['integer'],
+            'shop_id' => ['integer'],
+            'date_from' => ['date_format:Y-m-d'],
+            'date_to' => ['date_format:Y-m-d'],
+        ])->safe()->all();
+
+        $shopId = $validator['shop_id'] ?? null;
+        $dateFrom = $validator['date_from'] ?? null;
+        $dateTo = $validator['date_to'] ?? null;
+
+        $salesReport = Sale::with(['user', 'shop'])
+            ->where(function ($query) use ($shopId, $dateFrom, $dateTo) {
+                if ($shopId) $query->where('shop_id', $shopId);
+                if ($dateFrom && $dateTo) $query->whereBetween('report_date', [$dateFrom, $dateTo]);
+            })
+            ->orderBy('report_date', 'desc')
+            ->simplePaginate(10);
+
+        return SaleResource::collection($salesReport)
+            ->response()
+            ->setEncodingOptions(JSON_UNESCAPED_SLASHES);
+    }
+
+
     public function latestSaleReport(Request $request, $shop_id)
     {
 
@@ -64,14 +93,7 @@ class SaleController extends Controller
 
     public function update(UpdateSaleRequest $request, Sale $report)
     {
-        // 1- Each user can edit his submitted report only.
-        if ($report->user_id != auth()->id()) {
-            return response()->json([
-                "errors" => (object)["message" => ["You can't edit this report."]]
-            ], 403);
-        }
-
-        // 2- disable editing old reports.
+        // 1- disable editing old reports.
         if (Carbon::createFromDate($report->created_at)->addHours(config('constants.sale_edit_cutoff_time', 4)) < now()) {
             return response()->json([
                 "errors" => (object)["message" => ["Old reports can't be edited."]]

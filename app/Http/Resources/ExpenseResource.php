@@ -29,7 +29,7 @@ class ExpenseResource extends JsonResource
             'updatedAt' => $this->updated_at,
 
             'shop' => new ShopResource($shop),
-            'images' => $images->pluck('full_path'),
+            'images' => ImageResource::collection($images),
             $this->mergeWhen($user, [
                 'user' => [
                     'userId' => $this->user->id,

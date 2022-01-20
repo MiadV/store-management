@@ -77,7 +77,7 @@ class ExpenseController extends Controller
     public function store(StoreExpenseRequest $request)
     {
 
-        // 1- report date should not be older than 1 day. (checked in form request).
+        // 1- report date should not be in future.
         // TODO 2- strictly limited expenses should be checked if there is enough balance left.
         // TODO 3- accountant only expenses should be submitted by accountants only.
 
@@ -126,28 +126,39 @@ class ExpenseController extends Controller
 
         }
 
-
     }
 
     public function update(UpdateExpenseRequest $request, Expense $report)
     {
 
-        // 1- Each user can edit his submitted report only.
-        if ($report->user_id != auth()->id()) {
-            return response()->json([
-                "errors" => (object)["message" => ["You can't edit this report."]]
-            ], 403);
-        }
-
-        // 2- disable editing old reports.
+        // 1- disable editing old reports.
         if (Carbon::createFromDate($report->created_at)->addHours(config('constants.expense_edit_cutoff_time', 4)) < now()) {
             return response()->json([
                 "errors" => (object)["message" => ["Old reports can't be edited."]]
             ], 403);
         }
 
-        // TODO 3- update images if has been edited.
+        try {
+            DB::beginTransaction();
 
-        return $report->update($request->safe()->except(['report_date', 'shop_id', 'expense_type_shop_id']));
+            $image_ids = $request->safe()['image_ids'];
+            Image::whereNotIn('id', $image_ids)->delete();
+            Image::whereIn('id', $image_ids)->update(['expense_id' => $report->id]);
+
+            // success
+            DB::commit();
+
+            return new ExpenseResource(Expense::find($report->id));
+
+//            return true;
+        } catch (\Exception $e) {
+            // failed
+            DB::rollBack();
+
+            return response()->json([
+                "errors" => (object)["message" => ["Something went wrong, please try again."]]
+            ], 403);
+
+        }
     }
 }

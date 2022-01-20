@@ -31,29 +31,29 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 import Card from './Card';
-import { ExpenseReportType, PaginatedList } from '../types';
+import { PaginatedList, SaleReportType } from '../types';
 import { useShopsList } from '../hooks/ShopHooks';
 import CustomDatePicker from './CustomDatePicker';
-import { useExpenseList } from '../hooks/ExpenseHooks';
 import { format } from 'date-fns';
 import currencyFormat from '../util/currencyFormat';
-import ExpenseForm from './ExpenseForm';
-import ExpenseEditForm from './ExpenseEditForm';
-import ExpenseReportItem from './ExpenseReportItem';
+import { useSaleList } from '../hooks/SaleHooks';
+import SalesForm from './SalesForm';
+import SalesEditForm from './SalesEditForm';
+import SaleReportItem from './SaleReportItem';
 
-const ExpenseTable = () => {
+const SalesTable = () => {
   const { isOpen: isAddFormOpen, onOpen: onAddFormOpen, onClose: onAddFormClose } = useDisclosure();
-  const [viewReport, setViewReport] = useState<ExpenseReportType | undefined>();
-  const [editReport, setEditReport] = useState<ExpenseReportType | undefined>();
+  const [viewReport, setViewReport] = useState<SaleReportType | undefined>();
+  const [editReport, setEditReport] = useState<SaleReportType | undefined>();
   const { data: shops, isLoading: shopsIsLoading } = useShopsList({
     staleTime: Infinity,
   });
   const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([null, null]);
   const [startDate, endDate] = dateRange;
   const [filterShopId, setFilterShopId] = useState<number>(0);
-  const [expenseList, setExpenseList] = useState<PaginatedList<ExpenseReportType> | undefined>();
+  const [salesList, setSalesList] = useState<PaginatedList<SaleReportType> | undefined>();
   const [currentPage, setCurrentPage] = useState(1);
-  const { data, isLoading, refetch } = useExpenseList({
+  const { data, isLoading, refetch } = useSaleList({
     pageIndex: currentPage,
     shopId: filterShopId === 0 ? null : filterShopId,
     startDate: startDate,
@@ -62,8 +62,8 @@ const ExpenseTable = () => {
   });
 
   useEffect(() => {
-    setExpenseList(data);
-  }, [data, setExpenseList]);
+    setSalesList(data);
+  }, [data, setSalesList]);
 
   useEffect(() => {
     refetch();
@@ -79,7 +79,7 @@ const ExpenseTable = () => {
       <Card overflowX={{ base: 'scroll', xl: 'hidden' }}>
         <Flex p={4} justifyContent="space-between" align="center">
           <Text fontSize="xl" fontWeight="bold">
-            Expenses
+            Sales
           </Text>
 
           <Button
@@ -138,21 +138,20 @@ const ExpenseTable = () => {
               <Thead>
                 <Tr>
                   <Th color="gray.400">ID</Th>
-                  <Th color="gray.400">Type</Th>
                   <Th color="gray.400">Date</Th>
-                  <Th color="gray.400">Amount</Th>
+                  <Th color="gray.400">Total</Th>
                   <Th color="gray.400">Shop</Th>
                   <Th color="gray.400">Actions</Th>
                 </Tr>
               </Thead>
               <Tbody>
-                {expenseList?.data.map((row: ExpenseReportType) => {
+                {salesList?.data.map((row: SaleReportType) => {
                   return (
                     <TablesTableRow
                       report={row}
                       onEdit={setEditReport}
                       onView={setViewReport}
-                      key={row.expenseId}
+                      key={row.saleId}
                     />
                   );
                 })}
@@ -160,7 +159,7 @@ const ExpenseTable = () => {
             </Table>
           )}
         </Box>
-        {expenseList && (
+        {salesList && (
           <Flex p={4} justifyContent="space-between" align="center">
             <Flex flexDirection="row">
               <IconButton
@@ -173,7 +172,7 @@ const ExpenseTable = () => {
               <IconButton
                 mr={2}
                 aria-label="Go to previous page"
-                isDisabled={expenseList.links.prev === null}
+                isDisabled={salesList.links.prev === null}
                 onClick={() => setCurrentPage(currentPage - 1)}
                 icon={<BiChevronLeft />}
               />
@@ -187,7 +186,7 @@ const ExpenseTable = () => {
               <IconButton
                 ml={2}
                 aria-label="Go to next page"
-                isDisabled={expenseList.links.next === null}
+                isDisabled={salesList.links.next === null}
                 onClick={() => setCurrentPage(currentPage + 1)}
                 icon={<BiChevronRight />}
               />
@@ -208,14 +207,13 @@ const ExpenseTable = () => {
         <ModalContent maxW={'sm'} p={8} justifyContent="center">
           <ModalCloseButton />
           <Text fontWeight={'semibold'} fontSize="xl">
-            New expense report
+            New sales report
           </Text>
           <Box px={8} py={4}>
-            <ExpenseForm closeModal={onAddFormClose} />
+            <SalesForm closeModal={onAddFormClose} />
           </Box>
         </ModalContent>
       </Modal>
-
       <Modal
         isOpen={!!editReport}
         onClose={() => setEditReport(undefined)}
@@ -225,21 +223,19 @@ const ExpenseTable = () => {
         <ModalContent maxW={'sm'} p={8} justifyContent="center">
           <ModalCloseButton />
           <Text fontWeight={'semibold'} fontSize="xl">
-            Expense edit form
+            Sales edit form
           </Text>
-
           <Alert mt={4} status="warning">
             Any edits will affect all previously generated reports.
           </Alert>
 
           <Box px={8} py={4}>
             {editReport && (
-              <ExpenseEditForm closeModal={() => setEditReport(undefined)} report={editReport} />
+              <SalesEditForm closeModal={() => setEditReport(undefined)} report={editReport} />
             )}
           </Box>
         </ModalContent>
       </Modal>
-
       <Modal
         isOpen={!!viewReport}
         onClose={() => setViewReport(undefined)}
@@ -250,7 +246,7 @@ const ExpenseTable = () => {
           <ModalCloseButton />
 
           <Box px={8} py={4}>
-            {viewReport && <ExpenseReportItem report={viewReport} />}
+            {viewReport && <SaleReportItem report={viewReport} />}
           </Box>
         </ModalContent>
       </Modal>
@@ -259,31 +255,27 @@ const ExpenseTable = () => {
 };
 
 const TablesTableRow: React.FC<{
-  report: ExpenseReportType;
-  onEdit: (report: ExpenseReportType) => void;
-  onView: (report: ExpenseReportType) => void;
+  report: SaleReportType;
+  onEdit: (report: SaleReportType) => void;
+  onView: (report: SaleReportType) => void;
 }> = ({ report, onEdit, onView }) => {
   return (
     <Tr>
       <Td>
         <Text fontSize="md" minWidth="100%">
-          {report.expenseId}
+          {report.saleId}
         </Text>
       </Td>
 
       <Td>
         <Text fontSize="sm" fontWeight="semibold">
-          {report.expenseType.title}
-        </Text>
-      </Td>
-      <Td>
-        <Text fontSize="sm" fontWeight="semibold">
           {format(new Date(report.reportDate), 'dd MMM yyyy')}
         </Text>
       </Td>
+
       <Td>
         <Text fontSize="sm" fontWeight="semibold">
-          {currencyFormat(report.amount)}
+          {currencyFormat(report.TotalAmount)}
         </Text>
       </Td>
 
@@ -314,4 +306,4 @@ const TablesTableRow: React.FC<{
   );
 };
 
-export default ExpenseTable;
+export default SalesTable;

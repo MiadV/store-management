@@ -15,7 +15,6 @@ export const ExpenseReportEditSchema = yup
   .object()
   .shape({
     description: yup.string(),
-    report_date: yup.date().typeError('Please select a date').defined(),
     amount: yup.number().defined(),
   })
   .defined();

@@ -103,12 +103,20 @@ export type IAssignExpenseItem = {
   strict_limit: boolean;
 };
 
+export type ImageType = {
+  imageId: number;
+  uploader: number;
+  expenseId: number;
+  imagePath: string;
+  fullPath: string;
+};
+
 export type ExpenseReportType = {
   expenseId: number;
   description: string;
   reportDate: string;
   amount: string;
-  images: string[];
+  images: ImageType[];
   createdAt: string;
   updatedAt: string | null;
   expenseType: {
@@ -144,6 +152,15 @@ export interface INewSaleReport {
   online_transfer_amount: number;
 }
 
+export interface IEditSalesReport {
+  reportId: number | string;
+  description: string;
+  report_date: string;
+  cash_amount: number;
+  card_amount: number;
+  online_transfer_amount: number;
+}
+
 export type NewExpenseReportResponse = {
   data: ExpenseReportType;
 };
@@ -158,8 +175,8 @@ export interface INewExpenseReport {
 }
 
 export interface IEditExpenseReport {
+  reportId: number | string;
   description: string;
-  report_date: string;
   amount: number;
   image_ids: string[] | number[];
 }

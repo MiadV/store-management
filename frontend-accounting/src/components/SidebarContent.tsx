@@ -11,7 +11,7 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 import { IconType } from 'react-icons';
-import { BiArchive, BiChevronDown, BiChevronRight, BiGroup } from 'react-icons/bi';
+import { BiChevronDown, BiChevronRight, BiDollarCircle, BiGroup, BiReceipt } from 'react-icons/bi';
 import { Link, useLocation } from 'react-router-dom';
 import Logo from '../assets/vectors/Logo';
 
@@ -43,11 +43,11 @@ const SidebarContent: React.FC<BoxProps> = (props) => {
         </Text>
       </Flex>
       <Flex direction="column" as="nav" fontSize="sm" color="gray.600" aria-label="Main Navigation">
-        <NavItem icon={BiGroup} linkTo="/users">
-          Users
+        <NavItem icon={BiDollarCircle} linkTo="/sales">
+          Sales
         </NavItem>
 
-        <NavItem icon={BiArchive} onClick={expenses.onToggle}>
+        <NavItem icon={BiReceipt} onClick={expenses.onToggle}>
           Expenses
           {expenses.isOpen ? (
             <Icon as={BiChevronDown} ml="auto" boxSize={5} />
@@ -66,6 +66,10 @@ const SidebarContent: React.FC<BoxProps> = (props) => {
             Expense Types
           </NavItem>
         </Collapse>
+
+        <NavItem icon={BiGroup} linkTo="/users">
+          Users
+        </NavItem>
       </Flex>
       <Box px="4" py="5" position={'absolute'} bottom={0}>
         <Text fontSize="xs" textAlign="center">

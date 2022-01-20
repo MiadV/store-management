@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import {
   FormControl,
   Stack,
@@ -9,48 +9,40 @@ import {
   useToast,
   NumberInput,
   NumberInputField,
+  FormLabel,
 } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { endOfMonth, format, startOfMonth } from 'date-fns';
+import { format, subWeeks } from 'date-fns';
 import { useQueryClient } from 'react-query';
 import CustomDatePicker from './CustomDatePicker';
-import { ExpenseReportFormSchema } from '../validations/ExpenseReportFormSchema';
-import CustomExpenseTypeSelect from './CustomExpenseTypeSelect';
-import ExpenseTypeBalanceProgress from './ExpenseTypeBalanceProgress';
-import CustomImageUpload from './CustomImageUpload';
-import { useNewExpenseReportMutation } from '../hooks/ExpenseHooks';
 import mapServerSideErrors from '../util/mapServerSideErrors';
-import { INewExpenseReport, ResponseErrorType } from '../types';
+import { INewSaleReport, ResponseErrorType } from '../types';
 import CustomSelectShop from './CustomSelectShop';
+import { SalesReportFormSchema } from '../validations/SalesReportFormSchema';
+import { useNewSaleReportMutation } from '../hooks/SaleHooks';
 
-const ExpenseForm: React.FC<{ closeModal: () => void }> = ({ closeModal }) => {
+const SalesForm: React.FC<{ closeModal: () => void }> = ({ closeModal }) => {
   const queryClient = useQueryClient();
   const toast = useToast();
-  const [imageIds, setImageIds] = useState<number[] | string[]>([]);
 
-  const newExpenseReportMutation = useNewExpenseReportMutation();
+  const newSalesReportMutation = useNewSaleReportMutation();
   const { handleSubmit, register, formState, setValue, setError, watch } = useForm({
-    resolver: yupResolver(ExpenseReportFormSchema),
+    resolver: yupResolver(SalesReportFormSchema),
   });
   const { isSubmitting, errors } = formState;
-  const shopId = watch('shop_id');
 
-  // fix expense balance not hidding when shop changes.
-  useEffect(() => {
-    setValue('expense_type_shop_id', null);
-  }, [shopId, setValue]);
-
-  const onSubmit = async (data: INewExpenseReport) => {
+  const onSubmit = async (data: INewSaleReport) => {
     const payload = {
       ...data,
-      image_ids: imageIds,
       report_date: format(new Date(data.report_date), 'yyyy-MM-dd'),
     };
 
+    console.log(payload);
+
     try {
-      await newExpenseReportMutation.mutateAsync(payload).then(() => {
-        queryClient.refetchQueries(['expenseList'], { active: true });
+      await newSalesReportMutation.mutateAsync(payload).then(() => {
+        queryClient.refetchQueries(['salesList'], { active: true });
         closeModal();
       });
     } catch (err) {
@@ -77,20 +69,6 @@ const ExpenseForm: React.FC<{ closeModal: () => void }> = ({ closeModal }) => {
           {errors.shop_id && <FormErrorMessage>{errors.shop_id.message}</FormErrorMessage>}
         </FormControl>
 
-        <FormControl id="expense_type_shop_id" isInvalid={!!errors.expense_type_shop_id}>
-          {watch('shop_id') ? (
-            <CustomExpenseTypeSelect
-              storeId={watch('shop_id')}
-              placeholder="Select Type"
-              {...register('expense_type_shop_id')}
-            />
-          ) : null}
-        </FormControl>
-
-        {watch('expense_type_shop_id') && watch('shop_id') ? (
-          <ExpenseTypeBalanceProgress expenseRuleId={watch('expense_type_shop_id')} />
-        ) : null}
-
         <FormControl
           id="report_date"
           isRequired
@@ -100,20 +78,48 @@ const ExpenseForm: React.FC<{ closeModal: () => void }> = ({ closeModal }) => {
           <CustomDatePicker
             isClearable
             placeholderText="Expense Date"
-            minDate={startOfMonth(new Date())}
-            maxDate={endOfMonth(new Date())}
+            minDate={subWeeks(new Date(), 1)}
+            maxDate={new Date()}
             selected={watch('report_date')}
             onChange={(date) => setValue('report_date', date)}
           />
 
           {errors.report_date && <FormErrorMessage>{errors.report_date.message}</FormErrorMessage>}
         </FormControl>
-        <FormControl id="amount" isRequired isInvalid={!!errors.amount}>
+        <FormControl id="cash_amount" isRequired isInvalid={!!errors.cash_amount}>
+          <FormLabel htmlFor="cash_amount">Cash Amount</FormLabel>
           <NumberInput precision={2}>
-            <NumberInputField placeholder="Amount" {...register('amount')} />
+            <NumberInputField placeholder="Sale in Cash" {...register('cash_amount')} />
           </NumberInput>
 
-          {errors.amount && <FormErrorMessage>{errors.amount.message}</FormErrorMessage>}
+          {errors.cash_amount && <FormErrorMessage>{errors.cash_amount.message}</FormErrorMessage>}
+        </FormControl>
+
+        <FormControl id="card_amount" isRequired isInvalid={!!errors.card_amount}>
+          <FormLabel htmlFor="card_amount">Card Amount</FormLabel>
+          <NumberInput precision={2}>
+            <NumberInputField placeholder="Credit Card" {...register('card_amount')} />
+          </NumberInput>
+
+          {errors.card_amount && <FormErrorMessage>{errors.card_amount.message}</FormErrorMessage>}
+        </FormControl>
+
+        <FormControl
+          id="online_transfer_amount"
+          isRequired
+          isInvalid={!!errors.online_transfer_amount}
+        >
+          <FormLabel htmlFor="online_transfer_amount">Online Transfer</FormLabel>
+          <NumberInput precision={2}>
+            <NumberInputField
+              placeholder="Online Transfer"
+              {...register('online_transfer_amount')}
+            />
+          </NumberInput>
+
+          {errors.online_transfer_amount && (
+            <FormErrorMessage>{errors.online_transfer_amount.message}</FormErrorMessage>
+          )}
         </FormControl>
 
         <FormControl id="description" isInvalid={!!errors.description}>
@@ -123,8 +129,6 @@ const ExpenseForm: React.FC<{ closeModal: () => void }> = ({ closeModal }) => {
 
           {errors.description && <FormErrorMessage>{errors.description.message}</FormErrorMessage>}
         </FormControl>
-
-        <CustomImageUpload setImageIds={setImageIds} />
 
         <Button
           isLoading={isSubmitting}
@@ -140,4 +144,4 @@ const ExpenseForm: React.FC<{ closeModal: () => void }> = ({ closeModal }) => {
   );
 };
 
-export default ExpenseForm;
+export default SalesForm;

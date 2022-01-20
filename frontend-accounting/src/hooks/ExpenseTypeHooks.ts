@@ -35,7 +35,7 @@ export function useExpenseTypeListByStoreId({
 }
 
 const getExpenseTypeItemsList = async (): Promise<ExpenseItemType[]> => {
-  const { data } = await api().get(`/accountant/expense/types`);
+  const { data } = await api().get(`/accountant/expense-type`);
   return data;
 };
 
@@ -50,7 +50,7 @@ export function useExpenseTypeItemsList(
 const postExpenseItem = async (
   data: INewExpenseItem
 ): Promise<MutationReponse<ExpenseItemType>> => {
-  return await api().post(`/accountant/expense`, data);
+  return await api().post(`/accountant/expense-type`, data);
 };
 
 export function useExpenseItemMutation() {
@@ -62,7 +62,7 @@ export function useExpenseItemMutation() {
 const postAssignEpxensetype = async (
   data: IAssignExpenseItem
 ): Promise<MutationReponse<boolean>> => {
-  return await api().post(`/accountant/expense/assign`, data);
+  return await api().post(`/accountant/expense-type/assign`, data);
 };
 
 export function useAssignExpenseMutation() {

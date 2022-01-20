@@ -1,6 +1,13 @@
-import { UseQueryOptions, useQuery } from 'react-query';
+import { UseQueryOptions, useQuery, useMutation } from 'react-query';
 import api from '../util/api';
-import { ExpenseReportType, PaginatedList } from '../types';
+import {
+  ExpenseReportType,
+  IEditExpenseReport,
+  INewExpenseReport,
+  MutationReponse,
+  NewExpenseReportResponse,
+  PaginatedList,
+} from '../types';
 import { format } from 'date-fns';
 
 const getExpenseList = async ({
@@ -25,7 +32,7 @@ const getExpenseList = async ({
   return data;
 };
 
-export default function useExpenseList({
+export function useExpenseList({
   pageIndex,
   shopId,
   startDate,
@@ -53,5 +60,27 @@ export default function useExpenseList({
     ['expenseList', pageIndex, shopId, startDate, endDate],
     () => getExpenseList({ pageIndex, shopId, startDate, endDate }),
     { ...options }
+  );
+}
+
+const postNewExpenseReport = async (data: INewExpenseReport): Promise<NewExpenseReportResponse> => {
+  return await api().post('/expense', data);
+};
+
+export function useNewExpenseReportMutation() {
+  return useMutation<NewExpenseReportResponse, any, INewExpenseReport>(async (data) =>
+    postNewExpenseReport(data)
+  );
+}
+
+const updateExpense = async (
+  data: IEditExpenseReport
+): Promise<MutationReponse<ExpenseReportType>> => {
+  return await api().put(`/accountant/expense/${data.reportId}`, data);
+};
+
+export function useUpdateExpenseMutation() {
+  return useMutation<MutationReponse<ExpenseReportType>, any, IEditExpenseReport>(async (data) =>
+    updateExpense(data)
   );
 }

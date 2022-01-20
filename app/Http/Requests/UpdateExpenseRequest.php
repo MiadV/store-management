@@ -26,6 +26,7 @@ class UpdateExpenseRequest extends FormRequest
         return [
             'description' => ['required', 'string', 'min:0', 'max:250'],
             'amount' => ['required', 'regex:/^\d+(\.\d{1,2})?$/'],
+            "image_ids" => ['present', 'array'],
         ];
     }
 }

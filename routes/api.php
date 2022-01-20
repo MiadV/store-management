@@ -44,9 +44,6 @@ Route::middleware('auth:sanctum')
 
                 Route::post('/', [SaleController::class, 'store']);
 
-                Route::put('/{report}', [SaleController::class, 'update'])
-                    ->where('report', '[0-9]+');
-
                 Route::get('/latest/{shop_id}', [SaleController::class, 'latestSaleReport'])
                     ->where('shop_id', '[0-9]+');
 
@@ -98,10 +95,18 @@ Route::middleware('auth:sanctum')
                 Route::put('/user/{user}', [UserController::class, 'update'])
                     ->where('user', '[0-9]+');
 
+                Route::get('/sales', [SaleController::class, 'index']);
+                Route::put('/sales/{report}', [SaleController::class, 'update'])
+                    ->where('report', '[0-9]+');
+
                 Route::get('/expense', [ExpenseController::class, 'index']);
-                Route::post('/expense', [ExpenseTypeController::class, 'store']);
-                Route::post('/expense/assign', [ExpenseTypeController::class, 'assignExpenseToShop']);
-                Route::get('/expense/types', [ExpenseTypeController::class, 'index']);
+                Route::put('/expense/{report}', [ExpenseController::class, 'update'])
+                    ->where('report', '[0-9]+');
+
+
+                Route::post('/expense-type', [ExpenseTypeController::class, 'store']);
+                Route::get('/expense-type', [ExpenseTypeController::class, 'index']);
+                Route::post('/expense-type/assign', [ExpenseTypeController::class, 'assignExpenseToShop']);
 
             });
 
