@@ -29,7 +29,7 @@ const SalesEditForm: React.FC<{ closeModal: () => void; report: SaleReportType }
   const { handleSubmit, register, formState } = useForm({
     resolver: yupResolver(SalesReportEditSchema),
     defaultValues: {
-      description: report.description,
+      description: report.description ?? '',
       cash_amount: report.cashAmount,
       card_amount: report.cardAmount,
       online_transfer_amount: report.onlineTransferAmount,

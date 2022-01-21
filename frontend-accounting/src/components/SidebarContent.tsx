@@ -12,6 +12,7 @@ import {
 } from '@chakra-ui/react';
 import { IconType } from 'react-icons';
 import { BiChevronDown, BiChevronRight, BiDollarCircle, BiGroup, BiReceipt } from 'react-icons/bi';
+import { HiOutlineDocumentReport } from 'react-icons/hi';
 import { Link, useLocation } from 'react-router-dom';
 import Logo from '../assets/vectors/Logo';
 
@@ -66,6 +67,10 @@ const SidebarContent: React.FC<BoxProps> = (props) => {
             Expense Types
           </NavItem>
         </Collapse>
+
+        <NavItem icon={HiOutlineDocumentReport} linkTo="/reports">
+          Reports
+        </NavItem>
 
         <NavItem icon={BiGroup} linkTo="/users">
           Users

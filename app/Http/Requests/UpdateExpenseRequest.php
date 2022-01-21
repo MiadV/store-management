@@ -24,7 +24,7 @@ class UpdateExpenseRequest extends FormRequest
     public function rules()
     {
         return [
-            'description' => ['required', 'string', 'min:0', 'max:250'],
+            'description' => ['nullable', 'string', 'min:0', 'max:250'],
             'amount' => ['required', 'regex:/^\d+(\.\d{1,2})?$/'],
             "image_ids" => ['present', 'array'],
         ];

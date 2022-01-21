@@ -10,6 +10,7 @@ import ShopExpenseRulesTable from './pages/ShopExpenseRulesPage';
 import ExpenseList from './pages/ExpenseListPage';
 import ExpenseTypesPage from './pages/ExpenseTypesPage';
 import SalesPage from './pages/SalesPage';
+import ReportsPage from './pages/ReportsPage';
 
 const RoutesList = () => {
   const queryClient = useQueryClient();
@@ -36,6 +37,8 @@ const RoutesList = () => {
         <Route path="expenses" element={<ExpenseList />} />
         <Route path="expenses/type" element={<ExpenseTypesPage />} />
         <Route path="expenses/shop-rules" element={<ShopExpenseRulesTable />} />
+
+        <Route path="reports" element={<ReportsPage />} />
 
         <Route path="users" element={<UsersPage />} />
       </Route>

@@ -195,7 +195,7 @@ export type ImageUploadResponse = {
   };
 };
 
-export type ReportHistoryType = {
+export type ReportSummaryType = {
   saleReport: SaleReportType;
   expenseReports: ExpenseReportType[];
   sumOfExpenses: number | string;

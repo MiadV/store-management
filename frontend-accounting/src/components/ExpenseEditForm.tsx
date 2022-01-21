@@ -31,14 +31,13 @@ const ExpenseEditForm: React.FC<{ closeModal: () => void; report: ExpenseReportT
   const { handleSubmit, register, formState } = useForm({
     resolver: yupResolver(ExpenseReportEditSchema),
     defaultValues: {
-      description: report.description,
+      description: report.description ?? '',
       amount: report.amount,
     },
   });
   const { isSubmitting, errors } = formState;
 
   const onSubmit = async (data: IEditExpenseReport) => {
-    console.log(data);
     const payload = {
       ...data,
       reportId: report.expenseId,

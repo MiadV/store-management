@@ -142,8 +142,8 @@ class ExpenseController extends Controller
             DB::beginTransaction();
 
             $image_ids = $request->safe()['image_ids'];
-            Image::whereNotIn('id', $image_ids)->delete();
             Image::whereIn('id', $image_ids)->update(['expense_id' => $report->id]);
+            Image::where('expense_id', $report->id)->whereNotIn('id', $image_ids)->delete();
 
             // success
             DB::commit();
