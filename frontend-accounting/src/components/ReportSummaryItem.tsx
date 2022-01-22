@@ -1,5 +1,5 @@
 import React from 'react';
-import { AlertIcon, Box, Flex, Spinner, Text, useColorModeValue, VStack } from '@chakra-ui/react';
+import { Box, Flex, Spinner, Text, useColorModeValue } from '@chakra-ui/react';
 import { format } from 'date-fns';
 import ReportHistoryIcon from '../assets/vectors/ReportHistoryIcon';
 import currencyFormat from '../util/currencyFormat';

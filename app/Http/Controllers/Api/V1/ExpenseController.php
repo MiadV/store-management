@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Exports\ExpensesExport;
 use App\Http\Requests\StoreExpenseRequest;
 use App\Http\Requests\UpdateExpenseRequest;
 use App\Http\Resources\ExpenseResource;
@@ -41,6 +42,25 @@ class ExpenseController extends Controller
         return ExpenseResource::collection($expenseReports)
             ->response()
             ->setEncodingOptions(JSON_UNESCAPED_SLASHES);
+    }
+
+    public function export(Request $request)
+    {
+
+        $validator = Validator::make($request->all(), [
+            'shop_id' => ['integer'],
+            'date_from' => ['date_format:Y-m-d'],
+            'date_to' => ['date_format:Y-m-d'],
+        ])->safe()->all();
+
+        $shopId = $validator['shop_id'] ?? null;
+        $dateFrom = $validator['date_from'] ?? null;
+        $dateTo = $validator['date_to'] ?? null;
+
+        // in controller
+        ob_end_clean(); // this
+        ob_start(); // and this
+        return (new ExpensesExport)->forShop($shopId)->fromDate($dateFrom)->dateTo($dateTo)->download('expenses.xlsx');
     }
 
     public function show(Request $request, $report)

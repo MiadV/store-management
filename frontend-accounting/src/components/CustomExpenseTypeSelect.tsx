@@ -14,14 +14,11 @@ const CustomExpenseTypeSelect: React.ForwardRefRenderFunction<
     <Skeleton isLoaded={!isLoading}>
       <Select {...otherProps} ref={ref}>
         {data?.map((item) => {
-          if (!item.accountantOnly) {
-            return (
-              <option value={item.expenseTypeShopId} key={item.expenseTypeShopId}>
-                {item.title}
-              </option>
-            );
-          }
-          return null;
+          return (
+            <option value={item.expenseTypeShopId} key={item.expenseTypeShopId}>
+              {item.title}
+            </option>
+          );
         })}
       </Select>
     </Skeleton>

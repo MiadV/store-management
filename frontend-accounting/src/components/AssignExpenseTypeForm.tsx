@@ -40,7 +40,8 @@ const AssignExpenseTypeForm: React.FC<{ closeModal: () => void; shopId: number }
   const onSubmit = async (data: IAssignExpenseItem) => {
     try {
       await assignExpenseMutation.mutateAsync(data).then(() => {
-        queryClient.refetchQueries(['expenseTypeListByStoreId'], { active: true });
+        queryClient.invalidateQueries(['expenseTypeListByStoreId']);
+        queryClient.invalidateQueries(['expenseBalance']);
         closeModal();
       });
     } catch (err) {

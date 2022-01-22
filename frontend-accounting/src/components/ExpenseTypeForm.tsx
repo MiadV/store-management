@@ -26,7 +26,7 @@ const ExpenseTypeForm: React.FC<{ closeModal: () => void }> = ({ closeModal }) =
   const onSubmit = async (data: INewExpenseItem) => {
     try {
       await newExpenseItemMutation.mutateAsync(data).then(() => {
-        queryClient.refetchQueries(['expenseTypeItemsList'], { active: true });
+        queryClient.refetchQueries(['expenseTypeItemsList']);
         closeModal();
       });
     } catch (err) {

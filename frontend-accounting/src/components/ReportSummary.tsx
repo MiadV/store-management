@@ -40,7 +40,7 @@ const ReportSummary = () => {
           <Skeleton isLoaded={!shopsIsLoading}>
             <Select
               w={250}
-              placeholder="All Shops"
+              placeholder="Select Shop"
               onChange={(e) => handleShopChange(e.target.value)}
             >
               {shops?.map((i) => (

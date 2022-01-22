@@ -102,6 +102,7 @@ Route::middleware('auth:sanctum')
                 Route::get('/expense', [ExpenseController::class, 'index']);
                 Route::put('/expense/{report}', [ExpenseController::class, 'update'])
                     ->where('report', '[0-9]+');
+                Route::get('/expense/export', [ExpenseController::class, 'export']);
 
 
                 Route::post('/expense-type', [ExpenseTypeController::class, 'store']);

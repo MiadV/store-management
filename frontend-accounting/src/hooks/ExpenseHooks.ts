@@ -84,3 +84,22 @@ export function useUpdateExpenseMutation() {
     updateExpense(data)
   );
 }
+
+export const downloadExpenses = async ({
+  shopId,
+  startDate,
+  endDate,
+}: {
+  shopId?: number | null;
+  startDate?: Date | null;
+  endDate?: Date | null;
+}): Promise<any> => {
+  return await api().get(`/accountant/expense/export`, {
+    responseType: 'blob',
+    params: {
+      shop_id: shopId,
+      date_from: startDate && format(startDate, 'yyyy-MM-dd'),
+      date_to: endDate && format(endDate, 'yyyy-MM-dd'),
+    },
+  });
+};
