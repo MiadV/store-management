@@ -1,15 +1,21 @@
 import { useMutation } from "react-query";
-import { INewExpenseReport, NewExpenseReportResponse } from "../types";
+import {
+    ExpenseReportType,
+    INewExpenseReport,
+    MutationReponse,
+} from "../types";
 import api from "../util/api";
 
 const postNewExpenseReport = async (
     data: INewExpenseReport
-): Promise<NewExpenseReportResponse> => {
+): Promise<MutationReponse<ExpenseReportType>> => {
     return await api().post("/expense", data);
 };
 
-export default function useNewExpenseReportMutation() {
-    return useMutation<NewExpenseReportResponse, any, INewExpenseReport>(
-        async (data) => postNewExpenseReport(data)
-    );
+export function useNewExpenseReportMutation() {
+    return useMutation<
+        MutationReponse<ExpenseReportType>,
+        any,
+        INewExpenseReport
+    >(async (data) => postNewExpenseReport(data));
 }

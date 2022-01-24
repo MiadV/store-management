@@ -1,14 +1,33 @@
-import { ColorModeScript } from "@chakra-ui/react";
 import * as React from "react";
+import { ColorModeScript } from "@chakra-ui/react";
+import { BrowserRouter } from "react-router-dom";
+import { ChakraProvider } from "@chakra-ui/react";
+import { ReactQueryDevtools } from "react-query/devtools";
+import { QueryClient, QueryClientProvider } from "react-query";
 import ReactDOM from "react-dom";
 import { App } from "./App";
 import reportWebVitals from "./reportWebVitals";
 import * as serviceWorker from "./serviceWorker";
+import theme from "./theme";
+import "./theme/style.css";
+import { AuthUserProvider } from "./context/authContext";
+
+// Create a client
+const queryClient = new QueryClient();
 
 ReactDOM.render(
     <React.StrictMode>
-        <ColorModeScript />
-        <App />
+        <QueryClientProvider client={queryClient}>
+            <BrowserRouter>
+                <ChakraProvider theme={theme}>
+                    <AuthUserProvider>
+                        <ColorModeScript />
+                        <App />
+                    </AuthUserProvider>
+                </ChakraProvider>
+            </BrowserRouter>
+            <ReactQueryDevtools initialIsOpen={false} />
+        </QueryClientProvider>
     </React.StrictMode>,
     document.getElementById("root")
 );

@@ -1,31 +1,24 @@
 import React, { forwardRef } from "react";
-import ReactDatePicker, { ReactDatePickerProps } from "react-datepicker";
+import DatePicker, { ReactDatePickerProps } from "react-datepicker";
 import {
     Input,
     InputGroup,
     InputLeftElement,
     useColorModeValue,
 } from "@chakra-ui/react";
+import { BiCalendar } from "react-icons/bi";
 // import CSS
 import "react-datepicker/dist/react-datepicker.css";
 import "./chakra-react-datepicker.css";
-import { BiCalendar } from "react-icons/bi";
 
-const CustomDatePicker = ({
-    selected: selectedDate,
-    onChange,
-    placeholderText,
-    ...props
-}: ReactDatePickerProps) => {
+const CustomDatePicker = (props: ReactDatePickerProps) => {
     const className = useColorModeValue("light-theme", "dark-theme");
+
     return (
         <div className={className}>
-            <ReactDatePicker
-                selected={selectedDate}
-                onChange={onChange}
+            <DatePicker
+                customInput={<CustomInput />}
                 className="react-datapicker__input-text"
-                customInput={<CustomInput placeholderText={placeholderText} />}
-                dateFormat="yyyy/MM/dd"
                 {...props}
             />
         </div>
@@ -34,25 +27,15 @@ const CustomDatePicker = ({
 
 export default CustomDatePicker;
 
-const customDateInput = (
-    { value, onClick, onChange, placeholderText }: any,
-    ref: any
-) => (
+const customDateInput = (props: any, ref: any) => (
     <InputGroup>
         <InputLeftElement
             color="gray.400"
             children={<BiCalendar size={24} />}
-            onClick={onClick}
+            onClick={props.onClick}
         />
 
-        <Input
-            autoComplete="off"
-            value={value}
-            ref={ref}
-            onClick={onClick}
-            onChange={onChange}
-            placeholder={placeholderText}
-        />
+        <Input autoComplete="off" {...props} ref={ref} />
     </InputGroup>
 );
 customDateInput.displayName = "DateInput";

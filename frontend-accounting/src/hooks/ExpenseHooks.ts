@@ -5,7 +5,6 @@ import {
   IEditExpenseReport,
   INewExpenseReport,
   MutationReponse,
-  NewExpenseReportResponse,
   PaginatedList,
 } from '../types';
 import { format } from 'date-fns';
@@ -63,12 +62,14 @@ export function useExpenseList({
   );
 }
 
-const postNewExpenseReport = async (data: INewExpenseReport): Promise<NewExpenseReportResponse> => {
+const postNewExpenseReport = async (
+  data: INewExpenseReport
+): Promise<MutationReponse<ExpenseReportType>> => {
   return await api().post('/expense', data);
 };
 
 export function useNewExpenseReportMutation() {
-  return useMutation<NewExpenseReportResponse, any, INewExpenseReport>(async (data) =>
+  return useMutation<MutationReponse<ExpenseReportType>, any, INewExpenseReport>(async (data) =>
     postNewExpenseReport(data)
   );
 }

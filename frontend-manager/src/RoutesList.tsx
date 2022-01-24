@@ -1,12 +1,8 @@
-import React, { useEffect } from "react";
-import { useQueryClient } from "react-query";
+import React from "react";
 import { Routes, Route, Navigate, useLocation, Outlet } from "react-router-dom";
-import useAuth from "./hooks/useAuth";
-
 import LoginPage from "./pages/Login";
-import SelectShop from "./pages/SelectShop";
 import NotFound from "./pages/NotFound";
-import StoreDashboard from "./pages/StoreDashboard";
+import Dashboard from "./pages/Dashboard";
 import SalesPage from "./pages/Sales";
 import NewSalesReport from "./pages/NewSalesReport";
 import SaleReport from "./pages/SaleReport";
@@ -16,31 +12,18 @@ import ExpenseReport from "./pages/ExpenseReport";
 import ExpenseList from "./pages/ExpenseList";
 import ReportHistory from "./pages/ReportHistory";
 import ReportHistorySummary from "./pages/ReportHistorySummary";
+import { useAuthContext } from "./context/authContext";
+import SalesList from "./pages/SalesList";
 
 const RoutesList = () => {
-    const queryClient = useQueryClient();
-
-    // check if user is already logged in
-    useEffect(() => {
-        const token = localStorage.getItem(
-            `${process.env.REACT_APP_LOCAL_STORAGE_PREFIX}-token`
-        );
-        if (token) {
-            (async function fetchAuthUser() {
-                // get logged user
-                await queryClient.refetchQueries("auth", { exact: true });
-            })();
-        }
-    }, [queryClient]);
-
     return (
         <Routes>
             <Route path="/login" element={<LoginPage />} />
             <Route path="/" element={<PrivateOutlet />}>
-                <Route index element={<SelectShop />} />
-                <Route path="/store-dashboard" element={<StoreDashboard />} />
+                <Route index element={<Dashboard />} />
                 <Route path="/sales" element={<SalesPage />} />
                 <Route path="/sales/new" element={<NewSalesReport />} />
+                <Route path="/sales/list" element={<SalesList />} />
                 <Route
                     path="/sales/report/:reportId"
                     element={<SaleReport />}
@@ -55,7 +38,7 @@ const RoutesList = () => {
 
                 <Route path="/history" element={<ReportHistory />} />
                 <Route
-                    path="/history/summary/:date"
+                    path="/history/summary/:storeId/:date"
                     element={<ReportHistorySummary />}
                 />
             </Route>
@@ -67,10 +50,10 @@ const RoutesList = () => {
 export default RoutesList;
 
 function PrivateOutlet() {
-    let auth = useAuth();
+    let { authUser } = useAuthContext();
     let location = useLocation();
 
-    if (!auth.data) {
+    if (!authUser) {
         // Redirect them to the /login page, but save the current location they were
         // trying to go to when they were redirected. This allows us to send them
         // along to that page after they login, which is a nicer user experience

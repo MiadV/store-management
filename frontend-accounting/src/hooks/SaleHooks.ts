@@ -62,12 +62,16 @@ export function useSaleList({
   );
 }
 
-const postNewSaleReport = async (data: INewSaleReport): Promise<SaleReportType> => {
+const postNewSaleReport = async (
+  data: INewSaleReport
+): Promise<MutationReponse<SaleReportType>> => {
   return await api().post('/sale', data);
 };
 
 export function useNewSaleReportMutation() {
-  return useMutation<SaleReportType, any, INewSaleReport>(async (data) => postNewSaleReport(data));
+  return useMutation<MutationReponse<SaleReportType>, any, INewSaleReport>(async (data) =>
+    postNewSaleReport(data)
+  );
 }
 
 const updateSales = async (data: IEditSalesReport): Promise<MutationReponse<SaleReportType>> => {
@@ -79,3 +83,22 @@ export function useUpdateSalesMutation() {
     updateSales(data)
   );
 }
+
+export const downloadSales = async ({
+  shopId,
+  startDate,
+  endDate,
+}: {
+  shopId?: number | null;
+  startDate?: Date | null;
+  endDate?: Date | null;
+}): Promise<any> => {
+  return await api().get(`/accountant/sales/export`, {
+    responseType: 'blob',
+    params: {
+      shop_id: shopId,
+      date_from: startDate && format(startDate, 'yyyy-MM-dd'),
+      date_to: endDate && format(endDate, 'yyyy-MM-dd'),
+    },
+  });
+};

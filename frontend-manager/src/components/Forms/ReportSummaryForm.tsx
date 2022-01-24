@@ -1,15 +1,33 @@
 import React, { useState } from "react";
 import { Stack, Button } from "@chakra-ui/react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { format } from "date-fns";
-import CustomDatePicker from "./CustomDatePicker";
+import CustomDatePicker from "../CustomDatePicker";
+import CustomSelectShop from "../CustomSelectShop";
 
-const ReportHistoryForm: React.FC<{}> = () => {
+const ReportSummaryForm: React.FC<{}> = () => {
+    let navigate = useNavigate();
     const [reportDate, setReportDate] = useState<Date | null>(null);
+    const [storeId, setStoreId] = useState<string>();
+
+    function handleSubmit() {
+        let _storeId = storeId ? parseInt(storeId) : 0;
+        let to = reportDate
+            ? `/history/summary/${_storeId}/${format(
+                  reportDate!,
+                  "yyyy-MM-dd"
+              )}`
+            : "";
+
+        navigate(to);
+    }
 
     return (
         <form autoComplete="off" onSubmit={(e) => e.preventDefault()}>
             <Stack spacing={4} marginBottom={4}>
+                <CustomSelectShop
+                    onChange={(e) => setStoreId(e.target.value)}
+                />
                 <CustomDatePicker
                     onChange={(v) => setReportDate(v)}
                     selected={reportDate}
@@ -20,20 +38,12 @@ const ReportHistoryForm: React.FC<{}> = () => {
                 />
 
                 <Button
-                    disabled={!reportDate}
+                    disabled={!(reportDate && storeId)}
                     variant="solid"
                     type="submit"
                     loadingText="Please wait..."
                     colorScheme="teal"
-                    as={Link}
-                    to={
-                        reportDate
-                            ? `/history/summary/${format(
-                                  reportDate!,
-                                  "yyyy-MM-dd"
-                              )}`
-                            : ""
-                    }
+                    onClick={handleSubmit}
                 >
                     View Summary
                 </Button>
@@ -42,4 +52,4 @@ const ReportHistoryForm: React.FC<{}> = () => {
     );
 };
 
-export default ReportHistoryForm;
+export default ReportSummaryForm;

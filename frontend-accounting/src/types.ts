@@ -161,10 +161,6 @@ export interface IEditSalesReport {
   online_transfer_amount: number;
 }
 
-export type NewExpenseReportResponse = {
-  data: ExpenseReportType;
-};
-
 export interface INewExpenseReport {
   shop_id: string | number;
   expense_type_shop_id: string | number;

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useQueryClient } from 'react-query';
 import { Routes, Route, Navigate, useLocation, Outlet } from 'react-router-dom';
-import useAuth from './hooks/useAuth';
+import { useAuthContext } from './context/authContext';
 import DashboardPage from './pages/DashboardPage';
 import LoginPage from './pages/LoginPage';
 import UsersPage from './pages/UsersPage';
@@ -50,10 +50,10 @@ const RoutesList = () => {
 export default RoutesList;
 
 function PrivateOutlet() {
-  let auth = useAuth();
+  let { authUser } = useAuthContext();
   let location = useLocation();
 
-  if (!auth.data) {
+  if (!authUser) {
     // Redirect them to the /login page, but save the current location they were
     // trying to go to when they were redirected. This allows us to send them
     // along to that page after they login, which is a nicer user experience

@@ -17,6 +17,10 @@ export type ResponseErrorType = {
     };
 };
 
+export type MutationReponse<T> = {
+    data: T;
+};
+
 export type PaginatedList<T> = {
     data: T[];
     links: {
@@ -69,7 +73,7 @@ export type SaleReportType = {
     };
 };
 
-export type ExpenseTypeType = {
+export type ExpenseRuleType = {
     expenseTypeId: number;
     title: string;
     accountantOnly: boolean;
@@ -78,12 +82,20 @@ export type ExpenseTypeType = {
     isLimitStrict: boolean;
 };
 
+export type ImageType = {
+    imageId: number;
+    uploader: number;
+    expenseId: number;
+    imagePath: string;
+    fullPath: string;
+};
+
 export type ExpenseReportType = {
     expenseId: number;
     description: string;
     reportDate: string;
     amount: string;
-    images: string[];
+    images: ImageType[];
     createdAt: string;
     updatedAt: string | null;
     expenseType: {
@@ -110,10 +122,6 @@ export interface ILogin {
     password: string;
 }
 
-export type NewSaleReportResponse = {
-    data: SaleReportType;
-};
-
 export interface INewSaleReport {
     shop_id: string | number;
     description: string;
@@ -122,10 +130,6 @@ export interface INewSaleReport {
     card_amount: number;
     online_transfer_amount: number;
 }
-
-export type NewExpenseReportResponse = {
-    data: ExpenseReportType;
-};
 
 export interface INewExpenseReport {
     shop_id: string | number;
@@ -150,7 +154,7 @@ export type ImageUploadResponse = {
     };
 };
 
-export type ReportHistoryType = {
+export type ReportSummaryType = {
     saleReport: SaleReportType;
     expenseReports: ExpenseReportType[];
     sumOfExpenses: number | string;

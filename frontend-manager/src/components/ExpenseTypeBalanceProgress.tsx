@@ -1,46 +1,70 @@
-import React from "react";
-import { Text, Box, Progress } from "@chakra-ui/react";
+import React, { useState, useEffect } from "react";
+import { Text, Box, Progress, Skeleton } from "@chakra-ui/react";
 import currencyFormat from "../util/currencyFormat";
-import { ExpenseBalanceType } from "../types";
+import useExpenseBalance from "../hooks/useExpenseBalance";
+
+type StateType = {
+    limit: number | null;
+    currentTotal: number;
+    isStrict: boolean;
+};
+const initState = { limit: null, currentTotal: 0, isStrict: false };
 
 const ExpenseTypeBalanceProgress: React.FC<{
-    expenseBalance: ExpenseBalanceType;
-}> = (props) => {
-    const limit = props.expenseBalance.limit
-        ? parseFloat(props.expenseBalance.limit)
-        : null;
-    const currentTotal = parseFloat(props.expenseBalance.currentTotal);
-    const isStrict = props.expenseBalance.isStrict;
+    expenseRuleId: number;
+}> = ({ expenseRuleId = 0 }) => {
+    const [state, setState] = useState<StateType>(initState);
 
-    if (limit === null) {
-        return (
-            <Text fontSize="sm">{`Spend: ${currencyFormat(
-                currentTotal
-            )}`}</Text>
-        );
-    }
+    const { data: expenseBalance, isLoading } = useExpenseBalance(
+        expenseRuleId,
+        {
+            enabled: expenseRuleId !== 0,
+            staleTime: 10 * 60 * 1000,
+        }
+    );
 
-    if (currentTotal > limit) {
-        return (
-            <Box>
-                <Text fontSize="sm" color="red.500">
-                    {`${currencyFormat(
-                        currentTotal - limit
-                    )} passed ${currencyFormat(limit)} limit`}
-                </Text>
-            </Box>
-        );
-    }
+    useEffect(() => {
+        if (expenseBalance) {
+            const limit = expenseBalance.limit
+                ? parseFloat(expenseBalance.limit)
+                : null;
+            const currentTotal = parseFloat(expenseBalance.currentTotal);
+            const isStrict = expenseBalance.isStrict;
+
+            setState({ limit, currentTotal, isStrict });
+        }
+    }, [expenseBalance, setState]);
 
     return (
-        <Box>
-            <Progress variant="outline" value={(currentTotal / limit) * 100} />
-            <Text fontSize="sm">
-                {`${currencyFormat(currentTotal)} / ${currencyFormat(limit)} ${
-                    isStrict ? "Capped" : ""
-                }`}
-            </Text>
-        </Box>
+        <Skeleton isLoaded={!isLoading}>
+            {state.limit === null ? (
+                <Text fontSize="sm">{`Spend: ${currencyFormat(
+                    state.currentTotal
+                )}`}</Text>
+            ) : state.currentTotal > state.limit ? (
+                <Box>
+                    <Text fontSize="sm" color="red.500">
+                        {`${currencyFormat(
+                            state.currentTotal - state.limit
+                        )} passed ${currencyFormat(state.limit)} limit`}
+                    </Text>
+                </Box>
+            ) : (
+                <Box>
+                    <Progress
+                        variant="outline"
+                        value={(state.currentTotal / state.limit) * 100}
+                    />
+                    <Text fontSize="sm">
+                        {`${currencyFormat(
+                            state.currentTotal
+                        )} / ${currencyFormat(state.limit)} ${
+                            state.isStrict ? "Capped" : ""
+                        }`}
+                    </Text>
+                </Box>
+            )}
+        </Skeleton>
     );
 };
 

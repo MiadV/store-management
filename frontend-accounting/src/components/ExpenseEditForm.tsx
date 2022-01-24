@@ -46,7 +46,8 @@ const ExpenseEditForm: React.FC<{ closeModal: () => void; report: ExpenseReportT
 
     try {
       await updateExpenseReportMutation.mutateAsync(payload).then(() => {
-        queryClient.refetchQueries(['expenseList'], { active: true });
+        queryClient.invalidateQueries(['expenseList']);
+        queryClient.invalidateQueries(['expenseBalance']);
         closeModal();
       });
     } catch (err) {

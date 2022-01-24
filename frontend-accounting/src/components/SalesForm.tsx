@@ -42,7 +42,7 @@ const SalesForm: React.FC<{ closeModal: () => void }> = ({ closeModal }) => {
 
     try {
       await newSalesReportMutation.mutateAsync(payload).then(() => {
-        queryClient.refetchQueries(['salesList'], { active: true });
+        queryClient.invalidateQueries(['salesList']);
         closeModal();
       });
     } catch (err) {

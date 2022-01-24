@@ -1,16 +1,26 @@
 import * as yup from "yup";
 
-const ExpenseReportFormSchema = yup
+export const ExpenseReportFormSchema = yup
     .object()
     .shape({
-        expense_type_shop_id: yup
+        shop_id: yup
             .number()
             .typeError("Please select a shop")
+            .defined("Please select a shop"),
+        expense_type_shop_id: yup
+            .number()
+            .typeError("Please select a type")
             .defined(),
         description: yup.string(),
         report_date: yup.date().typeError("Please select a date").defined(),
-        amount: yup.number().typeError("Please enter amount").defined(),
+        amount: yup.number().defined(),
     })
     .defined();
 
-export default ExpenseReportFormSchema;
+export const ExpenseReportEditSchema = yup
+    .object()
+    .shape({
+        description: yup.string(),
+        amount: yup.number().defined(),
+    })
+    .defined();

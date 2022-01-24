@@ -1,7 +1,5 @@
 import React from "react";
 import { Box, SimpleGrid, Text } from "@chakra-ui/react";
-import { Navigate } from "react-router-dom";
-import Header from "../components/Header";
 import PageLayout from "../layouts/PageLayout";
 import useAuth from "../hooks/useAuth";
 import TaskItem from "../components/TaskItem";
@@ -9,25 +7,18 @@ import SalesIcon from "../assets/vectors/SalesIcon";
 import ExpenseIcon from "../assets/vectors/ExpenseIcon";
 import ReportHistoryIcon from "../assets/vectors/ReportHistoryIcon";
 import { PermissionType } from "../types";
-import { useSelectedStore } from "../context/selectedStoreContext";
 
 import LoadingOverlay from "../components/LoadingOverlay";
 
-const StoreDashboard: React.FC<{}> = () => {
-    const { selectedStore } = useSelectedStore();
+const Dashboard: React.FC<{}> = () => {
     const { data: authUser, isLoading } = useAuth();
 
     if (isLoading) {
         return <LoadingOverlay />;
     }
 
-    if (!selectedStore) {
-        return <Navigate to={"/"} />;
-    }
-
     return (
         <PageLayout>
-            <Header title={selectedStore.title} />
             <Box padding={6}>
                 <Text>Please select a task</Text>
 
@@ -39,7 +30,7 @@ const StoreDashboard: React.FC<{}> = () => {
     );
 };
 
-export default StoreDashboard;
+export default Dashboard;
 
 const RenderTaskItems: React.FC<{
     permissionsArray: PermissionType[];

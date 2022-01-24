@@ -45,7 +45,7 @@ const SalesEditForm: React.FC<{ closeModal: () => void; report: SaleReportType }
 
     try {
       await updateSalesReportMutation.mutateAsync(payload).then(() => {
-        queryClient.refetchQueries(['salesList'], { active: true });
+        queryClient.invalidateQueries(['salesList']);
         closeModal();
       });
     } catch (err) {

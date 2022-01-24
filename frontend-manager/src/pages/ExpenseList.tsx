@@ -9,23 +9,34 @@ import {
     Text,
     VStack,
 } from "@chakra-ui/react";
-import { Navigate } from "react-router-dom";
-import Header from "../components/Header";
 import PageLayout from "../layouts/PageLayout";
-import { useSelectedStore } from "../context/selectedStoreContext";
-import useCurrntMonthExpenses from "../hooks/useCurrentMonthExpenses";
 import { ExpenseReportType } from "../types";
 import ExpenseReportListItem from "../components/ExpenseReportListItem";
 import Card from "../components/Card";
+import CustomSelectShop from "../components/CustomSelectShop";
+import { useInfiniteQuery } from "react-query";
+import { getCurrentMonthExpenses } from "../hooks/useCurrentMonthExpenses";
 
 const ExpenseList: React.FC<{}> = () => {
-    const { selectedStore } = useSelectedStore();
-    const { isLoading, data, hasNextPage, fetchNextPage, isFetchingNextPage } =
-        useCurrntMonthExpenses(selectedStore?.shopId!);
+    const [storeId, setStoreId] = useState<number>(0);
     const [expenseList, setExpenseList] = useState<ExpenseReportType[]>([]);
 
+    const { isLoading, data, hasNextPage, fetchNextPage, isFetchingNextPage } =
+        useInfiniteQuery(
+            ["currntMonthExpenses", storeId],
+            ({ pageParam = 1 }) => getCurrentMonthExpenses(storeId, pageParam),
+            {
+                getNextPageParam: (lastPage) =>
+                    lastPage.links.next
+                        ? lastPage.meta.current_page + 1
+                        : undefined,
+                staleTime: Infinity,
+                enabled: storeId !== 0,
+            }
+        );
+
     useEffect(() => {
-        if (data?.pages) {
+        if (data?.pages && storeId !== 0) {
             let pages = data?.pages;
             let reports: ExpenseReportType[] = [];
 
@@ -35,19 +46,24 @@ const ExpenseList: React.FC<{}> = () => {
             });
 
             setExpenseList(reports);
+        } else {
+            setExpenseList([]);
         }
-    }, [data, setExpenseList]);
-
-    if (!selectedStore) {
-        return <Navigate to={"/"} />;
-    }
+    }, [data, setExpenseList, storeId]);
 
     return (
         <PageLayout>
-            <Header title={selectedStore?.title} goBackPath={`/expenses`} />
             <Box padding={6}>
                 <Text>Current month expenses</Text>
                 <VStack marginTop={4}>
+                    <CustomSelectShop
+                        onChange={(e) => {
+                            let val = !isNaN(parseInt(e.target.value))
+                                ? parseInt(e.target.value)
+                                : 0;
+                            setStoreId(val);
+                        }}
+                    />
                     <RenderExpenseList
                         expenseList={expenseList}
                         isLoading={isLoading}

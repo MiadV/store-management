@@ -1,10 +1,10 @@
 import { useQuery } from "react-query";
 import api from "../util/api";
-import { ExpenseTypeType } from "../types";
+import { ExpenseRuleType } from "../types";
 
 const getExpenseTypeListByStoreId = async (
     storeId: number
-): Promise<ExpenseTypeType[]> => {
+): Promise<ExpenseRuleType[]> => {
     const { data } = await api().get(`/expense/types/${storeId}`);
     return data;
 };

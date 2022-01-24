@@ -98,6 +98,7 @@ Route::middleware('auth:sanctum')
                 Route::get('/sales', [SaleController::class, 'index']);
                 Route::put('/sales/{report}', [SaleController::class, 'update'])
                     ->where('report', '[0-9]+');
+                Route::get('/sales/export', [SaleController::class, 'export']);
 
                 Route::get('/expense', [ExpenseController::class, 'index']);
                 Route::put('/expense/{report}', [ExpenseController::class, 'update'])

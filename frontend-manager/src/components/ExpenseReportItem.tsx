@@ -21,11 +21,12 @@ const ExpenseReportItem: React.FC<{ report: ExpenseReportType }> = ({
     const bgColor = useColorModeValue("gray.200", "gray.700");
     const { reportDate, shop, description, amount, expenseType, images, user } =
         report;
+    const imageList = images.map((i) => i.fullPath);
 
     return (
         <Box>
             <Flex alignItems={"center"}>
-                <Link to="/expenses" replace={true}>
+                <Link to="/expenses/list" replace={true}>
                     <IconButton
                         variant="ghost"
                         isRound
@@ -87,7 +88,7 @@ const ExpenseReportItem: React.FC<{ report: ExpenseReportType }> = ({
                         <Flex marginTop={4} direction={"column"}>
                             <Text fontWeight={"bold"}>Attachments</Text>
                             <Box marginTop={2}>
-                                <RenderImageItems imageList={images} />
+                                <RenderImageItems imageList={imageList} />
                             </Box>
                         </Flex>
                     )}

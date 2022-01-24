@@ -7,7 +7,9 @@ import Card from "./Card";
 import currencyFormat from "../util/currencyFormat";
 import { SaleReportType } from "../types";
 
-const ReportListItem: React.FC<{ report: SaleReportType }> = ({ report }) => {
+const SalesReportListItem: React.FC<{ report: SaleReportType }> = ({
+    report,
+}) => {
     const { saleId, reportDate, TotalAmount } = report;
 
     return (
@@ -40,4 +42,4 @@ const ReportListItem: React.FC<{ report: SaleReportType }> = ({ report }) => {
     );
 };
 
-export default ReportListItem;
+export default SalesReportListItem;

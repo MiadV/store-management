@@ -10,10 +10,10 @@ import { Link } from "react-router-dom";
 import { format } from "date-fns";
 import { BiArrowBack } from "react-icons/bi";
 import ReportHistoryIcon from "../assets/vectors/ReportHistoryIcon";
-import { ReportHistoryType } from "../types";
+import { ReportSummaryType } from "../types";
 import currencyFormat from "../util/currencyFormat";
 
-const ReportHistorySummaryItem: React.FC<{ report: ReportHistoryType }> = ({
+const ReportHistorySummaryItem: React.FC<{ report: ReportSummaryType }> = ({
     report,
 }) => {
     const bgColor = useColorModeValue("gray.200", "gray.700");

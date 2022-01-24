@@ -1,40 +1,29 @@
 import React from "react";
 import { Box } from "@chakra-ui/react";
-import { Navigate, useParams } from "react-router-dom";
 import SimpleLayout from "../layouts/SimpleLayout";
 import LoadingOverlay from "../components/LoadingOverlay";
-import useReportHistoryByDate from "../hooks/useReportHistoryByDate";
-import { useSelectedStore } from "../context/selectedStoreContext";
 import { ResponseErrorType } from "../types";
 import ReportHistorySummaryItem from "../components/ReportHistorySummaryItem";
 import NoReportHistorySummary from "../components/NoReportHistorySummary";
+import { useReportSummaryByDate } from "../hooks/ReportsHooks";
+import { useParams } from "react-router-dom";
 
 const ReportHistorySummary: React.FC<{}> = () => {
-    let { date } = useParams();
-    const sanitizedDate = new Date(date!);
-    const { selectedStore } = useSelectedStore();
+    const { storeId, date } = useParams();
+    const _storeId = storeId ? parseInt(storeId) : 0;
+    const _date = date ? new Date(date) : new Date();
     const {
         data: reportHistorySummary,
         isLoading,
         error,
-    } = useReportHistoryByDate(
-        selectedStore!.shopId,
-        sanitizedDate.getFullYear(),
-        sanitizedDate.getMonth() + 1,
-        sanitizedDate.getDate(),
-        {
-            staleTime: Infinity,
-            enabled: !!(selectedStore && sanitizedDate.getFullYear()),
-            retry: 0,
-        }
-    );
+    } = useReportSummaryByDate(_storeId, _date, {
+        staleTime: Infinity,
+        enabled: !!(storeId && _date),
+        retry: 0,
+    });
 
     if (isLoading) {
         return <LoadingOverlay />;
-    }
-
-    if (!selectedStore) {
-        return <Navigate to="/404" replace />;
     }
 
     return (

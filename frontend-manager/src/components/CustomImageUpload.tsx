@@ -13,11 +13,12 @@ import {
     useDeleteImageMutation,
     useUploadImageMutation,
 } from "../hooks/useImageMutation";
-import { ResponseErrorType, uploadedImageType } from "../types";
+import { ImageType, ResponseErrorType, uploadedImageType } from "../types";
 
 const CustomImageUpload: React.FC<{
     setImageIds: React.Dispatch<React.SetStateAction<number[] | string[]>>;
-}> = ({ setImageIds }) => {
+    initialImages?: ImageType[];
+}> = ({ setImageIds, initialImages }) => {
     const toast = useToast();
     const bgColor = useColorModeValue("white", "gray.700");
     const fileInputRef = useRef<HTMLInputElement>(null);
@@ -28,6 +29,16 @@ const CustomImageUpload: React.FC<{
     const deleteImage = useDeleteImageMutation();
 
     // TODO if user leaves the form and doesnt submit the data we need to delete uploaded images.
+
+    useEffect(() => {
+        let initImages = initialImages?.map((i) => ({
+            dataUrl: i.fullPath,
+            imageId: i.imageId,
+        }));
+        if (initImages) {
+            setUploadedFiles(initImages);
+        }
+    }, [setUploadedFiles, initialImages]);
 
     useEffect(() => {
         let uploadedImageIds = uploadedFiles.map((i) => i.imageId);

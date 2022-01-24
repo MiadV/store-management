@@ -1,8 +1,12 @@
 import * as yup from "yup";
 
-const SaleReportFormSchema = yup
+export const SalesReportFormSchema = yup
     .object()
     .shape({
+        shop_id: yup
+            .number()
+            .typeError("Please select a shop")
+            .defined("Please select a shop"),
         description: yup.string(),
         report_date: yup.date().typeError("Please select a date").defined(),
         cash_amount: yup.number().typeError("Please enter amount").defined(),
@@ -13,5 +17,3 @@ const SaleReportFormSchema = yup
             .defined(),
     })
     .defined();
-
-export default SaleReportFormSchema;

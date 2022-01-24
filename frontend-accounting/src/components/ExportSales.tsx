@@ -5,9 +5,9 @@ import fileDownload from 'js-file-download';
 import Card from './Card';
 import CustomDatePicker from './CustomDatePicker';
 import { useShopsList } from '../hooks/ShopHooks';
-import { downloadExpenses } from '../hooks/ExpenseHooks';
+import { downloadSales } from '../hooks/SaleHooks';
 
-const ExportExpenses = () => {
+const ExportSales = () => {
   const toast = useToast();
   const { data: shops, isLoading: shopsIsLoading } = useShopsList({
     staleTime: Infinity,
@@ -20,14 +20,14 @@ const ExportExpenses = () => {
     isNaN(parseInt(val)) ? setFilterShopId(null) : setFilterShopId(parseInt(val));
   }
 
-  async function handleDownloadExpenses() {
-    await downloadExpenses({
+  async function handleDownloadSales() {
+    await downloadSales({
       shopId: filterShopId,
       startDate: startDate,
       endDate: endDate,
     })
       .then((res) => {
-        fileDownload(res.data, 'expenses.xlsx');
+        fileDownload(res.data, 'sales.xlsx');
       })
       .catch((err) => {
         console.log('Export Error', err);
@@ -44,7 +44,7 @@ const ExportExpenses = () => {
     <>
       <Card overflowX={{ base: 'scroll', xl: 'hidden' }} p={4}>
         <Text fontSize="xl" fontWeight="bold" mb={1}>
-          Export Expenses
+          Export Sales
         </Text>
 
         <Flex gap={4} mt={4}>
@@ -78,7 +78,7 @@ const ExportExpenses = () => {
           <IconButton
             colorScheme="teal"
             isDisabled={!(startDate && endDate)}
-            onClick={() => handleDownloadExpenses()}
+            onClick={() => handleDownloadSales()}
             icon={<RiFileExcel2Line size={24} />}
             aria-label="download as excel file"
           />
@@ -88,4 +88,4 @@ const ExportExpenses = () => {
   );
 };
 
-export default ExportExpenses;
+export default ExportSales;
