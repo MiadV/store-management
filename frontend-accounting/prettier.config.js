@@ -10,4 +10,4 @@ module.exports = {
   jsxSingleQuote: false,
   bracketSpacing: true,
   jsxBracketSameLine: false,
-}
+};

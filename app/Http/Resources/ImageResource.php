@@ -22,6 +22,7 @@ class ImageResource extends JsonResource
             'expenseId' => $this->expense_id,
             'imagePath' => $this->image_path,
             'fullPath' => $this->full_path,
+            'thumbnail' => $this->thumbnail,
         ];
     }
 

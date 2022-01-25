@@ -177,6 +177,7 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        Intervention\Image\ImageServiceProvider::class,
 
         Clockwork\Support\Laravel\ClockworkServiceProvider::class,
 
@@ -236,6 +237,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'Clockwork' => Clockwork\Support\Laravel\Facade::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
+        'Image' => Intervention\Image\Facades\Image::class,
 
     ],
 

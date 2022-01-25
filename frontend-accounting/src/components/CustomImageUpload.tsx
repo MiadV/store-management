@@ -28,7 +28,7 @@ const CustomImageUpload: React.FC<{
   // TODO if user leaves the form and doesnt submit the data we need to delete uploaded images.
 
   useEffect(() => {
-    let initImages = initialImages?.map((i) => ({ dataUrl: i.fullPath, imageId: i.imageId }));
+    let initImages = initialImages?.map((i) => ({ dataUrl: i.thumbnail, imageId: i.imageId }));
     if (initImages) {
       setUploadedFiles(initImages);
     }

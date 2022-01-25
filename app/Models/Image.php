@@ -13,6 +13,7 @@ class Image extends Model
         'uploaded_by',
         'expense_id',
         'name',
+        'extension',
         'image_path',
     ];
 
@@ -21,12 +22,17 @@ class Image extends Model
      *
      * @var array
      */
-    protected $appends = ['full_path'];
+    protected $appends = ['full_path', 'thumbnail'];
 
 
     public function getFullPathAttribute()
     {
-        return asset("{$this->image_path}{$this->name}");
+        return asset("{$this->image_path}{$this->name}.{$this->extension}");
+    }
+
+    public function getThumbnailAttribute()
+    {
+        return asset("{$this->image_path}{$this->name}_thumbnail.{$this->extension}");
     }
 
     public function expense()

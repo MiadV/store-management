@@ -108,6 +108,7 @@ export type ImageType = {
   uploader: number;
   expenseId: number;
   imagePath: string;
+  thumbnail: string;
   fullPath: string;
 };
 

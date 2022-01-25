@@ -18,6 +18,7 @@ class CreateImagesTable extends Migration
             $table->foreignId('uploaded_by')->constrained('users')->onDelete('restrict')->onUpdate("cascade");
             $table->foreignId('expense_id')->nullable()->constrained('expenses')->onDelete('restrict')->onUpdate("cascade");
             $table->string('name')->nullable();
+            $table->string('extension')->nullable();
             $table->string('image_path')->nullable();
             $table->timestamps();
         });

@@ -11,7 +11,7 @@ import { format } from "date-fns";
 import { Link } from "react-router-dom";
 import { BiArrowBack } from "react-icons/bi";
 import ExpenseIcon from "../assets/vectors/ExpenseIcon";
-import { ExpenseReportType } from "../types";
+import { ExpenseReportType, ImageType } from "../types";
 import currencyFormat from "../util/currencyFormat";
 import ImagePreviewModal from "./ImagePreviewModal";
 
@@ -21,7 +21,6 @@ const ExpenseReportItem: React.FC<{ report: ExpenseReportType }> = ({
     const bgColor = useColorModeValue("gray.200", "gray.700");
     const { reportDate, shop, description, amount, expenseType, images, user } =
         report;
-    const imageList = images.map((i) => i.fullPath);
 
     return (
         <Box>
@@ -88,7 +87,7 @@ const ExpenseReportItem: React.FC<{ report: ExpenseReportType }> = ({
                         <Flex marginTop={4} direction={"column"}>
                             <Text fontWeight={"bold"}>Attachments</Text>
                             <Box marginTop={2}>
-                                <RenderImageItems imageList={imageList} />
+                                <RenderImageItems imageList={images} />
                             </Box>
                         </Flex>
                     )}
@@ -109,7 +108,9 @@ const ExpenseReportItem: React.FC<{ report: ExpenseReportType }> = ({
 
 export default ExpenseReportItem;
 
-const RenderImageItems: React.FC<{ imageList: string[] }> = ({ imageList }) => {
+const RenderImageItems: React.FC<{ imageList: ImageType[] }> = ({
+    imageList,
+}) => {
     const [src, setSrc] = useState<string | null>(null);
 
     function openModal(image: string) {
@@ -120,10 +121,10 @@ const RenderImageItems: React.FC<{ imageList: string[] }> = ({ imageList }) => {
         setSrc(null);
     }
 
-    const items = imageList.map((image, i) => (
+    const items = imageList.map((image) => (
         <Image
-            key={i}
-            src={image}
+            key={image.imageId}
+            src={image.thumbnail}
             alt="receipt"
             boxSize="70px"
             boxShadow="md"
@@ -131,7 +132,7 @@ const RenderImageItems: React.FC<{ imageList: string[] }> = ({ imageList }) => {
             loading="lazy"
             borderRadius={5}
             cursor="pointer"
-            onClick={() => openModal(image)}
+            onClick={() => openModal(image.fullPath)}
         />
     ));
     return (
