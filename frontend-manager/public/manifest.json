@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Manager Dashboard",
+  "name": "Store Managers Module",
   "icons": [
     {
       "src": "favicon.ico",
