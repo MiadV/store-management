@@ -35,7 +35,7 @@ Route::middleware('auth:sanctum')
         Route::prefix('upload')
             ->group(function () {
                 Route::post('/image', [ImageController::class, 'store']);
-                Route::delete('/image', [ImageController::class, 'destroy']);
+                Route::post('/image/delete', [ImageController::class, 'destroy']);
             });
 
         Route::prefix('sale')

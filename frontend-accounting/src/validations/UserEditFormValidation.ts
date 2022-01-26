@@ -5,7 +5,7 @@ const UserEditFormSchema = yup
   .shape({
     phone: yup.string().nullable(),
     permissions: yup.array().min(1).defined(),
-    shops: yup.array().min(1).defined(),
+    // shops: yup.array().min(1).defined(),
     new_password: yup.string().nullable(),
     new_password_confirmation: yup
       .string()

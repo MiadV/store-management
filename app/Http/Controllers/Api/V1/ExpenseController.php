@@ -57,9 +57,6 @@ class ExpenseController extends Controller
         $dateFrom = $validator['date_from'] ?? null;
         $dateTo = $validator['date_to'] ?? null;
 
-        // in controller
-        ob_end_clean(); // this
-        ob_start(); // and this
         return (new ExpensesExport)->forShop($shopId)->fromDate($dateFrom)->dateTo($dateTo)->download('expenses.xlsx');
     }
 
@@ -161,9 +158,13 @@ class ExpenseController extends Controller
         try {
             DB::beginTransaction();
 
+            // update images
             $image_ids = $request->safe()['image_ids'];
             Image::whereIn('id', $image_ids)->update(['expense_id' => $report->id]);
             Image::where('expense_id', $report->id)->whereNotIn('id', $image_ids)->delete();
+
+            // update fields
+            $report->update($request->safe()->except(['report_date', 'shop_id']));
 
             // success
             DB::commit();

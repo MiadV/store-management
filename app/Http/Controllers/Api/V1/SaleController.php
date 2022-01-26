@@ -55,9 +55,6 @@ class SaleController extends Controller
         $dateFrom = $validator['date_from'] ?? null;
         $dateTo = $validator['date_to'] ?? null;
 
-        // in controller
-        ob_end_clean(); // this
-        ob_start(); // and this
         return (new SalesExport)->forShop($shopId)->fromDate($dateFrom)->dateTo($dateTo)->download('sales.xlsx');
     }
 
