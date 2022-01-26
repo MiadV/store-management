@@ -78,7 +78,7 @@ const SidebarContent: React.FC<BoxProps> = (props) => {
       </Flex>
       <Box px="4" py="5" position={'absolute'} bottom={0}>
         <Text fontSize="xs" textAlign="center">
-          MiadV Version: 0.0.1
+          MiadV Version: 0.1.1
         </Text>
       </Box>
     </Box>
