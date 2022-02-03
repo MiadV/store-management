@@ -75,7 +75,11 @@ const ExpenseForm: React.FC<{}> = () => {
     };
 
     return (
-        <form autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
+        <form
+            autoComplete="off"
+            onSubmit={handleSubmit(onSubmit)}
+            style={{ width: "100%" }}
+        >
             <Stack spacing={4} marginBottom={4}>
                 <FormControl id="shop_id" isInvalid={!!errors.shop_id}>
                     <CustomSelectShop {...register("shop_id")} />

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
     FormControl,
     Stack,
@@ -6,10 +6,12 @@ import {
     InputGroup,
     FormErrorMessage,
     Textarea,
+    Text,
     useToast,
     NumberInput,
     NumberInputField,
     FormLabel,
+    Box,
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
@@ -22,17 +24,37 @@ import { INewSaleReport, ResponseErrorType } from "../../types";
 import CustomSelectShop from "../CustomSelectShop";
 import { SalesReportFormSchema } from "../../validations/SalesReportFormSchema";
 import useNewSaleReportMutation from "../../hooks/useNewSaleReportMutation";
+import currencyFormat from "../../util/currencyFormat";
 
-const SalesForm: React.FC<{}> = () => {
+const SalesForm: React.FC = () => {
     let navigate = useNavigate();
     const queryClient = useQueryClient();
     const toast = useToast();
-
+    const [totalSale, setTotalSale] = useState(0);
     const newSalesReportMutation = useNewSaleReportMutation();
     const { handleSubmit, register, formState, setValue, setError, watch } =
         useForm({
             resolver: yupResolver(SalesReportFormSchema),
         });
+
+    // update total sale amount
+    const watchTotalSale = watch([
+        "cash_amount",
+        "card_amount",
+        "online_transfer_amount",
+    ]);
+
+    useEffect(() => {
+        const total = watchTotalSale.reduce((sum, i) => {
+            if (!isNaN(parseFloat(i))) {
+                return sum + parseFloat(i);
+            } else {
+                return sum;
+            }
+        }, 0);
+        setTotalSale(total);
+    }, [watchTotalSale, setTotalSale]);
+
     const { isSubmitting, errors } = formState;
 
     const onSubmit = async (data: INewSaleReport) => {
@@ -63,7 +85,11 @@ const SalesForm: React.FC<{}> = () => {
     };
 
     return (
-        <form autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
+        <form
+            autoComplete="off"
+            onSubmit={handleSubmit(onSubmit)}
+            style={{ width: "100%" }}
+        >
             <Stack spacing={4} marginBottom={4}>
                 <FormControl id="shop_id" isInvalid={!!errors.shop_id}>
                     <CustomSelectShop {...register("shop_id")} />
@@ -171,6 +197,12 @@ const SalesForm: React.FC<{}> = () => {
                         </FormErrorMessage>
                     )}
                 </FormControl>
+
+                <Box textAlign={"center"} py={4}>
+                    <Text fontWeight={"bold"}>
+                        Total Sale: {currencyFormat(totalSale)}
+                    </Text>
+                </Box>
 
                 <Button
                     isLoading={isSubmitting}

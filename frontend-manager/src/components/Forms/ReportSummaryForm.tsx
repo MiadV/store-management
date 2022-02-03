@@ -23,7 +23,11 @@ const ReportSummaryForm: React.FC<{}> = () => {
     }
 
     return (
-        <form autoComplete="off" onSubmit={(e) => e.preventDefault()}>
+        <form
+            autoComplete="off"
+            onSubmit={(e) => e.preventDefault()}
+            style={{ width: "100%" }}
+        >
             <Stack spacing={4} marginBottom={4}>
                 <CustomSelectShop
                     onChange={(e) => setStoreId(e.target.value)}
