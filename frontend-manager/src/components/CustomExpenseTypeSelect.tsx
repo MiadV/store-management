@@ -12,7 +12,7 @@ const CustomExpenseTypeSelect: React.ForwardRefRenderFunction<
 
     return (
         <Skeleton isLoaded={!isLoading}>
-            <Select {...otherProps} ref={ref}>
+            <Select {...otherProps} ref={ref} width="100%">
                 {data?.map((item) => {
                     if (!item.accountantOnly) {
                         return (

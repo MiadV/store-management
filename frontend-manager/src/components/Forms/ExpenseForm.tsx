@@ -164,6 +164,7 @@ const ExpenseForm: React.FC<{}> = () => {
                     type="submit"
                     loadingText="Please wait..."
                     colorScheme="teal"
+                    isFullWidth
                 >
                     Submit
                 </Button>

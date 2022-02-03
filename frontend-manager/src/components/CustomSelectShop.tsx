@@ -9,7 +9,7 @@ const CustomSelectShop: React.ForwardRefRenderFunction<any, SelectProps> = (
     const { authUser } = useAuthContext();
 
     return (
-        <Select placeholder="Select Shop" {...props} ref={ref}>
+        <Select placeholder="Select Shop" {...props} ref={ref} width="100%">
             {authUser?.shops?.map((i) => (
                 <option value={i.shopId} key={i.shopId}>
                     {i.title}

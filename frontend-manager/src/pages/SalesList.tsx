@@ -35,7 +35,9 @@ const SalesList: React.FC<{}> = () => {
                             </Card>
                         ) : report ? (
                             <SalesReportListItem report={report} />
-                        ) : null}
+                        ) : (
+                            <Text>Sorry No reports were found.</Text>
+                        )}
                     </Box>
                 </VStack>
             </Box>

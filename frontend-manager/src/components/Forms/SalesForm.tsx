@@ -82,7 +82,7 @@ const SalesForm: React.FC<{}> = () => {
                 >
                     <CustomDatePicker
                         isClearable
-                        placeholderText="Expense Date"
+                        placeholderText="Report Date"
                         minDate={subDays(new Date(), 1)}
                         maxDate={new Date()}
                         selected={watch("report_date")}
@@ -101,7 +101,7 @@ const SalesForm: React.FC<{}> = () => {
                     isInvalid={!!errors.cash_amount}
                 >
                     <FormLabel htmlFor="cash_amount">Cash Amount</FormLabel>
-                    <NumberInput precision={2}>
+                    <NumberInput precision={2} width="100%">
                         <NumberInputField
                             placeholder="Sale in Cash"
                             {...register("cash_amount")}
@@ -178,6 +178,7 @@ const SalesForm: React.FC<{}> = () => {
                     type="submit"
                     loadingText="Please wait..."
                     colorScheme="teal"
+                    isFullWidth
                 >
                     Submit
                 </Button>

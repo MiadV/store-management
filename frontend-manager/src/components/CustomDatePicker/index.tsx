@@ -35,7 +35,7 @@ const customDateInput = (props: any, ref: any) => (
             onClick={props.onClick}
         />
 
-        <Input autoComplete="off" {...props} ref={ref} />
+        <Input autoComplete="off" {...props} ref={ref} width="100%" />
     </InputGroup>
 );
 customDateInput.displayName = "DateInput";
