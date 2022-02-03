@@ -6,9 +6,9 @@ import ExpenseForm from "../components/Forms/ExpenseForm";
 const NewExpenseReport: React.FC<{}> = () => {
     return (
         <PageLayout>
-            <Box padding={6}>
+            <Box padding={6} width="100%">
                 <Text>Daily expense form</Text>
-                <VStack marginTop={4}>
+                <VStack marginTop={4} width="100%">
                     <ExpenseForm />
                 </VStack>
             </Box>

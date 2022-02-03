@@ -6,9 +6,9 @@ import SalesForm from "../components/Forms/SalesForm";
 const NewSalesReport: React.FC<{}> = () => {
     return (
         <PageLayout>
-            <Box padding={6}>
+            <Box padding={6} width="100%">
                 <Text>Daily sale form</Text>
-                <VStack marginTop={4}>
+                <VStack marginTop={4} width="100%">
                     <SalesForm />
                 </VStack>
             </Box>
