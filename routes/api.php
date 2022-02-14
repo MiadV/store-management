@@ -99,11 +99,13 @@ Route::middleware('auth:sanctum')
                 Route::put('/sales/{report}', [SaleController::class, 'update'])
                     ->where('report', '[0-9]+');
                 Route::get('/sales/export', [SaleController::class, 'export']);
+                Route::get('/sales/export/json', [SaleController::class, 'exportJson']);
 
                 Route::get('/expense', [ExpenseController::class, 'index']);
                 Route::put('/expense/{report}', [ExpenseController::class, 'update'])
                     ->where('report', '[0-9]+');
                 Route::get('/expense/export', [ExpenseController::class, 'export']);
+                Route::get('/expense/export/json', [ExpenseController::class, 'exportJson']);
 
 
                 Route::post('/expense-type', [ExpenseTypeController::class, 'store']);

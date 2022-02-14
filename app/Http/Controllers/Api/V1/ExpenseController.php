@@ -60,6 +60,17 @@ class ExpenseController extends Controller
         return (new ExpensesExport)->forShop($shopId)->fromDate($dateFrom)->dateTo($dateTo)->download('expenses.xlsx');
     }
 
+    public function exportJson(Request $request)
+    {
+        $expenseReports = Expense::with(['user', 'images', 'shop', 'expenseType'])
+            ->orderBy('report_date', 'desc')
+            ->get();
+
+        return ExpenseResource::collection($expenseReports)
+            ->response()
+            ->setEncodingOptions(JSON_UNESCAPED_SLASHES);
+    }
+
     public function show(Request $request, $report)
     {
         $expenseReport = Expense::with(['user', 'images', 'shop', 'expenseType'])

@@ -58,6 +58,17 @@ class SaleController extends Controller
         return (new SalesExport)->forShop($shopId)->fromDate($dateFrom)->dateTo($dateTo)->download('sales.xlsx');
     }
 
+    public function exportJson(Request $request)
+    {
+        $salesReport = Sale::with(['user', 'shop'])
+            ->orderBy('report_date', 'desc')
+            ->get();
+
+        return SaleResource::collection($salesReport)
+            ->response()
+            ->setEncodingOptions(JSON_UNESCAPED_SLASHES);
+    }
+
 
     public function latestSaleReport(Request $request, $shop_id)
     {
