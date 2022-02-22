@@ -28,7 +28,7 @@ Initial roles and permissions can be modified from `database/seeders/Permissions
 
 ### Setup Frontend:
 
-This project uses [React-js](https://reactjs.org/) in frontend.
+Frontend modules are bootstraped with [CRA](https://create-react-app.dev/) and use [Chakra-Ui](https://chakra-ui.com/) components.
 
 1. [Accounting Module](./frontend-accounting/)
 1. [Managers Module](./frontend-manager/)
