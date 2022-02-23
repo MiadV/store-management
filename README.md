@@ -6,6 +6,10 @@ it consists of 2 differnt modules:
 1. **Accounting Module:** used to generate reports and manage shop managers/supervisors.
 2. **Manager Module:** will be used by shop managers / supervisors to report sales and expenses.
 
+This project is built using React.js, [Chakra-Ui](https://chakra-ui.com/), Typescript, [Laravel](https://laravel.com/).
+
+![Store Management App](/preview.png)
+
 ## Running Locally / Seeding
 
 ### Setup Backend:
